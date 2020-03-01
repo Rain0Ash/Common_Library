@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<assembly name="Common_Library">
+  <member name="P:Common_Library.Config.Config.Item(System.String,System.String[])">
+    <attribute ctor="M:JetBrains.Annotations.CanBeNullAttribute.#ctor" />
+  </member>
+  <member name="P:Common_Library.Config.JSONConfig.Config">
+    <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+  </member>
+  <member name="M:Common_Library.Localization.CultureInfoFixed.#ctor(System.String)">
+    <parameter name="name">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+  <member name="M:Common_Library.Localization.CultureInfoFixed.#ctor(System.String,System.Boolean)">
+    <parameter name="name">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+  <member name="M:Common_Library.Mail.Mail.#ctor(System.Net.Mail.SmtpClient,System.Net.Mail.MailAddress)">
+    <parameter name="smtpClient">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+    <parameter name="address">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+  <member name="M:Common_Library.Mail.Mail.GetMessage(System.Collections.Generic.IEnumerable{System.Net.Mail.MailAddress},System.String,System.String,System.Boolean)">
+    <parameter name="to">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+    <parameter name="subject">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+    <parameter name="body">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+  <member name="M:Common_Library.Mail.Mail.GetMessage(System.Net.Mail.MailAddress,System.Collections.Generic.IEnumerable{System.Net.Mail.MailAddress},System.String,System.String,System.Boolean)">
+    <parameter name="from">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+    <parameter name="to">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+    <parameter name="subject">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+    <parameter name="body">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+  <member name="M:Common_Library.Mail.Mail.Send(System.Net.Mail.MailMessage,System.Exception@)">
+    <parameter name="message">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+  <member name="M:Common_Library.Mail.Mail.SendAsync(System.Net.Mail.MailMessage)">
+    <parameter name="message">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+  <member name="M:Common_Library.Types.Other.PathObject.GetFolders(System.String,System.IO.SearchOption)">
+    <parameter name="searchPattern">
+      <attribute ctor="M:JetBrains.Annotations.RegexPatternAttribute.#ctor" />
+    </parameter>
+  </member>
+  <member name="M:Common_Library.Utils.RegexUtils.GetCaptures(System.String,System.String,System.Text.RegularExpressions.RegexOptions)">
+    <parameter name="str">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+    <parameter name="pattern">
+      <attribute ctor="M:JetBrains.Annotations.RegexPatternAttribute.#ctor" />
+    </parameter>
+  </member>
+  <member name="M:Common_Library.Utils.RegexUtils.GetCaptures(System.Text.RegularExpressions.Regex,System.String)">
+    <parameter name="str">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+  <member name="M:Common_Library.Utils.RegexUtils.IfMatchGetCaptures(System.String,System.String,System.Text.RegularExpressions.RegexOptions)">
+    <parameter name="str">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+    <parameter name="pattern">
+      <attribute ctor="M:JetBrains.Annotations.RegexPatternAttribute.#ctor" />
+    </parameter>
+  </member>
+  <member name="M:Common_Library.Utils.RegexUtils.IfMatchGetCaptures(System.Text.RegularExpressions.MatchCollection,System.String)">
+    <parameter name="str">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+  <member name="M:Common_Library.Utils.RegexUtils.IfMatchGetCaptures(System.Text.RegularExpressions.Regex,System.String)">
+    <parameter name="str">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+  <member name="M:Common_Library.Utils.RegexUtils.IsValidRegex(System.String)">
+    <parameter name="pattern">
+      <attribute ctor="M:JetBrains.Annotations.RegexPatternAttribute.#ctor" />
+    </parameter>
+  </member>
+  <member name="M:Common_Library.Utils.RegexUtils.JoinMatches(System.String,System.String,System.String,System.Text.RegularExpressions.RegexOptions)">
+    <parameter name="pattern">
+      <attribute ctor="M:JetBrains.Annotations.RegexPatternAttribute.#ctor" />
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+  <member name="M:Common_Library.Utils.RegexUtils.JoinMatches(System.String,System.String,System.Text.RegularExpressions.RegexOptions)">
+    <parameter name="str">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+    <parameter name="pattern">
+      <attribute ctor="M:JetBrains.Annotations.RegexPatternAttribute.#ctor" />
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+  <member name="M:Common_Library.Utils.RegexUtils.JoinMatches(System.Text.RegularExpressions.Regex,System.String)">
+    <parameter name="str">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+  <member name="M:Common_Library.Utils.RegexUtils.JoinMatches(System.Text.RegularExpressions.Regex,System.String,System.String)">
+    <parameter name="str">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+    <parameter name="separator">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+</assembly>

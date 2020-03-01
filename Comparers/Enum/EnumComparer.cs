@@ -1,0 +1,41 @@
+// This is an independent project of an individual developer. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
+
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+
+namespace Common_Library.Comparers.Enum
+{
+    public struct EnumEqualityComparer<TEnum> : IEqualityComparer<TEnum> where TEnum : struct
+    {
+        private static class BoxAvoidance
+        {
+            private static readonly Func<TEnum, Int32> Wrapper;
+
+            public static Int32 ToInt(TEnum enu)
+            {
+                return Wrapper(enu);
+            }
+
+            static BoxAvoidance()
+            {
+                ParameterExpression p = Expression.Parameter(typeof(TEnum), null);
+                UnaryExpression c = Expression.ConvertChecked(p, typeof(Int32));
+
+                Wrapper = Expression.Lambda<Func<TEnum, Int32>>(c, p).Compile();
+            }
+        }
+
+        public Boolean Equals(TEnum firstEnum, TEnum secondEnum)
+        {
+            return BoxAvoidance.ToInt(firstEnum) == 
+                   BoxAvoidance.ToInt(secondEnum);
+        }
+
+        public Int32 GetHashCode(TEnum firstEnum)
+        {
+            return BoxAvoidance.ToInt(firstEnum);
+        }
+    }
+}

@@ -1,0 +1,101 @@
+// This is an independent project of an individual developer. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
+
+using System;
+
+namespace Common_Library.Config
+{
+    public class ConfigProperty : ConfigProperty<Object>
+    {
+        public ConfigProperty(String key, params String[] sections)
+            : base(key, sections)
+        {
+        }
+        
+        public ConfigProperty(String key, Object defaultValue, params String[] sections)
+            : base(key, defaultValue, sections)
+        {
+        }
+        
+        public ConfigProperty(String key, Object defaultValue, Boolean crypt, params String[] sections)
+            : base(key, defaultValue, crypt, sections)
+        {
+        }
+        
+        public ConfigProperty(String key, Object defaultValue, Boolean crypt, Byte[] cryptKey, params String[] sections)
+            : base(key, defaultValue, crypt, cryptKey, sections)
+        {
+        }
+    }
+    
+    public class ConfigProperty<T>
+    {
+        public static Config Config
+        {
+            get
+            {
+                return Config.StandartConfig;
+            }
+        }
+        
+        public String Key { get; }
+        public String[] Sections { get; }
+        public T DefaultValue { get; set; }
+        public Boolean Crypt { get; set; }
+        public Byte[] CryptKey { get; set; }
+
+        public ConfigProperty(String key, params String[] sections)
+        {
+            Key = key;
+            Sections = sections;
+        }
+        
+        public ConfigProperty(String key, T defaultValue, params String[] sections)
+            : this(key, sections)
+        {
+            DefaultValue = defaultValue;
+        }
+
+        public ConfigProperty(String key, T defaultValue, Boolean crypt, params String[] sections)
+            : this(key, defaultValue, sections)
+        {
+            Crypt = crypt;
+        }
+        
+        public ConfigProperty(String key, T defaultValue, Boolean crypt, Byte[] cryptKey, params String[] sections)
+            : this(key, defaultValue, crypt, sections)
+        {
+            CryptKey = cryptKey;
+        }
+        
+        public void SetValue(T value, Config config = null)
+        {
+            config ??= Config;
+            config.SetValue(this, value);
+        }
+        
+        public T GetValue(Config config = null)
+        {
+            config ??= Config;
+            return config.GetValue(this);
+        }
+        
+        public T GetOrSetValue(Config config = null)
+        {
+            config ??= Config;
+            return config.GetOrSetValue(this);
+        }
+        
+        public Boolean KeyExist(Config config = null)
+        {
+            config ??= Config;
+            return config.KeyExist(Key, Sections);
+        }
+        
+        public void RemoveValue(Config config = null)
+        {
+            config ??= Config;
+            config.RemoveValue(Key, Sections);
+        }
+    }
+}

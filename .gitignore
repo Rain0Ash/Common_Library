@@ -1,0 +1,6 @@
+/.idea/
+/.vs/
+old/
+bin/
+obj/
+/packages/
