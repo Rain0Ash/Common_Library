@@ -2,6 +2,7 @@
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
 using System;
+using System.Globalization;
 
 namespace Common_Library.Config
 {
@@ -12,8 +13,18 @@ namespace Common_Library.Config
         {
         }
         
+        public ConfigProperty(Config config, String key, params String[] sections)
+            : base(config, key, sections)
+        {
+        }
+        
         public ConfigProperty(String key, Object defaultValue, params String[] sections)
             : base(key, defaultValue, sections)
+        {
+        }
+        
+        public ConfigProperty(Config config, String key, Object defaultValue, params String[] sections)
+            : base(config, key, defaultValue, sections)
         {
         }
         
@@ -22,22 +33,43 @@ namespace Common_Library.Config
         {
         }
         
+        public ConfigProperty(Config config, String key, Object defaultValue, Boolean crypt, params String[] sections)
+            : base(config, key, defaultValue, crypt, sections)
+        {
+        }
+        
         public ConfigProperty(String key, Object defaultValue, Boolean crypt, Byte[] cryptKey, params String[] sections)
             : base(key, defaultValue, crypt, cryptKey, sections)
+        {
+        }
+        
+        public ConfigProperty(Config config, String key, Object defaultValue, Boolean crypt, Byte[] cryptKey, params String[] sections)
+            : base(config, key, defaultValue, crypt, cryptKey, sections)
         {
         }
     }
     
     public class ConfigProperty<T>
     {
-        public static Config Config
+        public static implicit operator String(ConfigProperty<T> property)
+        {
+            return property.ToString();
+        }
+
+        private Config _config;
+        
+        public Config Config
         {
             get
             {
-                return Config.StandartConfig;
+                return _config ?? Config.StandartConfig;
+            }
+            set
+            {
+                _config = value;
             }
         }
-        
+
         public String Key { get; }
         public String[] Sections { get; }
         public T DefaultValue { get; set; }
@@ -50,10 +82,22 @@ namespace Common_Library.Config
             Sections = sections;
         }
         
+        public ConfigProperty(Config config, String key, params String[] sections)
+            : this(key, sections)
+        {
+            Config = config;
+        }
+        
         public ConfigProperty(String key, T defaultValue, params String[] sections)
             : this(key, sections)
         {
             DefaultValue = defaultValue;
+        }
+        
+        public ConfigProperty(Config config, String key, T defaultValue, params String[] sections)
+            : this(key, defaultValue, sections)
+        {
+            Config = config;
         }
 
         public ConfigProperty(String key, T defaultValue, Boolean crypt, params String[] sections)
@@ -62,10 +106,22 @@ namespace Common_Library.Config
             Crypt = crypt;
         }
         
+        public ConfigProperty(Config config, String key, T defaultValue, Boolean crypt, params String[] sections)
+            : this(key, defaultValue, crypt, sections)
+        {
+            Config = config;
+        }
+        
         public ConfigProperty(String key, T defaultValue, Boolean crypt, Byte[] cryptKey, params String[] sections)
             : this(key, defaultValue, crypt, sections)
         {
             CryptKey = cryptKey;
+        }
+        
+        public ConfigProperty(Config config, String key, T defaultValue, Boolean crypt, Byte[] cryptKey, params String[] sections)
+            : this(key, defaultValue, crypt, cryptKey, sections)
+        {
+            Config = config;
         }
         
         public void SetValue(T value, Config config = null)
@@ -96,6 +152,11 @@ namespace Common_Library.Config
         {
             config ??= Config;
             config.RemoveValue(Key, Sections);
+        }
+
+        public override String ToString()
+        {
+            return Convert.ToString(GetValue(), CultureInfo.InvariantCulture);
         }
     }
 }

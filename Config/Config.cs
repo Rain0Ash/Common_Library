@@ -80,7 +80,7 @@ namespace Common_Library.Config
         protected virtual void Initialize()
         {
         }
-        
+
         public void SetValue(String key, Object value, params String[] sections)
         {
             this[key, sections] = Convert.ToString(value, CultureInfo.InvariantCulture);
@@ -269,6 +269,46 @@ namespace Common_Library.Config
 
         [CanBeNull]
         protected abstract String this[String key, params String[] sections] { get; set; }
+        
+        public ConfigProperty GetProperty(String key, params String[] sections)
+        {
+            return new ConfigProperty(this, key, sections);
+        }
+        
+        public ConfigProperty GetProperty(String key, Object defaultValue, params String[] sections)
+        {
+            return new ConfigProperty(this, key, defaultValue, sections);
+        }
+        
+        public ConfigProperty GetProperty(String key, Object defaultValue, Boolean crypt, params String[] sections)
+        {
+            return new ConfigProperty(this, key, defaultValue, crypt, sections);
+        }
+        
+        public ConfigProperty GetProperty(String key, Object defaultValue, Boolean crypt, Byte[] cryptKey, params String[] sections)
+        {
+            return new ConfigProperty(this, key, defaultValue, crypt, cryptKey, sections);
+        }
+        
+        public ConfigProperty<T> GetProperty<T>(String key, params String[] sections)
+        {
+            return new ConfigProperty<T>(this, key, sections);
+        }
+        
+        public ConfigProperty<T> GetProperty<T>(String key, T defaultValue, params String[] sections)
+        {
+            return new ConfigProperty<T>(this, key, defaultValue, sections);
+        }
+        
+        public ConfigProperty<T> GetProperty<T>(String key, T defaultValue, Boolean crypt, params String[] sections)
+        {
+            return new ConfigProperty<T>(this, key, defaultValue, crypt, sections);
+        }
+        
+        public ConfigProperty<T> GetProperty<T>(String key, T defaultValue, Boolean crypt, Byte[] cryptKey, params String[] sections)
+        {
+            return new ConfigProperty<T>(this, key, defaultValue, crypt, cryptKey, sections);
+        }
 
         protected Boolean CheckReadOnly()
         {

@@ -12,17 +12,25 @@ namespace Common_Library.Config.XML
         public XMLConfig(String configPath = null, Boolean isReadOnly = true)
             : base(PathUtils.IsValidFilePath(configPath) ? configPath : new FileInfo($"{ConfigName}.xml").FullName, isReadOnly)
         {
-            throw new NotImplementedException();
         }
         
         protected override String this[String key, params String[] sections]
         {
             get
             {
-                return null;
+                try
+                {
+                    Object content = Serialization.XML.XMLToObject<Object>(FileUtils.GetFileContents(ConfigPath), key);
+                    return content.GetType().GetField(key)?.GetValue(content)?.ToString();
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
             }
             set
             {
+                File.AppendAllText(ConfigPath, Serialization.XML.ObjectToXML(value, key));
             }
         }
     }
