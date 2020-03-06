@@ -8,9 +8,9 @@ namespace Common_Library.Network.Type
     public class Client : INetBase
     {
         private const Int32 ReceiveBufferSize = 8096;
-        private IPEndPoint _remoteEndPoint;
-        private BufferManager _bufferManager;
-        private Socket _connectSocket;
+        private readonly IPEndPoint _remoteEndPoint;
+        private readonly BufferManager _bufferManager;
+        private readonly Socket _connectSocket;
         private BaseProtocolHandler _protocolHandler;
 
         public Boolean IsStarted { get; private set; }

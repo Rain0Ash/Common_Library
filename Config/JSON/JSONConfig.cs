@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Windows.Forms;
 using Common_Library.Utils;
 using JetBrains.Annotations;
@@ -36,7 +35,6 @@ namespace Common_Library.Config
             }
             catch (Exception)
             {
-                throw;
                 return new NestedDictionary<String, String>();
             }
         }

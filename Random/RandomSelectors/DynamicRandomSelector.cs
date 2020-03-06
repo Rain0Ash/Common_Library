@@ -1,6 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System;
+using System.Linq;
 
 namespace Common_Library.Random {
 
@@ -34,23 +34,6 @@ namespace Common_Library.Random {
             _itemsList   = new List<T>(expectedNumberOfItems);
             _weightsList = new List<Single>(expectedNumberOfItems);
             _cdl         = new List<Single>(expectedNumberOfItems);
-        }
-        
-        /// <summary>
-        /// Constructor, where you can preload collection with items/weights array. 
-        /// </summary>
-        /// <param name="items">Items that will get returned on random selections</param>
-        /// <param name="weights">Un-normalized weights/chances of items, should be same length as items array</param>
-        /// <param name="seed">Leave it -1 if you want seed to be randomly picked</param>
-        /// <param name="expectedNumberOfItems">Set this if you know how much items the collection will hold, to minimize Garbage Collection</param>
-        public DynamicRandomSelector(IReadOnlyList<T> items, Single[] weights, Int32 seed = -1, Int32 expectedNumberOfItems = 32) : this() {
-        
-            for(Int32 i = 0; i < items.Count; i++)
-            {
-                Add(items[i], weights[i]);
-            }
-
-            Build();
         }
 
         /// <summary>

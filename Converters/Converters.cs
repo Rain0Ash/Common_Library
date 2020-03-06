@@ -7,7 +7,7 @@ namespace Common_Library.Converters
 {
     public static class Converters
     {
-        public static Boolean ToBoolean(Object obj)
+        public static Boolean ToBoolean(Object? obj)
         {
             return obj?.ToString().ToUpper() switch
             {

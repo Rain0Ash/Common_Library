@@ -3,6 +3,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Globalization;
 
 namespace Common_Library.Utils
 {
@@ -52,6 +53,11 @@ namespace Common_Library.Utils
                 value = default;
                 return false;
             }
+        }
+        
+        public static String Convert(this Object obj, IFormatProvider info = null)
+        {
+            return System.Convert.ToString(obj, info ?? CultureInfo.InvariantCulture);
         }
     }
 }

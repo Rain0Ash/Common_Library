@@ -19,12 +19,12 @@ namespace Common_Library.Random {
         /// Needs array of items and CDA (Cummulative Distribution Array). 
         /// </summary>
         /// <param name="items">Items of type T</param>
-        /// <param name="CDA">Cummulative Distribution Array</param>
+        /// <param name="cda">Cummulative Distribution Array</param>
         /// <param name="seed">Seed for internal random generator</param>
-        public StaticRandomSelectorLinear(T[] items, Single[] CDA, Int32 seed) {
+        public StaticRandomSelectorLinear(T[] items, Single[] cda, Int32 seed) {
 
             _items = items;
-            _cda = CDA;
+            _cda = cda;
             _random = new System.Random(seed);           
         }
 

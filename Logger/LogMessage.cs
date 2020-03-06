@@ -13,7 +13,7 @@ namespace Common_Library.Logger
 {
     public class LogMessage : IConsoleMsg
     {
-        public static readonly Dictionary<MessageType, ConsoleColor> MessageColors = new Dictionary<MessageType, ConsoleColor>
+        public static Dictionary<MessageType, ConsoleColor> MessageColors { get; } = new Dictionary<MessageType, ConsoleColor>
         {
             {MessageType.Default, ConsoleColor.White},
             {MessageType.Debug, ConsoleColor.Cyan},

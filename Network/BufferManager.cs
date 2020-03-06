@@ -9,11 +9,11 @@ namespace Common_Library.Network
 {
     public class BufferManager
     {
-        private Int32 _numBytes;
+        private readonly Int32 _numBytes;
         private Byte[] _buffer;
-        private ConcurrentStack<Int32> _freeIndexPool;
+        private readonly ConcurrentStack<Int32> _freeIndexPool;
         private Int32 _currentIndex;
-        private Int32 _bufferSize;
+        private readonly Int32 _bufferSize;
 
         public BufferManager(Int32 totalBytes, Int32 bufferSize)
         {

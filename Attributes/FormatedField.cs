@@ -2,12 +2,10 @@
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using Common_Library.Comparers;
 using Common_Library.Utils;
 
 namespace Common_Library.Attributes
@@ -119,7 +117,7 @@ namespace Common_Library.Attributes
             }
             catch (Exception)
             {
-                throw;
+                return str;
             }
         }
     }

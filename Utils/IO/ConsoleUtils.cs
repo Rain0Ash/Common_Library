@@ -2,19 +2,11 @@
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using Common_Library.Types.Map;
 
 namespace Common_Library.Utils
 {
-    public interface IConsoleMsg
-    {
-        void ToConsole();
-        void ToConsole(Boolean newLine);
-        void ToConsole(Boolean newLine, ConsoleColor color);
-    }
-    
     public static class ConsoleUtils
     {
         private static readonly Map<Color, ConsoleColor> ColorMap = new Map<Color, ConsoleColor>
@@ -47,66 +39,108 @@ namespace Common_Library.Utils
             return ColorMap.TryGetValue(consoleColor, out Color color) ? color : Color.White;
         }
 
-        public static void Write(Object obj)
+        public static void Write(Object obj, IFormatProvider info = null)
         {
-            ToConsole(obj, false);
+            ToConsole(obj, false, info);
         }
         
-        public static void Write(Object obj, ConsoleColor color)
+        public static void Write(Object obj, ConsoleColor color, IFormatProvider info = null)
         {
-            ToConsole(obj, color, false);
+            ToConsole(obj, color, false, info);
         }
         
-        public static void Write(Object obj, ConsoleColor color, ConsoleColor bColor)
+        public static void Write(Object obj, ConsoleColor color, ConsoleColor bColor, IFormatProvider info = null)
         {
-            ToConsole(obj, color, bColor, false);
+            ToConsole(obj, color, bColor, false, info);
         }
         
-        public static void WriteLine(Object obj)
+        public static void WriteLine(IFormatProvider info = null)
         {
-            ToConsole(obj);
+            WriteLine(String.Empty, info);
         }
         
-        public static void WriteLine(Object obj, ConsoleColor color)
+        public static void WriteLine(Object obj, IFormatProvider info = null)
         {
-            ToConsole(obj, color);
+            ToConsole(obj, info);
         }
         
-        public static void WriteLine(Object obj, ConsoleColor color, ConsoleColor bColor)
+        public static void WriteLine(Object obj, ConsoleColor color, IFormatProvider info = null)
         {
-            ToConsole(obj, color, bColor);
+            ToConsole(obj, color, true, info);
         }
         
-        public static void ToConsole(this Object obj, Boolean newLine = true)
+        public static void WriteLine(Object obj, Color color, IFormatProvider info = null)
+        {
+            ToConsole(obj, color, true, info);
+        }
+        
+        public static void WriteLine(Object obj, ConsoleColor color, ConsoleColor bColor, IFormatProvider info = null)
+        {
+            ToConsole(obj, color, bColor, true, info);
+        }
+        
+        public static void WriteLine(Object obj, Color color, Color bColor, IFormatProvider info = null)
+        {
+            ToConsole(obj, color, bColor, true, info);
+        }
+        
+        public static void ToConsole(this Object obj, IFormatProvider info = null)
+        {
+            ToConsole(obj, true, info);
+        }
+
+        public static void ToConsole(this Object obj, Boolean newLine = true, IFormatProvider info = null)
         {
             if (newLine)
             {
-                Console.WriteLine(obj);
+                Console.WriteLine(obj.Convert(info));
             }
             else
             {
-                Console.Write(obj);
+                Console.Write(obj.Convert(info));
             }
         }
         
-        public static void ToConsole(this Object obj, ConsoleColor color, Boolean newLine = true)
+        public static void ToConsole(this Object obj, ConsoleColor color, Boolean newLine = true, IFormatProvider info = null)
         {
             ConsoleColor consoleColor = Console.ForegroundColor;
             Console.ForegroundColor = color;
             
-            ToConsole(obj, newLine);
+            ToConsole(obj, newLine, info);
                 
             Console.ForegroundColor = consoleColor;
         }
         
-        public static void ToConsole(this Object obj, ConsoleColor color, ConsoleColor bColor, Boolean newLine = true)
+        public static void ToConsole(this Object obj, Color color, Boolean newLine = true, IFormatProvider info = null)
+        {
+            if (newLine)
+            {
+                Colorful.Console.WriteLine(obj.Convert(info), color);
+            }
+            else
+            {
+                Colorful.Console.Write(obj.Convert(info), color);
+            }
+        }
+        
+        public static void ToConsole(this Object obj, ConsoleColor color, ConsoleColor bColor, Boolean newLine = true, IFormatProvider info = null)
         {
             ConsoleColor backgroundColor = Console.BackgroundColor;
             Console.BackgroundColor = bColor;
             
-            ToConsole(obj, color, newLine);
+            ToConsole(obj, color, newLine, info);
                 
             Console.BackgroundColor = backgroundColor;
+        }
+        
+        public static void ToConsole(this Object obj, Color color, Color bColor, Boolean newLine = true, IFormatProvider info = null)
+        {
+            Color backgroundColor = Colorful.Console.BackgroundColor;
+            Colorful.Console.BackgroundColor = bColor;
+            
+            ToConsole(obj, color, newLine);
+                
+            Colorful.Console.BackgroundColor = backgroundColor;
         }
     }
 }

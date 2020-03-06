@@ -9,10 +9,10 @@ namespace Common_Library.Network.Type
     public class Server : INetBase
     {
         private const Int32 ReceiveBufferSize = 8096;
-        private BufferManager _bufferManager;
-        private Socket _listenSocket;
-        private Semaphore _maxNumberAcceptedClients;
-        private ConcurrentDictionary<UInt32, Session> _sessions;
+        private readonly BufferManager _bufferManager;
+        private readonly Socket _listenSocket;
+        private readonly Semaphore _maxNumberAcceptedClients;
+        private readonly ConcurrentDictionary<UInt32, Session> _sessions;
         private BaseProtocolHandler _protocolHandler;
 
         public Boolean IsStarted { get; private set; }

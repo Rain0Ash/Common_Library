@@ -65,10 +65,60 @@ namespace Common_Library.Types.Other
             }
         }
 
-        public Image FolderImage { get; set; } = Images.Images.Lineal.Folder;
-        public Image NotFolderImage { get; set; } = Images.Images.Lineal.NotFolder;
-        public Image FileImage { get; set; } = Images.Images.Lineal.File;
-        public Image NotFileImage { get; set; } = Images.Images.Lineal.NotFile;
+        private Image _folderImage;
+        public Image FolderImage
+        {
+            get
+            {
+                return _folderImage ?? Images.Images.Lineal.Folder;
+            }
+            set
+            {
+                _folderImage = value;
+            }
+        }
+
+        private Image _notFolderImage;
+
+        public Image NotFolderImage
+        {
+            get
+            {
+                return _notFolderImage ?? Images.Images.Lineal.NotFolder;
+            }
+            set
+            {
+                _notFolderImage = value;
+            }
+        }
+
+        private Image _fileImage;
+
+        public Image FileImage
+        {
+            get
+            {
+                return _fileImage ?? Images.Images.Lineal.File;
+            }
+            set
+            {
+                _fileImage = value;
+            }
+        }
+
+        private Image _notFileImage;
+
+        public Image NotFileImage
+        {
+            get
+            {
+                return _notFileImage ?? Images.Images.Lineal.NotFile;
+            }
+            set
+            {
+                _notFileImage = value;
+            }
+        }
 
         public Image GetPathTypeIcon
         {

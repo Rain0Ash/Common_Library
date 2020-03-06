@@ -2,7 +2,6 @@
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
 using System;
-using System.Windows.Forms;
 using Common_Library.LongPath;
 
 namespace Common_Library.Utils
@@ -76,7 +75,7 @@ namespace Common_Library.Utils
                 }
                 catch (Exception)
                 {
-                    throw;
+                    //ignore
                 }
             }
         }

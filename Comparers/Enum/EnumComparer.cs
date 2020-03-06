@@ -3,20 +3,16 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq.Expressions;
 
 namespace Common_Library.Comparers.Enum
 {
-    public struct EnumEqualityComparer<TEnum> : IEqualityComparer<TEnum> where TEnum : struct
+    public struct EnumEqualityComparer<TEnum> : IEqualityComparer<TEnum> where TEnum : struct, IConvertible
     {
         private static class BoxAvoidance
         {
             private static readonly Func<TEnum, Int32> Wrapper;
-
-            public static Int32 ToInt(TEnum enu)
-            {
-                return Wrapper(enu);
-            }
 
             static BoxAvoidance()
             {
@@ -25,17 +21,52 @@ namespace Common_Library.Comparers.Enum
 
                 Wrapper = Expression.Lambda<Func<TEnum, Int32>>(c, p).Compile();
             }
+            
+            public static Int32 ToInt(TEnum @enum)
+            {
+                return Wrapper(@enum);
+            }
         }
 
         public Boolean Equals(TEnum firstEnum, TEnum secondEnum)
         {
-            return BoxAvoidance.ToInt(firstEnum) == 
-                   BoxAvoidance.ToInt(secondEnum);
+            return BoxAvoidance.ToInt(firstEnum) == BoxAvoidance.ToInt(secondEnum);
         }
 
         public Int32 GetHashCode(TEnum firstEnum)
         {
             return BoxAvoidance.ToInt(firstEnum);
+        }
+    }
+    
+    public struct EnumEqualityComparer<TEnum, TInt> : IEqualityComparer<TEnum> where TEnum : struct, IConvertible where TInt : struct, IConvertible, IEquatable<TInt>
+    {
+        private static class BoxAvoidance
+        {
+            private static readonly Func<TEnum, TInt> Wrapper;
+
+            static BoxAvoidance()
+            {
+                ParameterExpression p = Expression.Parameter(typeof(TEnum), null);
+                UnaryExpression c = Expression.ConvertChecked(p, typeof(TInt));
+
+                Wrapper = Expression.Lambda<Func<TEnum, TInt>>(c, p).Compile();
+            }
+            
+            public static TInt ToInt(TEnum @enum)
+            {
+                return Wrapper(@enum);
+            }
+        }
+
+        public Boolean Equals(TEnum firstEnum, TEnum secondEnum)
+        {
+            return BoxAvoidance.ToInt(firstEnum).Equals(BoxAvoidance.ToInt(secondEnum));
+        }
+
+        public Int32 GetHashCode(TEnum firstEnum)
+        {
+            return BoxAvoidance.ToInt(firstEnum).ToInt32(CultureInfo.InvariantCulture);
         }
     }
 }

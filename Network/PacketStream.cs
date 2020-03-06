@@ -871,7 +871,7 @@ namespace Common_Library.Network
 
         #region IComparable Members
 
-        public Int32 CompareTo(Object obj)
+        public Int32 CompareTo(Object? obj)
         {
             if (!(obj is PacketStream stream))
             {

@@ -12,7 +12,7 @@ namespace Common_Library.Threading
     public class Synchronizer<T>
     {
 
-        private Dictionary<T, SyncLock> _locks = new Dictionary<T, SyncLock>();
+        private readonly Dictionary<T, SyncLock> _locks = new Dictionary<T, SyncLock>();
         private readonly Object _mLock = new Object();
 
         /// <summary>

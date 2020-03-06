@@ -29,7 +29,7 @@ namespace Common_Library.DataBase
             {
                 cn.Open();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return null;
             }

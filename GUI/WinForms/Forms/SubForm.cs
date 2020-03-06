@@ -33,7 +33,7 @@ namespace Common_Library.GUI.WinForms.Forms
             }
         }
 
-        private Form _baseForm;
+        private readonly Form _baseForm;
 
         public SubForm(Form baseForm)
         {

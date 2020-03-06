@@ -14,6 +14,7 @@ namespace Common_Library.Localization
     public abstract class LocalizationBase
     {
         public const String DefaultCultureCode = @"en";
+        private const UInt16 DefaultCultureLCID = 0x409;
         public static event Handlers.EmptyHandler LanguageChanged;
 
         public static readonly String NewLine = Environment.NewLine;
@@ -89,8 +90,7 @@ namespace Common_Library.Localization
             }
             catch (Exception)
             {
-                const UInt16 englishLCID = 0x409;
-                lcid = englishLCID;
+                lcid = DefaultCultureLCID;
             }
             
             SetUILanguage(lcid);

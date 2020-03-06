@@ -5,9 +5,5 @@ namespace Common_Library.GUI.WinForms.ListBoxes
 {
     public class AdditionalPathListBox : PathListBox
     {
-        public AdditionalPathListBox()
-        {
-            
-        }
     }
 }

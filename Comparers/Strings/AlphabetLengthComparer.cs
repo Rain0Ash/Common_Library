@@ -7,8 +7,13 @@ namespace Common_Library.Comparers
 {
     public class AlphabetLengthComparer : System.Collections.IComparer
     {
-        public Int32 Compare(Object x, Object y)
+        public Int32 Compare(Object? x, Object? y)
         {
+            if (x == null || y == null)
+            {
+                return -2;
+            }
+            
             if (x.ToString().Length == y.ToString().Length)
             {
                 return String.CompareOrdinal(x.ToString(), y.ToString());

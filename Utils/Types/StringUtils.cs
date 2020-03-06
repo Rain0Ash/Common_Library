@@ -102,7 +102,7 @@ namespace Common_Library.Utils
             Match match = Regex.Match(path, FormatVariableRegexPattern);
             return match.Success ? path.Substring(0, match.Index) : null;
         }
-        
+
         public static String Format(this String source, params Object[] args)
         {
             if (source == null)

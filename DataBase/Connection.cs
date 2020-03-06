@@ -3,8 +3,6 @@
 
 using System;
 using System.Data.Common;
-using System.Data.SqlClient;
-using MySql.Data.MySqlClient;
 
 namespace Common_Library.DataBase
 {
@@ -58,7 +56,7 @@ namespace Common_Library.DataBase
         
         public override String ToString()
         {
-            return $"Server={Host},{Port};User={User};Password={Password};Database={Database};Pooling={Pooling};Min Pool Size={MinPoolSize};Max Pool Size={MaxPoolSize};Trusted_Connection={TrustedConnection};Connection Timeout={Timeout};Connection Lifetime={Lifetime}";
+            return $"Server={Host},{Port};User={User};Password={Password};Database={Database};Pooling={Pooling};Min Pool Size={MinPoolSize};Max Pool Size={MaxPoolSize};Connection Timeout={Timeout};Connection Lifetime={Lifetime}";
         }
     }
 }
