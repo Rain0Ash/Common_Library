@@ -5,7 +5,7 @@ using System;
 
 namespace Common_Library.GUI.WinForms.TextBoxes
 {
-    public class HidenTextBox : ValidateTextBox
+    public class HidenTextBox : ValidableTextBox
     {
         private const Char ResetChar = '\0';
 

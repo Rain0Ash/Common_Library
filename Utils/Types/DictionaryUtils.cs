@@ -8,33 +8,50 @@ namespace Common_Library.Utils
 {
     public static class DictionaryUtils
     {
-        public static Boolean TryGetValue<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, out TValue result, TValue defaultValue = default)
+        public static Boolean TryGetValue<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key, out TValue result, TValue defaultValue = default)
         {
             try
             {
                 result = dictionary[key];
                 return true;
             }
-            catch (ArgumentOutOfRangeException)
+            catch (KeyNotFoundException)
             {
                 result = defaultValue;
                 return false;
             }
         }
         
-        public static TValue TryGetValue<TKey, TValue>(this IDictionary<TKey, TValue> list, TKey key, TValue defaultValue = default)
+        public static TValue TryGetValue<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key, TValue defaultValue = default)
         {
-            return TryGetValue(list, key, out TValue result) ? result : defaultValue;
+            return TryGetValue(dictionary, key, out TValue result) ? result : defaultValue;
         }
         
+        public static KeyValuePair<TKey, TValue> GetPair<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key)
+        {
+            return new KeyValuePair<TKey, TValue>(key, dictionary[key]);
+        }
+        
+        public static Boolean TryGetPair<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key, out KeyValuePair<TKey, TValue> pair)
+        {
+            if (dictionary.ContainsKey(key))
+            {
+                pair = GetPair(dictionary, key);
+                return true;
+            }
+
+            pair = default;
+            return false;
+        }
+
         public static Dictionary<TValue, TKey> Reverse<TKey, TValue>(this IDictionary<TKey, TValue> source)
         {
             Dictionary<TValue, TKey> dictionary = new Dictionary<TValue, TKey>();
-            foreach (KeyValuePair<TKey, TValue> entry in source)
+            foreach ((TKey key, TValue value) in source)
             {
-                if(!dictionary.ContainsKey(entry.Value))
+                if(!dictionary.ContainsKey(value))
                 {
-                    dictionary.Add(entry.Value, entry.Key);
+                    dictionary.Add(value, key);
                 }
             }
             
@@ -45,9 +62,9 @@ namespace Common_Library.Utils
         {
             Dictionary<TKey, TValue> ret = new Dictionary<TKey, TValue>(original.Count, original.Comparer);
             
-            foreach (KeyValuePair<TKey, TValue> entry in original)
+            foreach ((TKey key, TValue value) in original)
             {
-                ret.Add(entry.Key, (TValue) entry.Value.Clone());
+                ret.Add(key, (TValue) value.Clone());
             }
             
             return ret;

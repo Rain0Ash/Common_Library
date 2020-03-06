@@ -15,9 +15,9 @@ namespace Common_Library
 
         public delegate void EnumerableHandler(IEnumerable<Object> list);
 
-        public delegate void IntHandler(Int32 number);
+        public delegate void Int32Handler(Int32 number);
         
-        public delegate void IntArrayHandler(Int32 number);
+        public delegate void Int32ArrayHandler(Int32[] number);
         
         public delegate void BooleanHandler(Boolean boolean);
 

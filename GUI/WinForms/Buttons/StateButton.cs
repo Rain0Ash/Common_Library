@@ -10,7 +10,7 @@ namespace Common_Library.GUI.WinForms.Buttons
     public class StateButton : Button
     {
         private Int32 _state;
-        public event Handlers.IntHandler StateChanged;
+        public event Handlers.Int32Handler StateChanged;
 
         public Int32 State
         {
@@ -32,7 +32,7 @@ namespace Common_Library.GUI.WinForms.Buttons
         }
 
         private Int32 _maximumStates;
-        public event Handlers.IntHandler MaximumStatesChanged;
+        public event Handlers.Int32Handler MaximumStatesChanged;
 
         public Int32 MaximumStates
         {

@@ -3,21 +3,17 @@
 
 using System.Linq;
 using Common_Library;
+using Common_Library.Types.Interfaces;
 
 namespace System.Collections.Generic
 {
-    public class EventDictionary<TKey,TValue> : Dictionary<TKey, TValue>
+    public class EventDictionary<TKey,TValue> : Dictionary<TKey, TValue>, IEventPairType<TKey, TValue>
     {
         public event Handlers.TypeKeyValueHandler<TKey, TValue> OnAdd;
-        
         public event Handlers.TypeKeyValueHandler<TKey, TValue> OnSet;
-        
         public event Handlers.TypeKeyValueHandler<TKey, TValue> OnRemove;
-        
         public event Handlers.TypeKeyValueHandler<TKey, TValue> OnChange;
-
         public event Handlers.EmptyHandler ItemsChanged;
-        
         public event Handlers.EmptyHandler OnClear;
 
         public new void Add(TKey key, TValue value)

@@ -83,7 +83,7 @@ namespace Common_Library.Logger
 
         public override String ToString()
         {
-            CultureInfo cultureInfo = LocalizationBase.GetLocalizationCulture();
+            CultureInfo cultureInfo = LocalizationBase.CurrentCulture;
             
             String dateTime = MessageAdditions switch
             {

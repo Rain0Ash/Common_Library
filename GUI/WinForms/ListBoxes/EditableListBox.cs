@@ -7,7 +7,7 @@ using Common_Library.Utils;
 
 namespace Common_Library.GUI.WinForms.ListBoxes
 {
-    public class EditableListBox : ValidateListBox
+    public class EditableListBox : ValidableListBox
     {
         public ActionType ActionType { get; set; } = ActionType.All;
 

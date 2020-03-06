@@ -3,13 +3,16 @@
 
 using System.Linq;
 using Common_Library;
+using Common_Library.Types.Interfaces;
 
 namespace System.Collections.Generic
 {
-    public class EventList<T> : List<T>
+    public class EventList<T> : List<T>, IEventListType<T>
     {
         public event Handlers.TypeHandler<T> OnAdd;
+        public event Handlers.TypeHandler<T> OnSet;
         public event Handlers.TypeHandler<T> OnRemove;
+        public event Handlers.TypeHandler<T> OnChange;
         public event Handlers.EmptyHandler OnClear;
         public event Handlers.EmptyHandler ItemsChanged;
 

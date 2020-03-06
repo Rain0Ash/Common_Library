@@ -2,15 +2,17 @@
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Common_Library.Localization;
+using Common_Library.Utils;
 
 namespace Common_Library.GUI.WinForms.ComboBoxes
 {
     public sealed class LocalizationComboBox : ImagedComboBox
     {
-        public event Handlers.StringHandler LanguageChanged;
+        public event Handlers.Int32Handler LanguageChanged;
         private readonly LocalizationBase _localizationBase;
 
         public LocalizationComboBox(LocalizationBase localization)
@@ -18,8 +20,9 @@ namespace Common_Library.GUI.WinForms.ComboBoxes
             _localizationBase = localization ?? throw new NullReferenceException();
             BindingContext = new BindingContext();
             DataSource = GetItemsForDataSource();
-            LocalizationBase.LanguageChanged += () => SetLanguage();
-            LanguageChanged += LocalizationBase.UpdateLocalization;
+            LocalizationBase.LanguageChanged += SetLanguage;
+            LanguageChanged += lcid => LocalizationBase.UpdateLocalization(lcid, _localizationBase.AvailableLocalization);
+            SetLanguage();
         }
 
         protected override void UpdateText()
@@ -30,19 +33,24 @@ namespace Common_Library.GUI.WinForms.ComboBoxes
         private DropDownItem[] GetItemsForDataSource()
         {
             return _localizationBase.GetCultures()
-                .Select(culture => new DropDownItem(culture.CultureName) {Image = culture.CultureImage}).ToArray();
+                .Select(culture => new DropDownItem(culture.CustomName) {Image = culture.Image}).ToArray();
         }
 
-        public void SetLanguage(String languageCodeOrName = null)
+        public void SetLanguage()
         {
-            Int32 selectedIndex = _localizationBase.GetLanguageID(languageCodeOrName ?? LocalizationBase.GetLocalizationCultureCode());
-            if (selectedIndex > -1)
+            SetLanguage(LocalizationBase.CurrentCulture.LCID);
+        }
+        
+        public void SetLanguage(Int32 lcid)
+        {
+            Int32 selectedIndex = LocalizationBase.GetLanguageOrderID(lcid);
+            if (MathUtils.InRange(selectedIndex, MathUtils.Position.Left, 0, Items.Count))
             {
                 SelectedIndex = selectedIndex;
                 return;
             }
-            
-            SelectedIndex = -1;
+
+            SelectedIndex = LocalizationBase.GetLanguageOrderID(LocalizationBase.BasicCulture.LCID);
         }
 
         protected override void OnVisibleChanged(EventArgs e)
@@ -54,15 +62,16 @@ namespace Common_Library.GUI.WinForms.ComboBoxes
             }
         }
 
-        public String GetLanguageCode()
+        public Int32 GetLanguageLCID()
         {
-            return CountryData.LanguageNameByISO2.FirstOrDefault(x => x.Value.CustomName == Text).Key?.ToLower() ?? LocalizationBase.DefaultCultureCode;
+            return LocalizationBase.CultureByLCID.FirstOr(x => String.Equals(x.Value.CustomName, Text, StringComparison.CurrentCultureIgnoreCase), 
+                new KeyValuePair<Int32, CultureInfoFixed>(LocalizationBase.DefaultCulture.LCID, LocalizationBase.DefaultCulture)).Key;
         }
 
         protected override void OnSelectedIndexChanged(EventArgs e)
         {
             base.OnSelectedIndexChanged(e);
-            LanguageChanged?.Invoke(GetLanguageCode());
+            LanguageChanged?.Invoke(GetLanguageLCID());
         }
 
         protected override void Dispose(Boolean disposing)

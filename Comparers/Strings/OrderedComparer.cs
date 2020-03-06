@@ -7,16 +7,28 @@ using System.Linq;
 
 namespace Common_Library.Comparers
 {
-    public class OrderedComparer : IComparer<Object>
+    public class OrderedComparer : OrderedComparer<Object>
     {
-        private readonly List<Object> _orderList;
+    }
+    
+    public class OrderedComparer<T> : IComparer<T>
+    {
+        private readonly List<T> _orderList;
 
-        public OrderedComparer(IEnumerable<Object> languageOrderList = null)
+        protected IList<T> Order
         {
-            _orderList = (languageOrderList ?? new Object[0]).ToList();
+            get
+            {
+                return _orderList;
+            }
         }
 
-        public Int32 Compare(Object x, Object y)
+        public OrderedComparer(IEnumerable<T> languageOrderList = null)
+        {
+            _orderList = (languageOrderList ?? new T[0]).ToList();
+        }
+
+        public Int32 Compare(T x, T y)
         {
             Int32 indexOfX = _orderList.IndexOf(x);
             Int32 indexOfY = _orderList.IndexOf(y);

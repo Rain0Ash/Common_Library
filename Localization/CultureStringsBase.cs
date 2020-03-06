@@ -3,61 +3,100 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
+using System.Windows.Forms;
 using Common_Library.Attributes;
+using Common_Library.Utils;
 
 namespace Common_Library.Localization
 {
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class CultureStringsBase
         {
-            private readonly IComparer<String> _comparer;
+            public static CultureComparer Comparer
+            {
+                get
+                {
+                    return LocalizationBase.DefaultComparer;
+                }
+            }
 
             public static implicit operator String(CultureStringsBase obj)
             {
                 return obj.ToString();
             }
+
+            protected const String StringMissing = @"String is missing";
+
+            internal static IEnumerable<String> DefaultLocalization { get; } = new[] {"en"}.Select(code => code.ToLower());
             
-            private const String StringMissing = @"String is missing";
+            public virtual IEnumerable<Int32> AvailableLocalization
+            {
+                get
+                {
+                    return DefaultLocalization.Select(GetLCID);;
+                }
+            }
             
-            // ReSharper disable once InconsistentNaming
-            [LanguageField] public String en;
+            protected readonly Dictionary<Int32, String> Localization;
+
+            protected static Int32 GetLCID(String code)
+            {
+                return LocalizationBase.CodeByLCID.TryGetValue(code, LocalizationBase.DefaultCulture.LCID);
+            }
+
+            private static readonly Int32 DefaultLCID = GetLCID(LocalizationBase.DefaultCulture.Code);
+
+            private String Default
+            {
+                get
+                {
+                    return Localization.TryGetValue(DefaultLCID, StringMissing);
+                }
+                set
+                {
+                    Localization[DefaultLCID] = value ?? String.Empty;
+                }
+            }
+            
+            public String en
+            {
+                get
+                {
+                    return Default;
+                }
+                protected set
+                {
+                    Default = value;
+                }
+            }
 
             public CultureStringsBase()
                 : this(StringMissing)
             {
             }
             
-            public CultureStringsBase(String english, IComparer<String> comparer = null)
+            public CultureStringsBase([NotNull]String english)
             {
+                Localization = AvailableLocalization.ToDictionary(lcid => lcid, lcid => (String)null);
                 en = english ?? StringMissing;
-                _comparer = comparer ?? new CultureComparer();
             }
-            
-            private IEnumerable<Culture> GetAvailableCultures()
+
+            public IEnumerable<CultureInfoFixed> GetCultures()
             {
-                return GetType()
-                    .GetMembers(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
-                    .Where(field =>
-                        (field.GetCustomAttribute<LanguageField>()?.Enabled ?? false) &&
-                        CountryData.LanguageNameByISO2.ContainsKey(field.Name.ToUpper()))
-                    .Select(field => new Culture(field.Name));
-            }
-            
-            public IEnumerable<Culture> GetCultures()
-            {
-                return GetAvailableCultures()
-                    .OrderBy(culture => culture.CultureName, _comparer);
+                return Localization.Keys.Select(lcid => LocalizationBase.CultureByLCID[lcid]).OrderBy(culture => culture.Code, Comparer);
             }
 
             public override String ToString()
             {
-                Type type = GetType();
-                const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public;
-                String str = type.GetField(String.IsNullOrEmpty(LocalizationBase.LocalizationCultureCode) ? LocalizationBase.DefaultCultureCode : LocalizationBase.LocalizationCultureCode, flags)?.GetValue(this)?.ToString() ?? 
-                             type.GetField(LocalizationBase.DefaultCultureCode, flags)?.GetValue(this)?.ToString() ?? StringMissing;
-
-                return str;
+                return ToString(LocalizationBase.CurrentCulture.LCID);
+            }
+            
+            public String ToString(Int32 lcid)
+            {
+                return Localization.TryGetValue(lcid, Default) ?? Default;
             }
         }
 }

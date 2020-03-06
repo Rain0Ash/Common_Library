@@ -40,19 +40,15 @@ namespace Common_Library.GUI.WinForms.ComboBoxes
 
         public Image Image { get; set; }
 
-        public DropDownItem()
-            : this(String.Empty)
-        { }
-
-        public DropDownItem(String text)
-            : this(new CultureStringsBase(text))
+        public DropDownItem(String text, Image image = null)
+            : this(new CultureStringsBase(text), image)
         {
         }
 
-        public DropDownItem(CultureStringsBase text)
+        public DropDownItem(CultureStringsBase text, Image image = null)
         {
             Value = text;
-            Image = new Bitmap(16, 16);
+            Image = image ?? new Bitmap(16, 16);
             using Graphics graphics = Graphics.FromImage(Image);
             using Brush brush = new SolidBrush(Color.FromName(text));
             graphics.DrawRectangle(Pens.White, 0, 0, Image.Width, Image.Height);

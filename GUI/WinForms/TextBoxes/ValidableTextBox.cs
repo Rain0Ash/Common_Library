@@ -7,9 +7,9 @@ using Common_Library.Interfaces;
 
 namespace Common_Library.GUI.WinForms.TextBoxes
 {
-    public abstract class ValidateTextBox : HistoryTextBox, IValidate
+    public abstract class ValidableTextBox : HistoryTextBox, IValidable
     {
-        protected ValidateTextBox()
+        protected ValidableTextBox()
         {
             TextChanged += (sender, args) => CheckValidFormatColor();
         }

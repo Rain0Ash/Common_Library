@@ -8,7 +8,7 @@ using Common_Library.Utils;
 
 namespace Common_Library.Types.Map
 {
-    public class Map<TKey, TValue> : Dictionary<TKey, TValue>
+    public class Map<TKey, TValue> : Dictionary<TKey, TValue>, IMap<TKey, TValue>
     {
         private Dictionary<TValue, TKey> Reverse { get; }
 
@@ -56,13 +56,32 @@ namespace Common_Library.Types.Map
         
         public void Add(TValue key, TKey value)
         {
-            base.Add(value, key);
-            Reverse.Add(key, value);
+            Add(value, key);
+        }
+        
+        public new Boolean TryAdd(TKey key, TValue value)
+        {
+            if (!base.ContainsKey(key) && !Reverse.ContainsKey(value))
+            {
+                return base.TryAdd(key, value) && Reverse.TryAdd(value, key);
+            }
+
+            return false;
+        }
+        
+        public Boolean TryAdd(TValue key, TKey value)
+        {
+            return TryAdd(value, key);
         }
         
         public new void Remove(TKey key)
         {
-            if (TryGetValue(key, out TValue value))
+            Remove(key, out _);
+        }
+        
+        public new void Remove(TKey key, out TValue value)
+        {
+            if (TryGetValue(key, out value))
             {
                 return;
             }
@@ -73,7 +92,12 @@ namespace Common_Library.Types.Map
         
         public void Remove(TValue key)
         {
-            if (!Reverse.TryGetValue(key, out TKey value))
+            Remove(key, out _);
+        }
+        
+        public void Remove(TValue key, out TKey value)
+        {
+            if (!Reverse.TryGetValue(key, out value))
             {
                 return;
             }
@@ -82,6 +106,16 @@ namespace Common_Library.Types.Map
             Reverse.Remove(key);
         }
 
+        public Boolean ContainsKey(TValue value)
+        {
+            return Reverse.ContainsKey(value);
+        }
+
+        public Boolean TryGetValue(TValue key, out TKey value)
+        {
+            return Reverse.TryGetValue(key, out value);
+        }
+        
         public new void Clear()
         {
             base.Clear();
@@ -112,11 +146,6 @@ namespace Common_Library.Types.Map
                 Reverse[key] = value;
                 base[value] = key;
             }
-        }
-
-        public Boolean TryGetValue(TValue key, out TKey value)
-        {
-            return Reverse.TryGetValue(key, out value);
         }
 
         public IReadOnlyDictionary<TKey, TValue> Get()

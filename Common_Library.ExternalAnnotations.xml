@@ -16,6 +16,11 @@
       <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
     </parameter>
   </member>
+  <member name="M:Common_Library.Localization.CultureStringsBase.#ctor(System.String)">
+    <parameter name="english">
+      <attribute ctor="M:System.Diagnostics.CodeAnalysis.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
   <member name="M:Common_Library.Mail.Mail.#ctor(System.Net.Mail.SmtpClient,System.Net.Mail.MailAddress)">
     <parameter name="smtpClient">
       <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />

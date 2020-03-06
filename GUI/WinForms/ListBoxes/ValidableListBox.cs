@@ -8,9 +8,9 @@ using Common_Library.Interfaces;
 
 namespace Common_Library.GUI.WinForms.ListBoxes
 {
-    public class ValidateListBox : EventListBox, IValidate
+    public class ValidableListBox : EventListBox, IValidable
     {
-        public ValidateListBox()
+        public ValidableListBox()
         {
             ItemsChanged += CheckValidFormatColor;
         }

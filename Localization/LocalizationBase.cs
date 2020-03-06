@@ -3,94 +3,161 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Generic.Interfaces;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
+using Common_Library.Types.Map;
+using Common_Library.Utils;
 
-namespace Common_Library.Localization
+ namespace Common_Library.Localization
 {
     [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
     public abstract class LocalizationBase
     {
-        public const String DefaultCultureCode = @"en";
-        private const UInt16 DefaultCultureLCID = 0x409;
         public static event Handlers.EmptyHandler LanguageChanged;
+        
+        public static String NewLine
+        {
+            get
+            {
+                return Environment.NewLine;
+            }
+        }
+        
+        static LocalizationBase()
+        {
+            DefaultCulture = new CultureInfoFixed(0x409) {CustomName = "English"};
+            
+            CultureInfoFixed[] array =
+            {
+                DefaultCulture,
+                new CultureInfoFixed(0x419) {CustomName = "Русский"},
+                new CultureInfoFixed(0x407) {CustomName = "Deutsch"},
+                new CultureInfoFixed(0x40c) {CustomName = "Française"}
+            };
 
-        public static readonly String NewLine = Environment.NewLine;
+            CultureLCIDDictionary = new IndexDictionary<Int32, CultureInfoFixed>(array.Select(culture => new KeyValuePair<Int32, CultureInfoFixed>(culture.LCID, culture)));
+            
+            CodeByLCIDMap = new Map<Int32, String>(CultureLCIDDictionary.ToDictionary(pair => pair.Value.LCID, pair => pair.Value.Code.ToLower()));
+            
+            DefaultComparer = new CultureComparer(array);
+
+            SystemCulture = CultureLCIDDictionary.TryGetValue(CultureInfo.CurrentUICulture.LCID, DefaultCulture);
+            
+            CurrentCulture = SystemCulture;
+        }
+
+        public static CultureComparer DefaultComparer { get; }
+        
+        private static readonly IndexDictionary<Int32, CultureInfoFixed> CultureLCIDDictionary;
+
+        private static readonly Map<Int32, String> CodeByLCIDMap;
+
+        public static IReadOnlyMap<Int32, String> CodeByLCID
+        {
+            get
+            {
+                return CodeByLCIDMap;
+            }
+        }
+
+        public static IReadOnlyIndexDictionary<Int32, CultureInfoFixed> CultureByLCID
+        {
+            get
+            {
+                return CultureLCIDDictionary;
+            }
+        }
+
+        public static void AddLanguage(Int32 lcid, CultureInfoFixed culture)
+        {
+            CultureLCIDDictionary.Add(lcid, culture);
+            CodeByLCIDMap.Add(culture.Code, lcid);
+        }
+
+        public static void RemoveLanguage(Int32 lcid)
+        {
+            CultureLCIDDictionary.Remove(lcid);
+            CodeByLCIDMap.Remove(lcid);
+        }
+        
+        public static CultureInfoFixed DefaultCulture { get; }
+        
+        public static CultureInfoFixed SystemCulture { get; }
+
+        public static CultureInfoFixed BasicCulture
+        {
+            get
+            {
+                return UseSystemCulture ? SystemCulture : DefaultCulture;
+            }
+        }
+        
+        public static CultureInfoFixed CurrentCulture { get; protected set; }
 
         public static Boolean ChangeUIThreadLanguage { get; set; } = true;
-        
-        public static String LocalizationCultureCode { get; protected set; }
+
+        public static Boolean UseSystemCulture { get; set; } = true;
 
         private readonly CultureStringsBase _currentCultureStrings;
 
-        protected LocalizationBase(String cultureInfo = null, CultureStringsBase currentCultureStrings = null)
+        public IEnumerable<Int32> AvailableLocalization
+        {
+            get
+            {
+                return _currentCultureStrings.AvailableLocalization;
+            }
+        }
+        
+        protected LocalizationBase(Int32 lcid, CultureStringsBase currentCultureStrings = null)
         {
             _currentCultureStrings = currentCultureStrings ?? new CultureStringsBase(null);
-            Init(cultureInfo);
+            InitializeLanguage();
+            UpdateLocalization(lcid, AvailableLocalization);
         }
 
-        [DllImport("Kernel32.dll", CharSet = CharSet.Auto)]
-        private static extern UInt16 SetThreadUILanguage(UInt16 langId);
-
-        public static void UpdateLocalization(String cultureInfo = null)
+        public static void UpdateLocalization(Int32 lcid, IEnumerable<Int32> avlcid = null)
         {
-            if (LocalizationCultureCode == cultureInfo)
+            if (!CultureByLCID.ContainsKey(lcid) && avlcid?.Contains(lcid) != false)
+            {
+                lcid = BasicCulture.LCID;
+            }
+            
+            if (CurrentCulture.LCID == lcid)
             {
                 return;
             }
 
-            LocalizationCultureCode = cultureInfo ?? GetCurrentCultureCode();
+            CurrentCulture = CultureByLCID[lcid];
+            
             if (ChangeUIThreadLanguage)
             {
                 SetUILanguage();
             }
-            LanguageChanged?.Invoke();
-        }
 
-        private void Init(String cultureInfo)
-        {
-            InitializeLanguage();
-            UpdateLocalization(GetCultures().Select(culture => culture.CultureCode).Contains(cultureInfo) ? cultureInfo : DefaultCultureCode);
+            LanguageChanged?.Invoke();
         }
 
         protected virtual void InitializeLanguage()
         {
-            //Override;
+            //Override by language strings;
         }
 
-        public static String GetCurrentCultureCode()
-        {
-            return CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
-        }
+        [DllImport("Kernel32.dll", CharSet = CharSet.Auto)]
+        private static extern UInt16 SetThreadUILanguage(UInt16 langId);
         
-        public static CultureInfo GetCurrentCulture()
-        {
-            return CultureInfo.CurrentCulture;
-        }
-
-        public static CultureInfo GetLocalizationCulture()
-        {
-            return GetCultureByISOCode(LocalizationCultureCode);
-        }
-
         public static void SetUILanguage()
         {
-            CountryData.TryGetCultureInfo(LocalizationCultureCode, out CultureInfoFixed info);
-            if (info == null)
-            {
-                CountryData.TryGetCultureInfo(DefaultCultureCode, out info);
-            }
-
             UInt16 lcid;
             try
             {
-                lcid = (UInt16) info.LCID;
+                lcid = CurrentCulture.LCID16;
             }
             catch (Exception)
             {
-                lcid = DefaultCultureLCID;
+                lcid = DefaultCulture.LCID16;
             }
             
             SetUILanguage(lcid);
@@ -101,34 +168,24 @@ namespace Common_Library.Localization
             SetThreadUILanguage(lcid);
         }
 
-        public static CultureInfo GetCultureByISOCode(String code)
-        {
-            if (code == null)
-            {
-                return GetCurrentCulture();
-            }
-            return CultureInfo
-                       .GetCultures(CultureTypes.InstalledWin32Cultures)
-                       .First(culture => String.Equals(culture.TwoLetterISOLanguageName, code, StringComparison.OrdinalIgnoreCase)) ?? GetCurrentCulture();
-        }
-
-        public Int32 GetLanguageID(String languageCodeOrName = null)
-        {
-            languageCodeOrName ??= GetLocalizationCultureCode();
-            Int32 index = GetCultures().ToList().FindIndex(culture =>
-                String.Equals(culture.CultureCode, languageCodeOrName, StringComparison.CurrentCultureIgnoreCase) ||
-                String.Equals(culture.CultureName, languageCodeOrName, StringComparison.CurrentCultureIgnoreCase));
-            return index;
-        }
-
-        public IEnumerable<Culture> GetCultures()
+        public IEnumerable<CultureInfoFixed> GetCultures()
         {
             return _currentCultureStrings.GetCultures();
         }
-
-        public static String GetLocalizationCultureCode()
+        
+        public static Int32 GetLanguageOrderID(Int32 lcid)
         {
-            return LocalizationCultureCode;
+            return DefaultComparer.GetLanguageOrderID(lcid);
+        }
+
+        public static String GetCultureCode()
+        {
+            return CurrentCulture.Code;
+        }
+
+        public static String GetCultureCode(Int32 lcid)
+        {
+            return CodeByLCID.TryGetValue(lcid, out String code) ? code : DefaultCulture.Code;
         }
     }
 }
