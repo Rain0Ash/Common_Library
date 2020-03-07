@@ -101,7 +101,7 @@
     <Compile Update="GUI\WinForms\ListBoxes\RowImageColorListBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Update="GUI\WinForms\ListBoxes\ValidateListBox.cs">
+    <Compile Update="GUI\WinForms\ListBoxes\ValidableListBox.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Update="GUI\WinForms\RichTextBoxes\LoggerRichTextBox.cs">
@@ -137,7 +137,7 @@
     <Compile Update="GUI\WinForms\TextBoxes\PortTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Update="GUI\WinForms\TextBoxes\ValidateTextBox.cs">
+    <Compile Update="GUI\WinForms\TextBoxes\ValidableTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Update="GUI\WinForms\TextBoxes\VerticalTextBox.cs">

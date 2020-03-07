@@ -34,7 +34,7 @@ namespace System.Collections.Generic
             {
                 NestedDictionary<TKey, TValue> dict = this;
                 
-                if (sections.Length < 0)
+                if (sections.Length <= 0)
                 {
                     return dict[key];
                 }
@@ -47,7 +47,7 @@ namespace System.Collections.Generic
             {
                 NestedDictionary<TKey, TValue> dict = this;
                 
-                if (sections.Length < 0)
+                if (sections.Length <= 0)
                 {
                     dict[key] = value;
                 }

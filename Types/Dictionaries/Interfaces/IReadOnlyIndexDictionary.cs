@@ -5,6 +5,8 @@ namespace System.Collections.Generic.Interfaces
 {
     public interface IReadOnlyIndexDictionary<TKey, TValue> : IReadOnlyDictionary<TKey, TValue>
     {
+        public IReadOnlyList<TKey> OrderedKeys { get; }
+        
         public TValue GetByIndex(Int32 index);
 
         public KeyValuePair<TKey, TValue> GetPairByIndex(Int32 index);

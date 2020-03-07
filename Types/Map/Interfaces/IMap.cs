@@ -17,6 +17,6 @@ namespace Common_Library.Types.Map
 
         public void Remove(TValue key, out TKey value);
 
-        public TKey this[TValue key] { get; set; }
+        public new TKey this[TValue key] { get; set; }
     }
 }

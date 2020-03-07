@@ -1,17 +1,17 @@
 // This is an independent project of an individual developer. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
-using System.Collections.Generic.Interfaces;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.Serialization;
 using Common_Library.Utils;
-using MySqlX.XDevAPI.CRUD;
 
-namespace System.Collections.Generic
+namespace Common_Library.Types.Map
 {
     [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
-    public class IndexDictionary<TKey, TValue> : Dictionary<TKey, TValue>, IIndexDictionary<TKey, TValue>
+    public class IndexMap<TKey, TValue> : Map<TKey, TValue>, IIndexMap<TKey, TValue>
     {
         private List<TKey> _orderList;
 
@@ -23,54 +23,54 @@ namespace System.Collections.Generic
             }
         }
         
-        public IndexDictionary()
+        public IndexMap()
         {
             _orderList = new List<TKey>();
         }
 
-        public IndexDictionary(IDictionary<TKey, TValue> dictionary)
+        public IndexMap(IDictionary<TKey, TValue> dictionary)
             : base(dictionary)
         {
             _orderList = new List<TKey>(dictionary.Keys);
         }
 
-        public IndexDictionary(IDictionary<TKey, TValue> dictionary, IEqualityComparer<TKey>? comparer)
-            : base(dictionary, comparer)
+        public IndexMap(IDictionary<TKey, TValue> dictionary, IEqualityComparer<TKey>? keyComparer, IEqualityComparer<TValue>? valueComparer)
+            : base(dictionary, keyComparer, valueComparer)
         {
             _orderList = new List<TKey>(dictionary.Keys);
         }
 
-        public IndexDictionary(IEnumerable<KeyValuePair<TKey, TValue>> collection)
+        public IndexMap(IEqualityComparer<TKey>? keyComparer, IEqualityComparer<TValue>? valueComparer)
+            : base(keyComparer, valueComparer)
+        {
+            _orderList = new List<TKey>();
+        }
+        
+        public IndexMap(IEnumerable<KeyValuePair<TKey, TValue>> collection)
             : base(collection)
         {
             _orderList = new List<TKey>(collection.Select(pair => pair.Key));
         }
 
-        public IndexDictionary(IEnumerable<KeyValuePair<TKey, TValue>> collection, IEqualityComparer<TKey>? comparer)
-            : base(collection, comparer)
+        public IndexMap(IEnumerable<KeyValuePair<TKey, TValue>> collection, IEqualityComparer<TKey>? keyComparer, IEqualityComparer<TValue>? valueComparer)
+            : base(collection, keyComparer, valueComparer)
         {
             _orderList = new List<TKey>(collection.Select(pair => pair.Key));
         }
 
-        public IndexDictionary(IEqualityComparer<TKey>? comparer)
-            : base(comparer)
-        {
-            _orderList = new List<TKey>();
-        }
-
-        public IndexDictionary(Int32 capacity)
+        public IndexMap(Int32 capacity)
             : base(capacity)
         {
             _orderList = new List<TKey>(capacity);
         }
 
-        public IndexDictionary(Int32 capacity, IEqualityComparer<TKey>? comparer)
-            : base(capacity, comparer)
+        public IndexMap(Int32 capacity, IEqualityComparer<TKey>? keyComparer, IEqualityComparer<TValue>? valueComparer)
+            : base(capacity, keyComparer, valueComparer)
         {
             _orderList = new List<TKey>(capacity);
         }
-
-        protected IndexDictionary(SerializationInfo info, StreamingContext context)
+        
+        protected IndexMap(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
             _orderList = new List<TKey>();
@@ -78,39 +78,42 @@ namespace System.Collections.Generic
 
         public TValue GetByIndex(Int32 index)
         {
-            return this[_orderList[index]];
+            return this[GetReversedByIndex(index)];
         }
         
+        public TKey GetReversedByIndex(Int32 index)
+        {
+            return _orderList[index];
+        }
+
         public KeyValuePair<TKey, TValue> GetPairByIndex(Int32 index)
         {
-            return this.GetPair(_orderList[index]);
+            return this.GetPair(GetReversedByIndex(index));
         }
         
+        public KeyValuePair<TValue, TKey> GetReversedPairByIndex(Int32 index)
+        {
+            return Reversed.GetPair(GetByIndex(index));
+        }
+
         public Boolean TryGetPairByIndex(Int32 index, out KeyValuePair<TKey, TValue> pair)
         {
-            return this.TryGetPair(_orderList[index], out pair);
+            return this.TryGetPair(GetReversedByIndex(index), out pair);
+        }
+        
+        public Boolean TryGetReversedPairByIndex(Int32 index, out KeyValuePair<TValue, TKey> pair)
+        {
+            return Reversed.TryGetPair(GetByIndex(index), out pair);
         }
 
         public Int32 IndexOf(TKey key)
         {
             return _orderList.IndexOf(key);
         }
-
-        public new void Add(TKey key, TValue value)
-        {
-            base.Add(key, value);
-            _orderList.Add(key);
-        }
         
-        public new Boolean TryAdd(TKey key, TValue value)
+        public Int32 IndexOf(TValue key)
         {
-            if (!base.TryAdd(key, value))
-            {
-                return false;
-            }
-
-            _orderList.Add(key);
-            return true;
+            return IndexOf(Reversed[key]);
         }
 
         public void Insert(TKey key, TValue value)
@@ -125,8 +128,24 @@ namespace System.Collections.Generic
                 return;
             }
 
-            base.Add(key, value);
+            Add(key, value);
             _orderList.Insert(index, key);
+        }
+        
+        public void Insert(TValue key, TKey value)
+        {
+            Insert(0, key, value);
+        }
+
+        public void Insert(Int32 index, TValue key, TKey value)
+        {
+            if (ContainsKey(value))
+            {
+                return;
+            }
+
+            Add(key, value);
+            _orderList.Insert(index, value);
         }
 
         public Boolean TryInsert(TKey key, TValue value)
@@ -150,6 +169,16 @@ namespace System.Collections.Generic
             return true;
         }
 
+        public Boolean TryInsert(TValue key, TKey value)
+        {
+            return TryInsert(0, key, value);
+        }
+        
+        public Boolean TryInsert(Int32 index, TValue key, TKey value)
+        {
+            return TryInsert(index, value, key);
+        }
+
         public void Swap(Int32 index1, Int32 index2)
         {
             ListUtils.Swap(ref _orderList, index1, index2);
@@ -166,7 +195,22 @@ namespace System.Collections.Generic
             base.Remove(key, out value);
             _orderList.Remove(key);
         }
-
+        
+        public new void Remove(TValue key)
+        {
+            Remove(key, out _);
+        }
+        
+        public new void Remove(TValue key, out TKey value)
+        {
+            if (TryGetValue(key, out value))
+            {
+                _orderList.Remove(value);
+            }
+            
+            base.Remove(key, out value);
+        }
+        
         public void Reverse()
         {
             _orderList.Reverse();

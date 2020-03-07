@@ -4,54 +4,77 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
 using Common_Library.Utils;
 
 namespace Common_Library.Types.Map
 {
+    [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
     public class Map<TKey, TValue> : Dictionary<TKey, TValue>, IMap<TKey, TValue>
     {
-        private Dictionary<TValue, TKey> Reverse { get; }
+        protected Dictionary<TValue, TKey> Reversed { get; }
 
         public Map()
         {
-            Reverse = new Dictionary<TValue, TKey>();
+            Reversed = new Dictionary<TValue, TKey>();
         }
 
         public Map(IDictionary<TKey, TValue> dictionary)
             : base(dictionary)
         {
-            Reverse = new Dictionary<TValue, TKey>(dictionary.Reverse());
+            Reversed = new Dictionary<TValue, TKey>(dictionary.Reverse());
         }
         
-        public Map(IDictionary<TKey, TValue> dictionary, IEqualityComparer<TKey> keyComparer, IEqualityComparer<TValue> valueComparer)
+        public Map(IDictionary<TKey, TValue> dictionary, IEqualityComparer<TKey>? keyComparer, IEqualityComparer<TValue>? valueComparer)
             : base(dictionary, keyComparer)
         {
-            Reverse = new Dictionary<TValue, TKey>(dictionary.Reverse(), valueComparer);
+            Reversed = new Dictionary<TValue, TKey>(dictionary.Reverse(), valueComparer);
         }
         
-        public Map(IEqualityComparer<TKey> keyComparer, IEqualityComparer<TValue> valueComparer)
+        public Map(IEqualityComparer<TKey>? keyComparer, IEqualityComparer<TValue>? valueComparer)
             : base(keyComparer)
         {
-            Reverse = new Dictionary<TValue, TKey>(valueComparer);
+            Reversed = new Dictionary<TValue, TKey>(valueComparer);
+        }
+        
+        public Map(IEnumerable<KeyValuePair<TKey, TValue>> collection)
+            : base(collection)
+        {
+            Reversed = new Dictionary<TValue, TKey>(collection.Select(pair => new KeyValuePair<TValue, TKey>(pair.Value, pair.Key)));
+        }
+
+        public Map(IEnumerable<KeyValuePair<TKey, TValue>> collection, IEqualityComparer<TKey>? keyComparer, IEqualityComparer<TValue>? valueComparer)
+            : base(collection, keyComparer)
+        {
+            Reversed = new Dictionary<TValue, TKey>(collection.Select(pair => new KeyValuePair<TValue, TKey>(pair.Value, pair.Key)), valueComparer);
         }
         
         public Map(Int32 capacity)
             : base(capacity)
         {
-            Reverse = new Dictionary<TValue, TKey>(capacity);
+            Reversed = new Dictionary<TValue, TKey>(capacity);
         }
         
-        public Map(Int32 capacity, IEqualityComparer<TKey> keyComparer, IEqualityComparer<TValue> valueComparer)
+        public Map(Int32 capacity, IEqualityComparer<TKey>? keyComparer, IEqualityComparer<TValue>? valueComparer)
             : base(capacity, keyComparer)
         {
-            Reverse = new Dictionary<TValue, TKey>(capacity, valueComparer);
+            Reversed = new Dictionary<TValue, TKey>(capacity, valueComparer);
         }
         
-
+        protected Map(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+            Reversed = new Dictionary<TValue, TKey>();
+        }
+        
         public new void Add(TKey key, TValue value)
         {
             base.Add(key, value);
-            Reverse.Add(value, key);
+            Reversed.Add(value, key);
         }
         
         public void Add(TValue key, TKey value)
@@ -61,9 +84,9 @@ namespace Common_Library.Types.Map
         
         public new Boolean TryAdd(TKey key, TValue value)
         {
-            if (!base.ContainsKey(key) && !Reverse.ContainsKey(value))
+            if (!base.ContainsKey(key) && !Reversed.ContainsKey(value))
             {
-                return base.TryAdd(key, value) && Reverse.TryAdd(value, key);
+                return base.TryAdd(key, value) && Reversed.TryAdd(value, key);
             }
 
             return false;
@@ -87,7 +110,7 @@ namespace Common_Library.Types.Map
             }
 
             base.Remove(key);
-            Reverse.Remove(value);
+            Reversed.Remove(value);
         }
         
         public void Remove(TValue key)
@@ -97,29 +120,29 @@ namespace Common_Library.Types.Map
         
         public void Remove(TValue key, out TKey value)
         {
-            if (!Reverse.TryGetValue(key, out value))
+            if (!Reversed.TryGetValue(key, out value))
             {
                 return;
             }
 
             Remove(value);
-            Reverse.Remove(key);
+            Reversed.Remove(key);
         }
 
         public Boolean ContainsKey(TValue value)
         {
-            return Reverse.ContainsKey(value);
+            return Reversed.ContainsKey(value);
         }
 
         public Boolean TryGetValue(TValue key, out TKey value)
         {
-            return Reverse.TryGetValue(key, out value);
+            return Reversed.TryGetValue(key, out value);
         }
         
         public new void Clear()
         {
             base.Clear();
-            Reverse.Clear();
+            Reversed.Clear();
         }
         
         public new TValue this[TKey key]
@@ -131,7 +154,7 @@ namespace Common_Library.Types.Map
             set
             {
                 base[key] = value;
-                Reverse[value] = key;
+                Reversed[value] = key;
             }
         }
 
@@ -139,11 +162,11 @@ namespace Common_Library.Types.Map
         {
             get
             {
-                return Reverse[key];
+                return Reversed[key];
             }
             set
             {
-                Reverse[key] = value;
+                Reversed[key] = value;
                 base[value] = key;
             }
         }
@@ -155,7 +178,7 @@ namespace Common_Library.Types.Map
         
         public IReadOnlyDictionary<TValue, TKey> GetReverse()
         {
-            return new ReadOnlyDictionary<TValue, TKey>(Reverse);
+            return new ReadOnlyDictionary<TValue, TKey>(Reversed);
         }
     }
 }

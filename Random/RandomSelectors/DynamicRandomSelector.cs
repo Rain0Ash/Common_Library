@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿// This is an independent project of an individual developer. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
+
+using System.Collections.Generic;
 using System;
 using System.Linq;
 
@@ -41,9 +44,10 @@ namespace Common_Library.Random {
         /// </summary>
         /// <param name="items">Items that will get returned on random selections</param>
         /// <param name="weights">Un-normalized weights/chances of items, should be same length as items array</param>
-        /// <param name="seed">Leave it -1 if you want seed to be randomly picked</param>
+        /// /// <param name="seed">Leave it -1 if you want seed to be randomly picked</param>
         /// <param name="expectedNumberOfItems">Set this if you know how much items the collection will hold, to minimize Garbage Collection</param>
-        public DynamicRandomSelector(IReadOnlyList<T> items, IReadOnlyList<Single> weights, Int32 seed = -1, Int32 expectedNumberOfItems = 32) : this() {
+        public DynamicRandomSelector(IReadOnlyList<T> items, IReadOnlyList<Single> weights, Int32 seed = -1, Int32 expectedNumberOfItems = 32)
+            : this(seed, expectedNumberOfItems) {
 
             for (Int32 i = 0; i < items.Count; i++)
             {

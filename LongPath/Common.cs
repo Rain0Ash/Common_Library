@@ -1,4 +1,4 @@
-﻿﻿// This is an independent project of an individual developer. Dear PVS-Studio, please check it.
+﻿// This is an independent project of an individual developer. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
 using System;
@@ -9,6 +9,7 @@ using System.Security.AccessControl;
 using System.Security.Permissions;
 using System.Security.Principal;
 using System.Text;
+using JetBrains.Annotations;
 
 // ReSharper disable MemberCanBePrivate.Global
 
@@ -128,7 +129,8 @@ namespace Common_Library.LongPath
             return GetExceptionFromWin32Error(Marshal.GetLastWin32Error(), parameterName);
         }
 
-        internal static Exception GetExceptionFromWin32Error(Int32 errorCode, String parameterName = "path")
+        
+        internal static Exception? GetExceptionFromWin32Error(Int32 errorCode, String parameterName = "path")
         {
             String message = GetMessageFromErrorCode(errorCode);
 
