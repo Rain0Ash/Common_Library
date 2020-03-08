@@ -9,18 +9,9 @@ namespace Common_Library.Utils
 {
     public static class MapUtils
     {
-        public static Boolean TryGetValue<TKey, TValue>(this IReadOnlyMap<TKey, TValue> map, TValue key, out TKey result, TKey defaultValue = default)
+        public static Boolean TryGetValue<TKey, TValue>(this IReadOnlyMap<TKey, TValue> map, TValue key, out TKey result)
         {
-            try
-            {
-                result = map[key];
-                return true;
-            }
-            catch (KeyNotFoundException)
-            {
-                result = defaultValue;
-                return false;
-            }
+            return map.TryGetValue(key, out result);
         }
         
         public static TKey TryGetValue<TKey, TValue>(this IReadOnlyMap<TKey, TValue> map, TValue key, TKey defaultValue = default)

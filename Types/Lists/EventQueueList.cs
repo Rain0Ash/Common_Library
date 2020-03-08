@@ -3,8 +3,6 @@
 
 // ReSharper disable MemberCanBePrivate.Global
 
-using System.Linq;
-
 namespace System.Collections.Generic
 {
     public class EventQueueList<T> : EventList<T>
@@ -83,11 +81,6 @@ namespace System.Collections.Generic
             T item = this[index];
             RemoveAt(index);
             return item;
-        }
-
-        public T Get(Int32 index)
-        {
-            return this.ElementAtOrDefault(index);
         }
     }
 }

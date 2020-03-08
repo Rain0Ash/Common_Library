@@ -83,8 +83,8 @@ namespace Common_Library.Utils
         {
             ToConsole(obj, color, bColor, true, info);
         }
-        
-        public static void ToConsole(this Object obj, IFormatProvider info = null)
+
+        public static void ToConsole(this Object obj, IFormatProvider info)
         {
             ToConsole(obj, true, info);
         }

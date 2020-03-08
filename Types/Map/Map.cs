@@ -3,11 +3,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.Serialization;
 using Common_Library.Utils;
 
@@ -173,12 +170,17 @@ namespace Common_Library.Types.Map
 
         public IReadOnlyDictionary<TKey, TValue> Get()
         {
-            return new ReadOnlyDictionary<TKey, TValue>(this);
+            return this;
         }
         
-        public IReadOnlyDictionary<TValue, TKey> GetReverse()
+        public IReadOnlyDictionary<TValue, TKey> GetReversed()
         {
-            return new ReadOnlyDictionary<TValue, TKey>(Reversed);
+            return Reversed;
+        }
+        
+        public IEnumerator<KeyValuePair<TValue, TKey>> GetReversedEnumerator()
+        {
+            return Reversed.GetEnumerator();
         }
     }
 }

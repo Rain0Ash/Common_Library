@@ -3,7 +3,7 @@
 
 namespace Common_Library.Types.Interfaces
 {
-    public interface IEventPairType<out TKey, out TValue> : IEventType
+    public interface IEventDictionary<out TKey, out TValue> : IEventType
     {
         public event Handlers.TypeKeyValueHandler<TKey, TValue> OnAdd;
         

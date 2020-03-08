@@ -11,5 +11,7 @@ namespace Common_Library.Types.Map
         public Boolean ContainsKey(TValue value);
         public Boolean TryGetValue(TValue key, out TKey value);
         public TKey this[TValue key] { get; }
+
+        public IEnumerator<KeyValuePair<TValue, TKey>> GetReversedEnumerator();
     }
 }

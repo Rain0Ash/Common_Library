@@ -158,7 +158,7 @@ namespace Common_Library.Config
         {
             String value = GetValue(key, sections);
 
-            return value.Convert(out T cval) ? cval : defaultValue;
+            return value.TryConvert(out T cval) ? cval : defaultValue;
         }
 
         public T GetValue<T>(String key, T defaultValue, Boolean decrypt, params String[] sections)
@@ -173,10 +173,10 @@ namespace Common_Library.Config
             
             if (!decrypt || value == null)
             {
-                return value.Convert(out cval) ? cval : defaultValue;
+                return value.TryConvert(out cval) ? cval : defaultValue;
             }
 
-            return (Cryptography.AES.Decrypt(value, decryptKey) ?? value).Convert(out cval) ? cval : defaultValue;
+            return (Cryptography.AES.Decrypt(value, decryptKey) ?? value).TryConvert(out cval) ? cval : defaultValue;
         }
         
         public T GetValue<T>(ConfigProperty<T> property)
@@ -232,10 +232,10 @@ namespace Common_Library.Config
                 
                 if (crypt)
                 {
-                    return (Cryptography.AES.Decrypt(value, cryptKey) ?? value).Convert(out cval) ? cval : defaultValue;
+                    return (Cryptography.AES.Decrypt(value, cryptKey) ?? value).TryConvert(out cval) ? cval : defaultValue;
                 }
 
-                return value.Convert(out cval) ? cval : defaultValue;
+                return value.TryConvert(out cval) ? cval : defaultValue;
             }
 
             SetValue(key, defaultValue, crypt, cryptKey, sections);

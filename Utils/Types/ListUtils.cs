@@ -8,6 +8,23 @@ namespace Common_Library.Utils
 {
     public static class ListUtils
     {
+        public static T TryGetValue<T>(this IReadOnlyList<T> collection, Int32 index, T defaultValue = default)
+        {
+            return collection.TryGetValue(index, out T value) ? value : defaultValue;
+        }
+        
+        public static Boolean TryGetValue<T>(this IReadOnlyList<T> collection, Int32 index, out T value)
+        {
+            if (collection.InBounds(index))
+            {
+                value = collection[index];
+                return true;
+            }
+
+            value = default;
+            return false;
+        }
+        
         public static void Swap<T>(ref List<T> source, Int32 inx1, Int32 inx2)
         {
             T temp = source[inx1];

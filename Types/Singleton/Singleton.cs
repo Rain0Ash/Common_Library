@@ -1,18 +1,51 @@
 // This is an independent project of an individual developer. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
-using System;
+using System.Reflection;
 
 namespace Common_Library.Types
 {
-    public class Singleton<T> where T : Singleton<T>, new()
+    /// <summary>
+    /// Base class used for singletons
+    /// </summary>
+    /// <typeparam name="T">The class type</typeparam>
+    public class Singleton<T> where T : class
     {
-        private static readonly Lazy<Singleton<T>> Lazy = 
-            new Lazy<Singleton<T>>(() => new Singleton<T>());
+        private static T instance;
 
-        public static Singleton<T> GetInstance()
+        /// <summary>
+        /// Gets the instance of the singleton
+        /// </summary>
+        public static T Instance
         {
-            return Lazy.Value;
+            get
+            {
+                OnInit();
+
+                return instance;
+            }
+        }
+
+        protected Singleton()
+        {
+        }
+
+        private static void OnInit()
+        {
+            if (instance != null)
+            {
+                return;
+            }
+
+            lock (typeof(T))
+            {
+                instance = typeof(T).InvokeMember(typeof(T).Name,
+                    BindingFlags.CreateInstance |
+                    BindingFlags.Instance |
+                    BindingFlags.Public |
+                    BindingFlags.NonPublic,
+                    null, null, null) as T;
+            }
         }
     }
 }

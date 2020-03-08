@@ -27,7 +27,7 @@ namespace Common_Library
 
         public delegate void ObjectHandler(Object obj);
         
-        public delegate void ObjectIndexHandler(Object obj, Int32 index);
+        public delegate void IndexObjectHandler(Object obj, Int32 index);
         
         public delegate void KeyValueHandler(Object key, Object value);
         
@@ -35,8 +35,20 @@ namespace Common_Library
         
         public delegate void TypeHandler<in T>(T type);
         
+        public delegate void IndexTypeHandler<in T>(Int32 index, T type);
+
+        public delegate void RTypeHandler<T>(ref T type);
+
+        public delegate void IndexRTypeHandler<T>(Int32 index, ref T type);
+        
         public delegate void TypeArrayHandler<in T>(T[] array);
 
         public delegate void TypeKeyValueHandler<in TKey, in TValue>(TKey key, TValue value);
+        
+        public delegate void IndexTypeKeyValueHandler<in TKey, in TValue>(Int32 index, TKey key, TValue value);
+        
+        public delegate void RTypeKeyValueHandler<TKey, TValue>(ref TKey key, ref TValue value);
+        
+        public delegate void IndexRTypeKeyValueHandler<TKey, TValue>(Int32 index, ref TKey key, ref TValue value);
     }
 }

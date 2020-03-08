@@ -7,7 +7,7 @@ using Common_Library.Types.Interfaces;
 
 namespace System.Collections.Generic
 {
-    public class EventDictionary<TKey,TValue> : Dictionary<TKey, TValue>, IEventPairType<TKey, TValue>
+    public class EventDictionary<TKey,TValue> : Dictionary<TKey, TValue>, IEventDictionary<TKey, TValue>
     {
         public event Handlers.TypeKeyValueHandler<TKey, TValue> OnAdd;
         public event Handlers.TypeKeyValueHandler<TKey, TValue> OnSet;

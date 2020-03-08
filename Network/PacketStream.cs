@@ -128,7 +128,7 @@ namespace Common_Library.Network
 
         #region Reserve & Roundup
 
-        private Byte[] Roundup(Int32 length)
+        private static Byte[] Roundup(Int32 length)
         {
             Int32 i = 16;
             while (length > i)
@@ -756,7 +756,7 @@ namespace Common_Library.Network
 
         public PacketStream Write(DateTime value)
         {
-            return Write(TimeUtils.UnixTime(value));
+            return Write(value.UnixTime());
         }
 
         public PacketStream Write(Guid value, Boolean appendSize = true)

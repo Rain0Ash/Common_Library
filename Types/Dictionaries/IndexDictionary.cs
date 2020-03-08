@@ -6,7 +6,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.Serialization;
 using Common_Library.Utils;
-using MySqlX.XDevAPI.CRUD;
 
 namespace System.Collections.Generic
 {
@@ -218,6 +217,11 @@ namespace System.Collections.Generic
                 
                 base[key] = value;
             }
+        }
+
+        public new IEnumerable<KeyValuePair<TKey, TValue>> GetEnumerator()
+        {
+            return _orderList.Select(key => new KeyValuePair<TKey, TValue>(key, this[key]));
         }
     }
 }

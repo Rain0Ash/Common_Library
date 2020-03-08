@@ -5,7 +5,7 @@ using System;
 
 namespace Common_Library.Utils
 {
-    public static class EnumerationUtils
+    public static class EnumUtils
     {
         public static T RandomEnumValue<T>()
         {  

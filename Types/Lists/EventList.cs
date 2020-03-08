@@ -7,12 +7,15 @@ using Common_Library.Types.Interfaces;
 
 namespace System.Collections.Generic
 {
-    public class EventList<T> : List<T>, IEventListType<T>
+    public class EventList<T> : List<T>, IEventIndexCollection<T>
     {
-        public event Handlers.TypeHandler<T> OnAdd;
-        public event Handlers.TypeHandler<T> OnSet;
-        public event Handlers.TypeHandler<T> OnRemove;
-        public event Handlers.TypeHandler<T> OnChange;
+        public event Handlers.RTypeHandler<T> OnAdd;
+        public event Handlers.IndexRTypeHandler<T> OnInsert;
+        public event Handlers.RTypeHandler<T> OnSet;
+        public event Handlers.RTypeHandler<T> OnRemove;
+        public event Handlers.RTypeHandler<T> OnChange;
+
+        public event Handlers.IndexRTypeHandler<T> OnChangeIndex; 
         public event Handlers.EmptyHandler OnClear;
         public event Handlers.EmptyHandler ItemsChanged;
 
@@ -33,7 +36,7 @@ namespace System.Collections.Generic
         public new void Add(T item)
         {
             base.Add(item);
-            OnAdd?.Invoke(item);
+            OnAdd?.Invoke(ref item);
             ItemsChanged?.Invoke();
         }
 
@@ -45,7 +48,7 @@ namespace System.Collections.Generic
             }
 
             base.Remove(item);
-            OnRemove?.Invoke(item);
+            OnRemove?.Invoke(ref item);
             ItemsChanged?.Invoke();
         }
         
@@ -53,7 +56,16 @@ namespace System.Collections.Generic
         {
             T item = this[index];
             base.RemoveAt(index);
-            OnRemove?.Invoke(item);
+            OnRemove?.Invoke(ref item);
+            OnChangeIndex?.Invoke(index, ref item);
+            ItemsChanged?.Invoke();
+        }
+
+        public new void Insert(Int32 index, T item)
+        {
+            base.Insert(index, item);
+            OnAdd?.Invoke(ref item);
+            OnInsert?.Invoke(index, ref item);
             ItemsChanged?.Invoke();
         }
 
@@ -68,6 +80,19 @@ namespace System.Collections.Generic
 
             OnClear?.Invoke();
             ItemsChanged?.Invoke();
+        }
+
+        public new T this[Int32 index]
+        {
+            get
+            {
+                return base[index];
+            }
+            set
+            {
+                base[index] = value;
+                OnSet?.Invoke(ref value);
+            }
         }
     }
 }

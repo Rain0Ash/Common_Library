@@ -11,7 +11,7 @@ using Common_Library.Utils;
 namespace Common_Library.Types.Map
 {
     [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
-    public class IndexMap<TKey, TValue> : Map<TKey, TValue>, IIndexMap<TKey, TValue>
+    public class IndexMap<TKey, TValue> : Map<TKey, TValue>, IIndexMap<TKey, TValue>, IEnumerable<KeyValuePair<TKey, TValue>>
     {
         private List<TKey> _orderList;
 
@@ -246,7 +246,7 @@ namespace Common_Library.Types.Map
             base.Clear();
             _orderList.Clear();
         }
-        
+
         public new TValue this[TKey key]
         {
             get
@@ -262,6 +262,16 @@ namespace Common_Library.Types.Map
                 
                 base[key] = value;
             }
+        }
+
+        public new IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
+        {
+            return _orderList.Select(key => new KeyValuePair<TKey, TValue>(key, this[key])).GetEnumerator();
+        }
+
+        public new IEnumerator<KeyValuePair<TValue, TKey>> GetReversedEnumerator()
+        {
+            return _orderList.Select(key => new KeyValuePair<TValue, TKey>(this[key], key)).GetEnumerator();
         }
     }
 }

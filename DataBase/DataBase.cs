@@ -16,7 +16,7 @@ namespace Common_Library.DataBase
     
     public static class DataBase
     {
-        public static DbConnection CreateConnection(String connection, DbConnectionType type = DbConnectionType.MySQL)
+        public static DbConnection Create(String connection, DbConnectionType type = DbConnectionType.MySQL)
         {
             DbConnection cn = type switch
             {
@@ -24,7 +24,7 @@ namespace Common_Library.DataBase
                 DbConnectionType.SQLite => new SqliteConnection(connection),
                 _ => throw new ArgumentException(nameof(type))
             };
-            
+
             try
             {
                 cn.Open();
@@ -36,7 +36,7 @@ namespace Common_Library.DataBase
 
             return cn;
         }
-
+        
         public static void Close(DbConnection connection)
         {
             connection.Close();

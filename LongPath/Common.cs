@@ -9,7 +9,6 @@ using System.Security.AccessControl;
 using System.Security.Permissions;
 using System.Security.Principal;
 using System.Text;
-using JetBrains.Annotations;
 
 // ReSharper disable MemberCanBePrivate.Global
 

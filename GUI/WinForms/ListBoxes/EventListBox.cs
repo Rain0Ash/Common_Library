@@ -12,10 +12,10 @@ namespace Common_Library.GUI.WinForms.ListBoxes
     public class EventListBox : RowImageColorListBox
     {
         public Boolean OverlapAllowed { get; set; } = false;
-        public event Handlers.ObjectIndexHandler ItemAdded;
-        public event Handlers.ObjectIndexHandler ItemSourceAdded;
-        public event Handlers.ObjectIndexHandler ItemRemoved;
-        public event Handlers.ObjectIndexHandler ItemSourceRemoved;
+        public event Handlers.IndexObjectHandler ItemAdded;
+        public event Handlers.IndexObjectHandler ItemSourceAdded;
+        public event Handlers.IndexObjectHandler ItemRemoved;
+        public event Handlers.IndexObjectHandler ItemSourceRemoved;
         public event Handlers.EmptyHandler ItemsChanged;
 
         private void AddToItems(Object item)

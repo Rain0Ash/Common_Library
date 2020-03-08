@@ -49,9 +49,9 @@ namespace Common_Library.DataBase
             Database = database;
         }
 
-        public DbConnection CreateConnection()
+        public DbConnection Create()
         {
-            return DataBase.CreateConnection(this);
+            return DataBase.Create(this);
         }
         
         public override String ToString()

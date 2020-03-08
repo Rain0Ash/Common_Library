@@ -113,16 +113,8 @@ namespace Common_Library.GUI.WinForms.Controls
                 CurrentPage++;
             };
 
-            ControlsList.OnAdd += control =>
-            {
-                Controls.Add(control);
-                OnPageChanged();
-            };
-            ControlsList.OnRemove += control =>
-            {
-                Controls.Remove(control);
-                OnPageChanged();
-            };
+            ControlsList.OnAdd += AddToControls;
+            ControlsList.OnRemove += RemoveFromControls;
 
             PositionChanged += SetSizeAndPosition;
             AligmentChanged += SetSizeAndPosition;
@@ -132,6 +124,18 @@ namespace Common_Library.GUI.WinForms.Controls
             Controls.Add(NextPageButton);
             Controls.Add(PageValueLabel);
             
+            OnPageChanged();
+        }
+
+        private void AddToControls(ref T control)
+        {
+            Controls.Add(control);
+            OnPageChanged();
+        }
+        
+        private void RemoveFromControls(ref T control)
+        {
+            Controls.Remove(control);
             OnPageChanged();
         }
 

@@ -10,7 +10,7 @@ namespace Common_Library
     public static class Library
     {
         public static AppVersion Version { get; } = new AppVersion(0.9, App.App.Status.OpenBeta);
-        
+
         private static void Main()
         {
             $"Library version: {Version}".ToConsole(ConsoleColor.Green);
