@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Common_Library.Utils
 {
@@ -42,6 +43,11 @@ namespace Common_Library.Utils
 
             pair = default;
             return false;
+        }
+
+        public static IList<KeyValuePair<TKey, TValue>> GetPairs<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary)
+        {
+            return dictionary.ToList();
         }
 
         public static Dictionary<TValue, TKey> Reverse<TKey, TValue>(this IDictionary<TKey, TValue> source)

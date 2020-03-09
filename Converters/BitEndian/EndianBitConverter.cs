@@ -10,7 +10,7 @@ namespace Common_Library.Converters.BitEndian
     /// </summary>
     public abstract class EndianBitConverter
     {
-        #region Endianness of this converter
+        
 
         /// <summary>
         /// Indicates the byte order ("endianess") in which data is converted using this class.
@@ -28,9 +28,9 @@ namespace Common_Library.Converters.BitEndian
         /// </summary>
         public abstract Endianness Endianness { get; }
 
-        #endregion
+        
 
-        #region Factory properties
+        
 
         /// <summary>
         /// Returns a little-endian bit converter instance. The same instance is
@@ -44,9 +44,9 @@ namespace Common_Library.Converters.BitEndian
         /// </summary>
         public static BigEndianBitConverter Big { get; } = new BigEndianBitConverter();
 
-        #endregion
+        
 
-        #region Double/primitive conversions
+        
 
         /// <summary>
         /// Converts the specified double-precision floating point number to a 
@@ -92,9 +92,9 @@ namespace Common_Library.Converters.BitEndian
             return *(Single*)&value;
         }
 
-        #endregion
+        
 
-        #region To(PrimitiveType) conversions
+        
 
         /// <summary>
         /// Returns a Boolean value converted from one byte at a specified position in a byte array.
@@ -258,9 +258,9 @@ namespace Common_Library.Converters.BitEndian
         /// <returns>The converted number</returns>
         protected abstract Int64 FromBytes(Byte[] value, Int32 startIndex, Int32 bytesToConvert);
 
-        #endregion
+        
 
-        #region ToString conversions
+        
 
         /// <summary>
         /// Returns a String converted from the elements of a byte array.
@@ -307,9 +307,9 @@ namespace Common_Library.Converters.BitEndian
             return BitConverter.ToString(value, startIndex, length);
         }
 
-        #endregion
+        
 
-        #region	Decimal conversions
+        
 
         /// <summary>
         /// Returns a decimal value converted from sixteen bytes 
@@ -365,9 +365,9 @@ namespace Common_Library.Converters.BitEndian
             }
         }
 
-        #endregion
+        
 
-        #region GetBytes conversions
+        
 
         /// <summary>
         /// Returns an array with the given number of bytes formed
@@ -473,9 +473,9 @@ namespace Common_Library.Converters.BitEndian
             return GetBytes(unchecked((Int64)value));
         }
 
-        #endregion
+        
 
-        #region CopyBytes conversions
+        
 
         /// <summary>
         /// Copies the given number of bytes from the least-specific
@@ -635,6 +635,6 @@ namespace Common_Library.Converters.BitEndian
             CopyBytes(unchecked((Int64)value), 8, buffer, index);
         }
 
-        #endregion
+        
     }
 }

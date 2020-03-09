@@ -3,11 +3,21 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Common_Library.Utils
 {
     public static class EnumerableUtils
     {
+        public static IEnumerable<T> AggregateAdd<T>(this IEnumerable<T> source, Func<T, T, T> aggregateFunc, Func<T, T> addFunc, Boolean prepend = false)
+        {
+            source = source.ToList();
+
+            T value = addFunc(source.Aggregate(aggregateFunc));
+            
+            return prepend ? source.Prepend(value) : source.Append(value);
+        }
+
         public static IEnumerable<TOut> SelectWhere<T, TOut>(this IEnumerable<T> source, Func<T, (Boolean, TOut)> func)
         {
             foreach(T item in source)

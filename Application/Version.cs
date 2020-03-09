@@ -152,7 +152,7 @@ namespace Common_Library.App
             String version = GetVersion();
             String status = GetStatus();
             String branch = GetBranch();
-            return $"{version}{status}{branch}";
+            return $"{version}:{status}{branch}";
         }
         
         public Boolean Equals(AppVersion other)

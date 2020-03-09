@@ -13,6 +13,7 @@ namespace Common_Library.Exceptions
             
         }
     }
+    
     public class NotInitializedException : Exception
     {
         public NotInitializedException(String message = null)

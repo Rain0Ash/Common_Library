@@ -145,7 +145,7 @@ namespace Common_Library.GUI.WinForms.TextBoxes
         public event EventHandler FormatHelpButtonClicked;
 
         
-        #region HelpToolTip
+        
 
         public String PathTypeChangeToolTip
         {
@@ -220,7 +220,7 @@ namespace Common_Library.GUI.WinForms.TextBoxes
             }
         }
 
-        #endregion
+        
 
         
         public AdvancedPathTextBox()

@@ -132,7 +132,7 @@ namespace Common_Library.GUI.WinForms.Forms
             OnSizeChanged();
         }
         
-        #region CreateButtons
+        
         private void CreateButtons(MessageBoxButtons messageBoxButtons, IReadOnlyList<Object> buttonsName = null)
         {
             String GetFirstButtonText(out DialogResult dialogResult)
@@ -255,7 +255,7 @@ namespace Common_Library.GUI.WinForms.Forms
                 _buttons.Add(button);
             }
         }
-        #endregion
+        
 
         private void SetButtons()
         {

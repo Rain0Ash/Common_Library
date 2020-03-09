@@ -321,7 +321,7 @@ namespace Common_Library.LongPath
 
 		[DllImport("kernel32.dll", BestFitMapping = false, CharSet = CharSet.Auto, ExactSpelling = false, SetLastError = true)]
 		internal static extern Boolean SetCurrentDirectory(String path);
-		#region for Priviledge class
+		
 
 		internal enum SecurityImpersonationLevel
 		{
@@ -463,6 +463,6 @@ namespace Common_Library.LongPath
 		Boolean SetThreadToken(
 			[In]    IntPtr thread,
 			[In]    SafeTokenHandle token);
-		#endregion
+		
 	}
 }

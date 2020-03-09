@@ -2,19 +2,13 @@
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
 using Common_Library.Comparers.Enum;
+using Common_Library.Exceptions;
+using Common_Library.Utils;
 
 namespace System.Collections.Generic
 {
-    public class EnumDictionary<TKey, TValue> : Dictionary<TKey, TValue> where TKey : struct, IConvertible
+    public class EnumDictionary<TKey, TValue> : Dictionary<TKey, TValue> where TKey : Enum
     {
-        static EnumDictionary()
-        {
-            if (!typeof(TKey).IsEnum)
-            {
-                throw new ArgumentException("TKey must be an enum type.");
-            }
-        }
-        
         public EnumDictionary()
             : base(new EnumEqualityComparer<TKey>())
         {

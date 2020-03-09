@@ -21,7 +21,57 @@ namespace Common_Library.Utils
             TryConvert(input, out T value);
             return value;
         }
+
+        #region DecimalsConvert
+
+        public static SByte ToSByte(this Decimal value)
+        {
+            return System.Convert.ToSByte(MathUtils.Range(value, SByte.MinValue, SByte.MaxValue));
+        }
         
+        public static Byte ToByte(this Decimal value)
+        {
+            return value >= 0 ? System.Convert.ToByte(MathUtils.Range(value, Byte.MinValue, Byte.MaxValue))
+                : Convert(ToSByte(value));
+        }
+        
+        public static Int16 ToInt16(this Decimal value)
+        {
+            return System.Convert.ToInt16(MathUtils.Range(value, Int16.MinValue, Int16.MaxValue));
+        }
+        
+        public static UInt16 ToUInt16(this Decimal value)
+        {
+            return value >= 0 ? System.Convert.ToUInt16(MathUtils.Range(value, UInt16.MinValue, UInt16.MaxValue))
+                : Convert(ToInt16(value));
+        }
+        
+        public static Int32 ToInt32(this Decimal value)
+        {
+            return System.Convert.ToInt32(MathUtils.Range(value, Int32.MinValue, Int32.MaxValue));
+        }
+        
+        public static UInt32 ToUInt32(this Decimal value)
+        {
+            return value >= 0 ? System.Convert.ToUInt32(MathUtils.Range(value, UInt32.MinValue, UInt32.MaxValue)) 
+                : Convert(ToInt32(value));
+        }
+        
+        public static Int64 ToInt64(this Decimal value)
+        {
+            return System.Convert.ToInt64(MathUtils.Range(value, Int64.MinValue, Int64.MaxValue));
+        }
+        
+        public static UInt64 ToUInt64(this Decimal value)
+        {
+            return value >= 0 ? System.Convert.ToUInt64(MathUtils.Range(value, UInt64.MinValue, UInt64.MaxValue)) 
+                : Convert(ToInt64(value));
+        }
+
+        #endregion
+
+        #region UTypeConvert
+
         public static Byte Convert(SByte value)
         {
             unchecked
@@ -73,7 +123,9 @@ namespace Common_Library.Utils
                 return (UInt64) (value + Int64.MaxValue);
             }
         }
-        
+
+        #endregion
+
         public static String Convert(this Object obj, IFormatProvider info = null)
         {
             return System.Convert.ToString(obj, info ?? CultureInfo.InvariantCulture);
@@ -95,7 +147,7 @@ namespace Common_Library.Utils
                 return false;
             }
         }
-        
+
         public static Boolean TryConvert<T1, T2>(this T1 input, out T2 value)
         {
             try

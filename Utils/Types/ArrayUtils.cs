@@ -21,7 +21,7 @@ namespace Common_Library.Utils
             source[x2, y2] = temp;
         }
         
-        public static void Default(Array array)
+        public static void Default(this Array array)
         {
             Array.Clear(array, 0, array.Length);
         }

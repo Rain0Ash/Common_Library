@@ -43,6 +43,88 @@ namespace Common_Library.Utils
 
             return value;
         }
+        
+        public static void Range(ref Single value, Single minimum = 0, Single maximum = Single.MaxValue, Boolean looped = false)
+        {
+            value = Range(value, minimum, maximum, looped);
+        }
+        
+        public static Single Range(Single value, Single minimum = 0, Single maximum = Single.MaxValue, Boolean looped = false)
+        {
+            if (value > maximum)
+            {
+                return looped ? minimum : maximum;
+            }
+            
+            if (value < minimum)
+            {
+                return looped ? maximum : minimum;
+            }
+
+            return value;
+        }
+        
+        public static void Range(ref Double value, Double minimum = 0, Double maximum = Double.MaxValue, Boolean looped = false)
+        {
+            value = Range(value, minimum, maximum, looped);
+        }
+        
+        public static Double Range(Double value, Double minimum = 0, Double maximum = Double.MaxValue, Boolean looped = false)
+        {
+            if (value > maximum)
+            {
+                return looped ? minimum : maximum;
+            }
+            
+            if (value < minimum)
+            {
+                return looped ? maximum : minimum;
+            }
+
+            return value;
+        }
+
+        public static void Range(ref Decimal value, Decimal minimum = Decimal.Zero, Decimal maximum = Decimal.MaxValue, Boolean looped = false)
+        {
+            value = Range(value, minimum, maximum, looped);
+        }
+        
+        public static Decimal Range(Decimal value, Decimal minimum = Decimal.Zero, Decimal maximum = Decimal.MaxValue, Boolean looped = false)
+        {
+            if (value > maximum)
+            {
+                return looped ? minimum : maximum;
+            }
+            
+            if (value < minimum)
+            {
+                return looped ? maximum : minimum;
+            }
+
+            return value;
+        }
+        
+        public static void Range(ref IConvertible value, Decimal minimum = Decimal.Zero, Decimal maximum = Decimal.MaxValue, Boolean looped = false)
+        {
+            value = Range(value, minimum, maximum, looped);
+        }
+        
+        public static Decimal Range(IConvertible value, Decimal minimum = Decimal.Zero, Decimal maximum = Decimal.MaxValue, Boolean looped = false)
+        {
+            Decimal @decimal = Convert.ToDecimal(value);
+            
+            if (@decimal > maximum)
+            {
+                return looped ? minimum : maximum;
+            }
+            
+            if (@decimal < minimum)
+            {
+                return looped ? maximum : minimum;
+            }
+
+            return @decimal;
+        }
 
         public enum Position
         {
@@ -88,56 +170,26 @@ namespace Common_Library.Utils
             };
         }
 
-        public static void Range(ref Single value, Single minimum = 0, Single maximum = Single.MaxValue, Boolean looped = false)
+        public static Boolean IsPositive(Decimal value)
         {
-            value = Range(value, minimum, maximum, looped);
+            return value >= 0;
         }
         
-        public static Single Range(Single value, Single minimum = 0, Single maximum = Single.MaxValue, Boolean looped = false)
+        public static Boolean IsPowerOf2(UInt64 value)
         {
-            if (value > maximum)
-            {
-                return looped ? minimum : maximum;
-            }
-            
-            if (value < minimum)
-            {
-                return looped ? maximum : minimum;
-            }
-
-            return value;
-        }
-        
-        public static void Range(ref Double value, Double minimum = 0, Double maximum = Double.MaxValue, Boolean looped = false)
-        {
-            value = Range(value, minimum, maximum, looped);
-        }
-        
-        public static Double Range(Double value, Double minimum = 0, Double maximum = Double.MaxValue, Boolean looped = false)
-        {
-            if (value > maximum)
-            {
-                return looped ? minimum : maximum;
-            }
-            
-            if (value < minimum)
-            {
-                return looped ? maximum : minimum;
-            }
-
-            return value;
+            return (value & (value - 1)) == 0;
         }
 
-        public static Int32 GetDigitsAfterPoint(Double value)
+        public static Int32 GetDigitsAfterPoint<T>(T value)
         {
-            return value.ToString(CultureInfo.InvariantCulture).Split('.').Length > 1
-                ? value.ToString(CultureInfo.InvariantCulture).Split('.').ToList().ElementAt(1).Length
-                : 0;
+            String[] splitted = value.Convert(CultureInfo.InvariantCulture).Split('.');
+
+            return splitted.Length <= 1 ? 0 : splitted[1].Length;
         }
         
-        public static Int32 ZeroCheck(Int32 value, Int32 zero = 1)
+        public static Int32 ZeroCheck(Int32 value, Int32 onZero = 1)
         {
-            return value == 0 ? zero : value;
+            return value == 0 ? onZero : value;
         }
         
         private static Decimal RoundUp(Decimal number, Int32 digits) {

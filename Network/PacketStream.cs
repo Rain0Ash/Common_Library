@@ -22,13 +22,13 @@ namespace Common_Library.Network
     /// </summary>
     public class PacketStream : ICloneable, IComparable
     {
-        #region Data
+        
 
         private const Int32 DefaultSize = 128;
 
-        #endregion // Data
+        
 
-        #region Properties
+        
 
         public Byte[] Buffer { get; private set; }
 
@@ -66,9 +66,9 @@ namespace Common_Library.Network
             }
         }
 
-        #endregion // Properties
+        
 
-        #region Operators & Casts
+        
 
         public Byte this[Int32 index]
         {
@@ -86,9 +86,9 @@ namespace Common_Library.Network
             return o.GetBytes();
         }
 
-        #endregion // Operators & Casts
+        
 
-        #region Constructor
+        
 
         public PacketStream() : this(DefaultSize)
         {
@@ -124,9 +124,9 @@ namespace Common_Library.Network
             Replace(sourcePacketStream, offset, count);
         }
 
-        #endregion // Constructor
+        
 
-        #region Reserve & Roundup
+        
 
         private static Byte[] Roundup(Int32 length)
         {
@@ -157,9 +157,9 @@ namespace Common_Library.Network
             }
         }
 
-        #endregion // Reserve & Roundup
+        
 
-        #region Replace
+        
 
         /// <summary>
         /// Replace current PacketStream with provided one.
@@ -209,9 +209,9 @@ namespace Common_Library.Network
             return this;
         }
 
-        #endregion // Replace
+        
 
-        #region Clear
+        
 
         /// <summary>
         /// Clears current stream.
@@ -224,9 +224,9 @@ namespace Common_Library.Network
             return this;
         }
 
-        #endregion // Clear
+        
 
-        #region PushBack
+        
 
         public PacketStream PushBack(Byte b)
         {
@@ -235,9 +235,9 @@ namespace Common_Library.Network
             return this;
         }
 
-        #endregion // PushBack
+        
 
-        #region Swap
+        
 
         public PacketStream Swap(PacketStream swapStream)
         {
@@ -251,9 +251,9 @@ namespace Common_Library.Network
             return this;
         }
 
-        #endregion // Swap
+        
 
-        #region Rollback
+        
 
         public void Rollback()
         {
@@ -265,9 +265,9 @@ namespace Common_Library.Network
             Pos -= len;
         }
 
-        #endregion // Rollback
+        
 
-        #region Erase
+        
 
         public PacketStream Erase(Int32 from)
         {
@@ -291,9 +291,9 @@ namespace Common_Library.Network
             return this;
         }
 
-        #endregion // Erase
+        
 
-        #region Insert
+        
 
         public PacketStream Insert(Int32 offset, PacketStream copyStream)
         {
@@ -321,9 +321,9 @@ namespace Common_Library.Network
             return this;
         }
 
-        #endregion // Insert
+        
 
-        #region GetBytes
+        
 
         public Byte[] GetBytes()
         {
@@ -332,9 +332,9 @@ namespace Common_Library.Network
             return temp;
         }
 
-        #endregion // GetBytes
+        
 
-        #region Read Primitive Types
+        
 
         public Boolean ReadBoolean()
         {
@@ -534,9 +534,9 @@ namespace Common_Library.Network
             return result;
         }
 
-        #endregion // Read Primitive Types
+        
 
-        #region Read Complex Types
+        
 
         public PacketStream ReadPacketStream()
         {
@@ -622,9 +622,9 @@ namespace Common_Library.Network
             return result;
         }
 
-        #endregion // Read Complex Types
+        
 
-        #region Read Strings
+        
 
         public String ReadString()
         {
@@ -639,9 +639,9 @@ namespace Common_Library.Network
             return Encoding.UTF8.GetString(strBuf).Trim('\u0000');
         }
 
-        #endregion // Read Strings
+        
 
-        #region Write Primitive Types
+        
 
         public PacketStream Write(Boolean value)
         {
@@ -729,9 +729,9 @@ namespace Common_Library.Network
             return Write(Converter.GetBytes(value, 3));
         }
 
-        #endregion // Write Primitive Types
+        
 
-        #region Write Complex Types
+        
 
         public PacketStream Write(PacketMarshaler value)
         {
@@ -802,9 +802,9 @@ namespace Common_Library.Network
             return this;
         }
 
-        #endregion // Write Complex Types
+        
 
-        #region Write Strings
+        
 
         public PacketStream Write(String value, Boolean appendSize = true, Boolean appendTerminator = false)
         {
@@ -812,18 +812,18 @@ namespace Common_Library.Network
             return Write(str, appendSize);
         }
 
-        #endregion // Write Strings
+        
 
-        #region ToString
+        
 
         public override String ToString()
         {
             return BitConverter.ToString(GetBytes());
         }
 
-        #endregion // ToString
+        
 
-        #region Equals
+        
 
         public Boolean Equals(PacketStream stream)
         {
@@ -858,18 +858,18 @@ namespace Common_Library.Network
             return Buffer.GetHashCode();
         }
 
-        #endregion // Equals
+        
 
-        #region ICloneable Members
+        
 
         public Object Clone()
         {
             return new PacketStream(this);
         }
 
-        #endregion
+        
 
-        #region IComparable Members
+        
 
         public Int32 CompareTo(Object? obj)
         {
@@ -891,6 +891,6 @@ namespace Common_Library.Network
             return Count - stream.Count;
         }
 
-        #endregion
+        
     }
 }

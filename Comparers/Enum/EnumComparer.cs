@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 
 namespace Common_Library.Comparers.Enum
 {
-    public struct EnumEqualityComparer<TEnum> : IEqualityComparer<TEnum> where TEnum : struct, IConvertible
+    public struct EnumEqualityComparer<TEnum> : IEqualityComparer<TEnum> where TEnum : System.Enum
     {
         private static class BoxAvoidance
         {
@@ -39,7 +39,7 @@ namespace Common_Library.Comparers.Enum
         }
     }
     
-    public struct EnumEqualityComparer<TEnum, TInt> : IEqualityComparer<TEnum> where TEnum : struct, IConvertible where TInt : struct, IConvertible, IEquatable<TInt>
+    public struct EnumEqualityComparer<TEnum, TInt> : IEqualityComparer<TEnum> where TEnum : System.Enum where TInt : unmanaged, IConvertible, IEquatable<TInt>
     {
         private static class BoxAvoidance
         {

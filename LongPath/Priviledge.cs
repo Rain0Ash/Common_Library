@@ -149,7 +149,7 @@ namespace Common_Library.LongPath
             private static SafeTokenHandle processHandle = new SafeTokenHandle(IntPtr.Zero);
             private static readonly Object SyncRoot = new Object();
 
-            #region Constructor and finalizer
+            
             public TlsContents()
             {
                 Int32 error = 0;
@@ -279,9 +279,9 @@ namespace Common_Library.LongPath
                     Dispose(false);
                 }
             }
-            #endregion
+            
 
-            #region IDisposable implementation
+            
             public void Dispose()
             {
                 Dispose(true);
@@ -309,9 +309,9 @@ namespace Common_Library.LongPath
 
                 _disposed = true;
             }
-            #endregion
+            
 
-            #region Reference-counting
+            
             public void IncrementReferenceCount()
             {
                 ReferenceCountValue++;
@@ -331,9 +331,9 @@ namespace Common_Library.LongPath
 
             public Int32 ReferenceCountValue { get; private set; } = 1;
 
-            #endregion
+            
 
-            #region Properties
+            
             public SafeTokenHandle ThreadHandle
             {
                 get { return _threadHandle; }
@@ -341,7 +341,7 @@ namespace Common_Library.LongPath
 
             public Boolean IsImpersonating { get; }
 
-            #endregion
+            
             
         }
 

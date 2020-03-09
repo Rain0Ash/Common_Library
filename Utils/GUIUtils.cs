@@ -6,7 +6,7 @@ using System;
 namespace Common_Library.Utils
 {
     [Flags]
-    public enum ActionType : Byte
+    public enum ActionType : Int64
     {
         Select = 0,
         Copy = 1,

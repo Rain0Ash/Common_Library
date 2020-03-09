@@ -2,6 +2,7 @@
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
 using System;
+using System.Windows.Forms;
 using Common_Library.App;
 using Common_Library.Utils;
 
@@ -9,7 +10,7 @@ namespace Common_Library
 {
     public static class Library
     {
-        public static AppVersion Version { get; } = new AppVersion(0.9, App.App.Status.OpenBeta);
+        public static AppVersion Version { get; } = new AppVersion(1, App.App.Status.OpenBeta);
 
         private static void Main()
         {

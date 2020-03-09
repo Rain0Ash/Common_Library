@@ -229,7 +229,7 @@ namespace Common_Library.LongPath {
             }
         }
 
-		#region private implementation
+		
 
 		/// <summary>
 		/// The file or directory is not a reparse point.
@@ -429,6 +429,6 @@ namespace Common_Library.LongPath {
             throw new IOException(message, Marshal.GetExceptionForHR(Marshal.GetHRForLastWin32Error()));
         }
 
-		#endregion
+		
 	}
 }
