@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using Common_Library.Localization;
 using Common_Library.Utils;
 using Common_Library.Utils.OS;
 
@@ -19,6 +20,11 @@ namespace Common_Library.GUI.WinForms.Forms
 
         private static readonly Size IconSize = new Size(64, 64);
 
+        // ReSharper disable once FieldCanBeMadeReadOnly.Global
+        public static CultureStringsBase ThisLinkIsInvalidMessage = new CultureStringsBase(@"This link is invalid");
+        // ReSharper disable once FieldCanBeMadeReadOnly.Global
+        public static CultureStringsBase InvalidLinkMessage = new CultureStringsBase(@"Invalid link");
+        
         public static DialogResult GetDialogResultOnException(Exception exception, String additionalText = null, String title = null, MessageBoxButtons messageBoxButtons = MessageBoxButtons.RetryCancel, IReadOnlyList<Object> buttonsName = null)
         {
             title ??= "Exception occured";
@@ -58,65 +64,15 @@ namespace Common_Library.GUI.WinForms.Forms
         public MessageForm(String text = null, String title = null, Image icon = null, Image messageIcon = null, MessageBoxButtons messageBoxButtons = MessageBoxButtons.OK, IReadOnlyList<Object> buttonsName = null, Boolean showInTaskBar = false)
         {
             SuspendLayout();
-            text ??= String.Empty;
-            text = Regex.Replace(text, @"<.+></.+>", String.Empty);
 
-            List<String[]> matches = Regex.Matches(text, @"(?<=(<link>))(.)+?(?=(<\/link>))").OfType<Match>().Select(match => match.Value.Split(new []{"|"}, 2, StringSplitOptions.RemoveEmptyEntries)).ToList();
-            String labelText = text;
-            List<Link> links = new List<Link>();
-            foreach (String[] match in matches)
-            {
-                String link = match[0];
-                String pattern = $@"<link>{link}{(match.Length > 1 ? $"|{match[1]}" : String.Empty)}</link>";
-                String linkText = match.Length > 1 ? match[1] : link;
-                Int32 index = labelText.IndexOf(pattern, StringComparison.Ordinal);
-                labelText = labelText.Replace(pattern, linkText);
-                links.Add(new Link(index, linkText.Length, link));
-            }
+            LinkLabel textLabel = GetTextLabel(FindMatches(text, out IList<Link> links), links);
             
-            LinkLabel textLabel = new LinkLabel
-            {
-                Text = labelText,
-                Font = new Font(Font.Name, Font.Size + 3, FontStyle.Regular),
-                AutoSize = true,
-                LinkArea = new LinkArea(0, 0)
-            };
+            AddMessageIcon(messageIcon);
             
-            textLabel.LinkClicked += (s, e) =>
-            {
-                String link = e.Link.LinkData.ToString();
-                if (PathUtils.IsValidWebPath(link))
-                {
-                    ProcessUtils.OpenBrowser(link);
-                    return;
-                }
-
-                MessageBox.Show(@"This link is invalid", @"Invalid link", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            };
-            
-            foreach (Link link in links)
-            {
-                textLabel.Links.Add(link.Start, link.Length, link.Object);
-            }
-            
-            textLabel.Size = TextRenderer.MeasureText(labelText, textLabel.Font);
-            
-            
-            if (messageIcon != null)
-            {
-                PictureBox imageLabel = new PictureBox
-                {
-                    Image = new Bitmap(messageIcon, new Size(48, 48)),
-                    AutoSize = false,
-                    Size = IconSize,
-                    Location = new Point(0, 0)
-                };
-                Controls.Add(imageLabel);
-            }
             Text = title ?? "Message";
             Icon = ImageUtils.IconFromImage(icon ?? new Bitmap(Images.Images.Basic.Application, IconSize));
             AutoSize = true;
-            Size = new Size(textLabel.Size.Width + (messageIcon != null ? IconSize.Width * 2 : 0), 70 + Math.Max(textLabel.Size.Height, IconSize.Height));
+            Size = new Size(textLabel.Size.Width + (messageIcon != null ? IconSize.Width * 2 : 0), 74 + Math.Max(textLabel.Size.Height, IconSize.Height));
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
             MinimizeBox = false;
@@ -131,7 +87,72 @@ namespace Common_Library.GUI.WinForms.Forms
             PerformLayout();
             OnSizeChanged();
         }
+
+        private static void OnLink_Clicked(Object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            String link = e.Link.LinkData.ToString();
+            if (PathUtils.IsValidWebPath(link))
+            {
+                ProcessUtils.OpenBrowser(link);
+                return;
+            }
+
+            MessageBox.Show(ThisLinkIsInvalidMessage, InvalidLinkMessage, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
+        private void AddMessageIcon(Image icon)
+        {
+            PictureBox image = new PictureBox
+            {
+                Image = new Bitmap(icon, new Size(48, 48)),
+                AutoSize = false,
+                Size = IconSize,
+                Location = new Point(0, 0)
+            };
+            
+            Controls.Add(image);
+        }
+
+        private LinkLabel GetTextLabel(String labelText, IEnumerable<Link> links)
+        {
+            LinkLabel label = new LinkLabel
+            {
+                Text = labelText,
+                Font = new Font(Font.Name, Font.Size + 3, FontStyle.Regular),
+                AutoSize = true,
+                LinkArea = new LinkArea(0, 0)
+            };
+
+            label.LinkClicked += OnLink_Clicked;
+            
+            foreach (Link link in links)
+            {
+                label.Links.Add(link.Start, link.Length, link.Object);
+            }
+            
+            label.Size = TextRenderer.MeasureText(labelText, label.Font);
+
+            return label;
+        }
         
+        private static String FindMatches(String text, out IList<Link> links)
+        {
+            text ??= String.Empty;
+            text = Regex.Replace(text, @"<.+></.+>", String.Empty);
+            List<String[]> matches = Regex.Matches(text, @"(?<=(<link>))(.)+?(?=(<\/link>))").OfType<Match>().Select(match => match.Value.Split(new []{"|"}, 2, StringSplitOptions.RemoveEmptyEntries)).ToList();
+            links = new List<Link>();
+            foreach (String[] match in matches)
+            {
+                String link = match[0];
+                String pattern = $@"<link>{link}{(match.Length > 1 ? $"|{match[1]}" : String.Empty)}</link>";
+                String linkText = match.Length > 1 ? match[1] : link;
+                Int32 index = text.IndexOf(pattern, StringComparison.Ordinal);
+                text = text.Replace(pattern, linkText);
+                links.Add(new Link(index, linkText.Length, link));
+            }
+
+            return text;
+        }
         
         private void CreateButtons(MessageBoxButtons messageBoxButtons, IReadOnlyList<Object> buttonsName = null)
         {
@@ -211,49 +232,27 @@ namespace Common_Library.GUI.WinForms.Forms
                 }
             }
 
-            String firstButtonText = GetFirstButtonText(out DialogResult firstButtonResult);
-            String secondButtonText = GetSecondButtonText(out DialogResult secondButtonResult);
-            String thirdButtonText = GetThirdButtonText(out DialogResult thirdButtonResult);
+            AddButton(GetFirstButtonText(out DialogResult result), result);
+            
+            AddButton(GetSecondButtonText(out result), result);
+            
+            AddButton(GetThirdButtonText(out result), result);
+        }
 
-
-            void OnButtonClick(DialogResult dialogResult)
+        private void AddButton(String text, DialogResult result)
+        {
+            if (text == null)
             {
-                DialogResult = dialogResult;
+                return;
             }
             
-            if (firstButtonText != null)
+            Button button = new Button
             {
-                Button button = new Button
-                {
-                    Text = firstButtonText,
-                    AutoSize = false
-                };
-                button.Click += (sender, args) => OnButtonClick(firstButtonResult);
-                _buttons.Add(button);
-            }
-            
-            if (secondButtonText != null)
-            {
-                Button button = new Button
-                {
-                    Text = secondButtonText,
-                    AutoSize = false
-                };
-                
-                button.Click += (sender, args) => OnButtonClick(secondButtonResult);
-                _buttons.Add(button);
-            }
-            
-            if (thirdButtonText != null)
-            {
-                Button button = new Button
-                {
-                    Text = thirdButtonText,
-                    AutoSize = false
-                };
-                button.Click += (sender, args) => OnButtonClick(thirdButtonResult);
-                _buttons.Add(button);
-            }
+                Text = text,
+                AutoSize = false
+            };
+            button.Click += (sender, args) => DialogResult = result;
+            _buttons.Add(button);
         }
         
 

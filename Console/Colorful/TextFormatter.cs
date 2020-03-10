@@ -63,6 +63,7 @@ namespace Common_Library.Colorful
             TryExtendColors(ref args, ref colors);
 
             Int32 chocolateEnd = 0;
+            String vanilla;
             for (Int32 i = 0; i < locations.Count(); i++)
 			{
                 Int32 styledIndex = Int32.Parse(indices[i].TrimStart('{').TrimEnd('}'));
@@ -76,33 +77,37 @@ namespace Common_Library.Colorful
                 Int32 vanillaEnd = locations[i].Beginning;
                 chocolateEnd = locations[i].End;
 
-                String vanilla = input.Substring(vanillaStart, vanillaEnd - vanillaStart);
+                vanilla = input.Substring(vanillaStart, vanillaEnd - vanillaStart);
                 String chocolate = args[styledIndex].ToString();
 
                 formatMap.Add(new KeyValuePair<String, Color>(vanilla, _defaultColor));
                 formatMap.Add(new KeyValuePair<String, Color>(chocolate, colors[styledIndex]));
 			}
 
-            if (chocolateEnd < input.Length)
+            if (chocolateEnd >= input.Length)
             {
-                String vanilla = input.Substring(chocolateEnd, input.Length - chocolateEnd);
-                formatMap.Add(new KeyValuePair<String, Color>(vanilla, _defaultColor));
+                return formatMap;
             }
+
+            vanilla = input.Substring(chocolateEnd, input.Length - chocolateEnd);
+            formatMap.Add(new KeyValuePair<String, Color>(vanilla, _defaultColor));
 
             return formatMap;
         }
 
         private void TryExtendColors(ref Object[] args, ref Color[] colors)
         {
-            if (colors.Length < args.Length)
+            if (colors.Length >= args.Length)
             {
-                Color styledColor = colors[0];
-                colors = new Color[args.Length];
+                return;
+            }
 
-                for (Int32 i = 0; i < args.Length; i++)
-                {
-                    colors[i] = styledColor;
-                }
+            Color styledColor = colors[0];
+            colors = new Color[args.Length];
+
+            for (Int32 i = 0; i < args.Length; i++)
+            {
+                colors[i] = styledColor;
             }
         }
     }

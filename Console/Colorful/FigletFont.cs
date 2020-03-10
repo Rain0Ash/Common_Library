@@ -85,18 +85,21 @@ namespace Common_Library.Colorful
             String configString = font.Lines.First();
             String[] configArray = configString.Split(' ');
             font.Signature = configArray.First().Remove(configArray.First().Length - 1);
-            if (font.Signature == "flf2a")
+            
+            if (font.Signature != "flf2a")
             {
-                font.HardBlank = configArray.First().Last().ToString();
-                font.Height = ParseIntValue(configArray, 1);
-                font.BaseLine = ParseIntValue(configArray, 2);
-                font.MaxLength = ParseIntValue(configArray, 3);
-                font.OldLayout = ParseIntValue(configArray, 4);
-                font.CommentLines = ParseIntValue(configArray, 5);
-                font.PrintDirection = ParseIntValue(configArray, 6);
-                font.FullLayout = ParseIntValue(configArray, 7);
-                font.CodeTagCount = ParseIntValue(configArray, 8);
+                return font;
             }
+
+            font.HardBlank = configArray.First().Last().ToString();
+            font.Height = ParseIntValue(configArray, 1);
+            font.BaseLine = ParseIntValue(configArray, 2);
+            font.MaxLength = ParseIntValue(configArray, 3);
+            font.OldLayout = ParseIntValue(configArray, 4);
+            font.CommentLines = ParseIntValue(configArray, 5);
+            font.PrintDirection = ParseIntValue(configArray, 6);
+            font.FullLayout = ParseIntValue(configArray, 7);
+            font.CodeTagCount = ParseIntValue(configArray, 8);
 
             return font;
         }

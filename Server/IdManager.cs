@@ -197,16 +197,18 @@ using AAEmu.Commons.Utils;
                 while (nextFree < 0)
                 {
                     nextFree = _freeIds.NextClear(0);
-                    if (nextFree < 0)
+                    if (nextFree >= 0)
                     {
-                        if (_freeIds.Count < _freeIdSize)
-                        {
-                            IncreaseBitSetCapacity();
-                        }
-                        else
-                        {
-                            throw new Exception("Ran out of valid Id's.");
-                        }
+                        continue;
+                    }
+
+                    if (_freeIds.Count < _freeIdSize)
+                    {
+                        IncreaseBitSetCapacity();
+                    }
+                    else
+                    {
+                        throw new Exception("Ran out of valid Id's.");
                     }
                 }
 

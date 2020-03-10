@@ -8,14 +8,15 @@ namespace Common_Library.Utils
     [Flags]
     public enum ActionType : Int64
     {
-        Select = 0,
-        Copy = 1,
-        Paste = 2,
-        Cut = 4,
-        Add = 8,
-        Remove = 16,
-        Change = 32,
-        All = 63
+        None = 0,
+        Select = 1,
+        Copy = 2,
+        Paste = 4,
+        Cut = 8,
+        Add = 16,
+        Remove = 32,
+        Change = 64,
+        All = 127
     }
     
     public class GUIUtils

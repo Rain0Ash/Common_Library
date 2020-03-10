@@ -92,7 +92,7 @@ namespace Common_Library.Random {
         /// <param name="item">Item that will be removed out of collection, if found</param>
         public void Remove(T item) {
 
-            Int32 index = _itemsList.IndexOf(item); ;
+            Int32 index = _itemsList.IndexOf(item);
 
             // nothing was found
             if (index == -1)

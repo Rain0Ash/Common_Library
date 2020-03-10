@@ -27,7 +27,7 @@ namespace Common_Library.Utils
             return type.IsEnum && Attribute.GetCustomAttribute(type, typeof(FlagsAttribute), true) != null;
         }
         
-        public static TEnum RandomEnumValue<TEnum>()
+        public static TEnum RandomEnumValue<TEnum>() where TEnum : Enum
         {  
             Type type = typeof(TEnum);
             Array values = Enum.GetValues(type);
@@ -56,12 +56,12 @@ namespace Common_Library.Utils
             return AsDecimal(typeof(TEnum));
         }
         
-        public static IEnumerable<UInt64> AsUInt64(this Enum @enum, Boolean ignoreNegative = false)
+        public static IEnumerable<UInt64> AsUInt64(this Enum @enum, Boolean ignoreNegative = true)
         {
             return AsUInt64(@enum.GetType(), ignoreNegative);
         }
         
-        public static IEnumerable<UInt64> AsUInt64(Type type, Boolean ignoreNegative = false)
+        public static IEnumerable<UInt64> AsUInt64(Type type, Boolean ignoreNegative = true)
         {
             IEnumerable<Decimal> decimals = AsDecimal(type);
             
@@ -73,11 +73,11 @@ namespace Common_Library.Utils
             return decimals.Select(ConvertUtils.ToUInt64);
         }
         
-        public static IEnumerable<UInt64> AsUInt64<TEnum>(Boolean ignoreNegative = false) where TEnum : Enum
+        public static IEnumerable<UInt64> AsUInt64<TEnum>(Boolean ignoreNegative = true) where TEnum : Enum
         {
             return AsUInt64(typeof(TEnum), ignoreNegative);
         }
-        
+
         public static Int32 GetCountOfFlags<TEnum>() where TEnum : Enum
         {
             Type type = typeof(TEnum);
@@ -86,8 +86,10 @@ namespace Common_Library.Utils
             {
                 throw new NotFlagsEnumTypeException<TEnum>();
             }
+            
+            UInt64[] values = AsUInt64(type).ToArray();
 
-            return AsUInt64(type).Count(MathUtils.IsPowerOf2);
+            return values.Length < 2 ? values.Length : values.Count(MathUtils.IsPowerOf2);
         }
     }
 }

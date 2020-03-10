@@ -33,7 +33,7 @@ namespace Common_Library.Localization
             {
                 get
                 {
-                    return DefaultLocalization.Select(GetLCID);;
+                    return DefaultLocalization.Select(GetLCID);
                 }
             }
             

@@ -76,9 +76,11 @@ namespace Common_Library.Colorful
 
             MatchLocation previousLocation = new MatchLocation(0, 0);
             Int32 chocolateEnd = 0;
-            foreach (KeyValuePair<StyleClass<TextPattern>, MatchLocation> styledLocation in targets)
+            String vanilla;
+            
+            foreach ((StyleClass<TextPattern> key, MatchLocation value) in targets)
             {
-                MatchLocation currentLocation = styledLocation.Value;
+                MatchLocation currentLocation = value;
 
                 if (previousLocation.End > currentLocation.Beginning)
                 {
@@ -90,9 +92,9 @@ namespace Common_Library.Colorful
                 Int32 chocolateStart = vanillaEnd;
                 chocolateEnd = currentLocation.End;
 
-                String vanilla = input.Substring(vanillaStart, vanillaEnd - vanillaStart);
+                vanilla = input.Substring(vanillaStart, vanillaEnd - vanillaStart);
 
-                String chocolate = _matchFoundHandlers[styledLocation.Key].Invoke(input, styledLocation.Value, input.Substring(chocolateStart, chocolateEnd - chocolateStart));
+                String chocolate = _matchFoundHandlers[key].Invoke(input, value, input.Substring(chocolateStart, chocolateEnd - chocolateStart));
 
                 if (vanilla != "")
                 {
@@ -100,17 +102,19 @@ namespace Common_Library.Colorful
                 }
                 if (chocolate != "")
                 {
-                    styleMap.Add(new KeyValuePair<String, Color>(chocolate, styledLocation.Key.Color));
+                    styleMap.Add(new KeyValuePair<String, Color>(chocolate, key.Color));
                 }
 
                 previousLocation = currentLocation.Prototype();
             }
 
-            if (chocolateEnd < input.Length)
+            if (chocolateEnd >= input.Length)
             {
-                String vanilla = input.Substring(chocolateEnd, input.Length - chocolateEnd);
-                styleMap.Add(new KeyValuePair<String, Color>(vanilla, _styleSheet.UnstyledColor));
+                return styleMap;
             }
+
+            vanilla = input.Substring(chocolateEnd, input.Length - chocolateEnd);
+            styleMap.Add(new KeyValuePair<String, Color>(vanilla, _styleSheet.UnstyledColor));
 
             return styleMap;
         }

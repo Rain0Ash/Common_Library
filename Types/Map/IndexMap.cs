@@ -11,7 +11,7 @@ using Common_Library.Utils;
 namespace Common_Library.Types.Map
 {
     [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
-    public class IndexMap<TKey, TValue> : Map<TKey, TValue>, IIndexMap<TKey, TValue>, IEnumerable<KeyValuePair<TKey, TValue>>
+    public class IndexMap<TKey, TValue> : Map<TKey, TValue>, IIndexMap<TKey, TValue>
     {
         private List<TKey> _orderList;
 

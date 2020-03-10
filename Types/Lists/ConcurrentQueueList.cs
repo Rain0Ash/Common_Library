@@ -23,7 +23,7 @@ namespace System.Collections.Generic
             }
         }
 
-        public new T Get(Int32 index)
+        public T Get(Int32 index)
         {
             lock (this)
             {

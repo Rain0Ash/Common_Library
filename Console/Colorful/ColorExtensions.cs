@@ -33,11 +33,13 @@ namespace Common_Library.Colorful
                     return consoleColor;
                 }
 
-                if (sum < delta)
+                if (!(sum < delta))
                 {
-                    delta = sum;
-                    closestConsoleColor = consoleColor;
+                    continue;
                 }
+
+                delta = sum;
+                closestConsoleColor = consoleColor;
             }
 
             return closestConsoleColor;
