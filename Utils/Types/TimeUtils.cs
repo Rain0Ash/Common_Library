@@ -8,16 +8,16 @@ namespace Common_Library.Utils
     public static class TimeUtils
     {
         private static readonly DateTime UnixDate = new DateTime(1970, 1, 1, 0, 0, 0);
-        
+
         /// <summary>
         /// Return unix time in seconds
         /// </summary>
         public static Int64 UnixTime()
         {
             TimeSpan timeSpan = DateTime.Now - UnixDate;
-            return (Int64)timeSpan.TotalSeconds;
+            return (Int64) timeSpan.TotalSeconds;
         }
-        
+
         /// <summary>
         /// Return unix time in seconds
         /// </summary>
@@ -30,9 +30,9 @@ namespace Common_Library.Utils
             }
 
             TimeSpan timeSpan = DateTime.Now - UnixDate;
-            return (Int64)timeSpan.TotalMilliseconds;
+            return (Int64) timeSpan.TotalMilliseconds;
         }
-        
+
         public static Int64 UnixTime(this DateTime time)
         {
             if (time <= DateTime.MinValue)
@@ -46,7 +46,7 @@ namespace Common_Library.Utils
             }
 
             TimeSpan timeSpan = time - UnixDate;
-            return (Int64)timeSpan.TotalSeconds;
+            return (Int64) timeSpan.TotalSeconds;
         }
 
         public static DateTime UnixTime(Int64 time)

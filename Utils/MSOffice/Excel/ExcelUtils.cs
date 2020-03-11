@@ -5,6 +5,5 @@ namespace Common_Library.Utils.MSOffice.Excel
 {
     public static class ExcelUtils
     {
-        
     }
 }

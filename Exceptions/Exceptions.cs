@@ -10,16 +10,14 @@ namespace Common_Library.Exceptions
         public AlreadyInitializedException(String message = null)
             : base(message)
         {
-            
         }
     }
-    
+
     public class NotInitializedException : Exception
     {
         public NotInitializedException(String message = null)
             : base(message)
         {
-            
         }
     }
 }

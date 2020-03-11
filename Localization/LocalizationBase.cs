@@ -11,13 +11,13 @@ using System.Runtime.InteropServices;
 using Common_Library.Types.Map;
 using Common_Library.Utils;
 
- namespace Common_Library.Localization
+namespace Common_Library.Localization
 {
     [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
     public abstract class LocalizationBase
     {
         public static event Handlers.EmptyHandler LanguageChanged;
-        
+
         public static String NewLine
         {
             get
@@ -25,11 +25,11 @@ using Common_Library.Utils;
                 return Environment.NewLine;
             }
         }
-        
+
         static LocalizationBase()
         {
             DefaultCulture = new CultureInfoFixed(0x409) {CustomName = "English"};
-            
+
             CultureInfoFixed[] array =
             {
                 DefaultCulture,
@@ -38,19 +38,22 @@ using Common_Library.Utils;
                 new CultureInfoFixed(0x40c) {CustomName = "Française"}
             };
 
-            CultureLCIDDictionary = new IndexDictionary<Int32, CultureInfoFixed>(array.Select(culture => new KeyValuePair<Int32, CultureInfoFixed>(culture.LCID, culture)));
-            
-            CodeByLCIDMap = new Map<Int32, String>(CultureLCIDDictionary.ToDictionary(pair => pair.Value.LCID, pair => pair.Value.Code.ToLower()));
-            
+            CultureLCIDDictionary =
+                new IndexDictionary<Int32, CultureInfoFixed>(array.Select(culture =>
+                    new KeyValuePair<Int32, CultureInfoFixed>(culture.LCID, culture)));
+
+            CodeByLCIDMap =
+                new Map<Int32, String>(CultureLCIDDictionary.ToDictionary(pair => pair.Value.LCID, pair => pair.Value.Code.ToLower()));
+
             DefaultComparer = new CultureComparer(array);
 
             SystemCulture = CultureLCIDDictionary.TryGetValue(CultureInfo.CurrentUICulture.LCID, DefaultCulture);
-            
+
             CurrentCulture = SystemCulture;
         }
 
         public static CultureComparer DefaultComparer { get; }
-        
+
         private static readonly IndexDictionary<Int32, CultureInfoFixed> CultureLCIDDictionary;
 
         private static readonly Map<Int32, String> CodeByLCIDMap;
@@ -82,9 +85,9 @@ using Common_Library.Utils;
             CultureLCIDDictionary.Remove(lcid);
             CodeByLCIDMap.Remove(lcid);
         }
-        
+
         public static CultureInfoFixed DefaultCulture { get; }
-        
+
         public static CultureInfoFixed SystemCulture { get; }
 
         public static CultureInfoFixed BasicCulture
@@ -94,7 +97,7 @@ using Common_Library.Utils;
                 return UseSystemCulture ? SystemCulture : DefaultCulture;
             }
         }
-        
+
         public static CultureInfoFixed CurrentCulture { get; protected set; }
 
         public static Boolean ChangeUIThreadLanguage { get; set; } = true;
@@ -110,7 +113,7 @@ using Common_Library.Utils;
                 return _currentCultureStrings.AvailableLocalization;
             }
         }
-        
+
         protected LocalizationBase(Int32 lcid, CultureStringsBase currentCultureStrings = null)
         {
             _currentCultureStrings = currentCultureStrings ?? new CultureStringsBase(null);
@@ -124,14 +127,14 @@ using Common_Library.Utils;
             {
                 lcid = BasicCulture.LCID;
             }
-            
+
             if (CurrentCulture.LCID == lcid)
             {
                 return;
             }
 
             CurrentCulture = CultureByLCID[lcid];
-            
+
             if (ChangeUIThreadLanguage)
             {
                 SetUILanguage();
@@ -147,7 +150,7 @@ using Common_Library.Utils;
 
         [DllImport("Kernel32.dll", CharSet = CharSet.Auto)]
         private static extern UInt16 SetThreadUILanguage(UInt16 langId);
-        
+
         public static void SetUILanguage()
         {
             UInt16 lcid;
@@ -159,10 +162,10 @@ using Common_Library.Utils;
             {
                 lcid = DefaultCulture.LCID16;
             }
-            
+
             SetUILanguage(lcid);
         }
-        
+
         public static void SetUILanguage(UInt16 lcid)
         {
             SetThreadUILanguage(lcid);
@@ -172,7 +175,7 @@ using Common_Library.Utils;
         {
             return _currentCultureStrings.GetCultures();
         }
-        
+
         public static Int32 GetLanguageOrderID(Int32 lcid)
         {
             return DefaultComparer.GetLanguageOrderID(lcid);

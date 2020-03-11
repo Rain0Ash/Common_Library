@@ -10,7 +10,7 @@ namespace Common_Library.Types.Map
     public interface IReadOnlyIndexMap<TKey, TValue> : IReadOnlyMap<TKey, TValue>, IReadOnlyIndexDictionary<TKey, TValue>
     {
         public Int32 IndexOf(TValue key);
-        
+
         public TKey GetReversedByIndex(Int32 index);
 
         public KeyValuePair<TValue, TKey> GetReversedPairByIndex(Int32 index);

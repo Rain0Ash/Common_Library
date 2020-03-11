@@ -14,9 +14,9 @@ namespace Common_Library.GUI.WinForms.ListBoxes
         public readonly EditableListBox ListBox = new EditableListBox();
 
         public event Handlers.EmptyHandler ImageChanged;
-        
+
         private Image _addButtonImage = Images.Images.Lineal.Plus;
-        
+
         public Image AddButtonImage
         {
             get
@@ -29,11 +29,11 @@ namespace Common_Library.GUI.WinForms.ListBoxes
                 ImageChanged?.Invoke();
             }
         }
-        
+
         public readonly Button AddButton = new Button();
-        
+
         private Image _removeButtonImage = Images.Images.Lineal.Minus;
-        
+
         public Image RemoveButtonImage
         {
             get
@@ -72,7 +72,7 @@ namespace Common_Library.GUI.WinForms.ListBoxes
                 HelpToolTip.SetToolTip(RemoveButton, value);
             }
         }
-        
+
         public virtual String UpButtonToolTip
         {
             get
@@ -84,7 +84,7 @@ namespace Common_Library.GUI.WinForms.ListBoxes
                 HelpToolTip.SetToolTip(UpButton, value);
             }
         }
-        
+
         public virtual String DownButtonToolTip
         {
             get
@@ -96,11 +96,11 @@ namespace Common_Library.GUI.WinForms.ListBoxes
                 HelpToolTip.SetToolTip(DownButton, value);
             }
         }
-        
+
         public readonly Button UpButton = new Button();
-        
+
         public readonly Button DownButton = new Button();
-        
+
         public readonly HelpToolTip HelpToolTip = new HelpToolTip();
 
         public AdvancedListBox()
@@ -108,13 +108,13 @@ namespace Common_Library.GUI.WinForms.ListBoxes
             ListBox.SelectionMode = SelectionMode.MultiExtended;
             SizeChanged += (sender, args) => UpdatePosition();
             ImageChanged += UpdatePosition;
-            
-            
+
+
             if (GetType() != typeof(AdvancedListBox))
             {
                 return;
             }
-            
+
             RemoveButton.Click += (sender, args) => ListBox.RemoveAt(ListBox.SelectedIndices);
             Controls.Add(ListBox);
             Controls.Add(AddButton);

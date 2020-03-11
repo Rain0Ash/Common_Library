@@ -52,6 +52,7 @@ namespace Common_Library.Network
                     _currentIndex += _bufferSize;
                 }
             }
+
             return true;
         }
 

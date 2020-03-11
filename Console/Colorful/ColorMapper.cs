@@ -59,8 +59,8 @@ namespace Common_Library.Colorful
             internal COLORREF white;
         }
 
-        private const Int32 STD_OUTPUT_HANDLE = -11;                               // per WinBase.h
-        private static readonly IntPtr InvalidHandleValue = new IntPtr(-1);    // per WinBase.h
+        private const Int32 STD_OUTPUT_HANDLE = -11; // per WinBase.h
+        private static readonly IntPtr InvalidHandleValue = new IntPtr(-1); // per WinBase.h
 
         [DllImport("kernel32.dll", SetLastError = true)]
         private static extern IntPtr GetStdHandle(Int32 nStdHandle);
@@ -90,7 +90,7 @@ namespace Common_Library.Colorful
         public Dictionary<String, COLORREF> GetBufferColors()
         {
             Dictionary<String, COLORREF> colors = new Dictionary<String, COLORREF>();
-            IntPtr hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);    // 7
+            IntPtr hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE); // 7
             ConsoleScreenBufferInfoEx csbe = GetBufferInfo(hConsoleOutput);
 
             colors.Add("black", csbe.black);

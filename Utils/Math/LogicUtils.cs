@@ -8,9 +8,8 @@ namespace Common_Library.Utils
 {
     public static class LogicUtils
     {
-        
     }
-    
+
     public static class Gates
     {
         public static Boolean And(params Boolean[] values)
@@ -32,7 +31,7 @@ namespace Common_Library.Utils
                 _ => values.Any(boolean => boolean)
             };
         }
-        
+
         public static Boolean Xor(params Boolean[] values)
         {
             return values.Length switch
@@ -42,12 +41,12 @@ namespace Common_Library.Utils
                 _ => (values.Count(boolean => boolean) & 1) == 1
             };
         }
-        
+
         public static Boolean Nand(params Boolean[] values)
         {
             return !And(values);
         }
-        
+
         public static Boolean Nor(params Boolean[] values)
         {
             return !Or(values);

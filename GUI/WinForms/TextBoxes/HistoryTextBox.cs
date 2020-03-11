@@ -30,8 +30,15 @@ namespace Common_Library.GUI.WinForms.TextBoxes
             }
 
             ClearUndo();
-            if (_storageUndo.Count > 2048) _storageUndo.RemoveAt(0);
-            if (_storageRedo.Count > 2048) _storageRedo.RemoveAt(0);
+            if (_storageUndo.Count > 2048)
+            {
+                _storageUndo.RemoveAt(0);
+            }
+
+            if (_storageRedo.Count > 2048)
+            {
+                _storageRedo.RemoveAt(0);
+            }
 
             _storageUndo.Add(Text);
         }

@@ -16,38 +16,38 @@ namespace Common_Library.Images
         public static class Basic
         {
             public static readonly Image Null = OtherImages._null;
-            
+
             public static readonly Image Application = SystemIcons.Application.ToBitmap();
-        
+
             public static readonly Image Asterisk = SystemIcons.Asterisk.ToBitmap();
-        
+
             public static readonly Image Error = SystemIcons.Error.ToBitmap();
-        
+
             public static readonly Image Exclamation = SystemIcons.Exclamation.ToBitmap();
-        
+
             public static readonly Image Hand = SystemIcons.Hand.ToBitmap();
-        
+
             public static readonly Image Information = SystemIcons.Information.ToBitmap();
-        
+
             public static readonly Image Question = SystemIcons.Question.ToBitmap();
-        
+
             public static readonly Image Shield = SystemIcons.Shield.ToBitmap();
-        
+
             public static readonly Image Warning = SystemIcons.Warning.ToBitmap();
-        
+
             public static readonly Image WinLogo = SystemIcons.WinLogo.ToBitmap();
         }
-        
+
         public static class Line
         {
             public static readonly Image ResetGear = LineImages.reset;
 
             public static readonly Image Optimization = LineImages.optimization;
-            
+
             public static readonly Image Program = LineImages.program;
-            
+
             public static readonly Image Settings = LineImages.settings;
-            
+
             public static readonly Image Tech = LineImages.tech;
         }
 
@@ -56,15 +56,15 @@ namespace Common_Library.Images
             public static readonly Image Gear = LinealImages.gear;
 
             public static readonly Image Plus = LinealImages.plus;
-            
+
             public static readonly Image Minus = LinealImages.minus;
-            
+
             public static readonly Image Download = LinealImages.download;
 
             public static readonly Image Reload = LinealImages.reload;
-        
+
             public static readonly Image Refresh = LinealImages.refresh;
-        
+
             public static readonly Image Reuse = LinealImages.reuse;
 
             public static readonly Image File = LinealImages.file;
@@ -75,11 +75,11 @@ namespace Common_Library.Images
 
             public static readonly Image NotFolder = LinealImages.not_folder;
         }
-        
+
         public static class Fill
         {
             public static readonly Image ResetGear = FillImages.reset;
-            
+
             public static readonly Image Program = FillImages.program;
 
             public static readonly Image File = FillImages.file;
@@ -103,7 +103,7 @@ namespace Common_Library.Images
 
             public static readonly Image NotFolder = FlatImages.not_folder;
         }
-        
+
         public static class Gradient
         {
             public static readonly Image Program = GradientImages.program;
@@ -129,13 +129,13 @@ namespace Common_Library.Images
             public static readonly Image NotFolder = LinearColorImages.not_folder;
         }
         */
-        
+
         public static class Others
         {
             public static readonly Image Monitor = OtherImages.monitor;
-            
+
             public static readonly Image Proxy = OtherImages.proxy;
-            
+
             public static readonly Image XButton = OtherImages.xbutton;
         }
     }

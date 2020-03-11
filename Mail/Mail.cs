@@ -14,16 +14,16 @@ namespace Common_Library.Mail
         public SmtpClient SmtpClient { get; }
 
         public MailAddress Address { get; set; }
-        
+
         public delegate void EmailHandler(Object sender, Boolean cancelled, Exception exception);
 
         public event EmailHandler EmailSendCompleted;
-        
+
         public Mail([NotNull] SmtpClient smtpClient, [NotNull] MailAddress address)
         {
             SmtpClient = smtpClient;
             SmtpClient.SendCompleted += OnEmailSend;
-            
+
             Address = address;
         }
 
@@ -32,7 +32,8 @@ namespace Common_Library.Mail
             EmailSendCompleted?.Invoke(sender, args.Cancelled, args.Error);
         }
 
-        public MailMessage GetMessage([NotNull] IEnumerable<MailAddress> to, [NotNull] String subject, [NotNull] String body, Boolean replyToAdmin = false)
+        public MailMessage GetMessage([NotNull] IEnumerable<MailAddress> to, [NotNull] String subject, [NotNull] String body,
+            Boolean replyToAdmin = false)
         {
             return GetMessage(Address, to, subject, body, replyToAdmin);
         }
@@ -56,8 +57,9 @@ namespace Common_Library.Mail
         {
             SmtpClient.SendMailAsync(message);
         }
-        
-        public static MailMessage GetMessage([NotNull] MailAddress from, [NotNull] IEnumerable<MailAddress> to, [NotNull] String subject, [NotNull] String body, Boolean replyToAdmin = false)
+
+        public static MailMessage GetMessage([NotNull] MailAddress from, [NotNull] IEnumerable<MailAddress> to, [NotNull] String subject,
+            [NotNull] String body, Boolean replyToAdmin = false)
         {
             MailMessage message = new MailMessage
             {

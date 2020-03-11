@@ -6,17 +6,17 @@ using Microsoft.Win32.SafeHandles;
 
 namespace Common_Library.LongPath
 {
-	// ReSharper disable once ClassNeverInstantiated.Global
-	internal sealed class SafeFindHandle : SafeHandleZeroOrMinusOneIsInvalid
-	{
-		internal SafeFindHandle()
-			: base(true)
-		{
-		}
+    // ReSharper disable once ClassNeverInstantiated.Global
+    internal sealed class SafeFindHandle : SafeHandleZeroOrMinusOneIsInvalid
+    {
+        internal SafeFindHandle()
+            : base(true)
+        {
+        }
 
-		protected override Boolean ReleaseHandle()
-		{
-			return NativeMethods.FindClose(handle);
-		}
-	}
+        protected override Boolean ReleaseHandle()
+        {
+            return NativeMethods.FindClose(handle);
+        }
+    }
 }

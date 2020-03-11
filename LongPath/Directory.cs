@@ -26,8 +26,8 @@ namespace Common_Library.LongPath
         {
             SafeFileHandle handle = NativeMethods.CreateFile(normalizedPath,
                 NativeMethods.EFileAccess.GenericWrite,
-                (UInt32)(FileShare.Write | FileShare.Delete),
-                IntPtr.Zero, (Int32)FileMode.Open, NativeMethods.FileFlagBackupSemantics, IntPtr.Zero);
+                (UInt32) (FileShare.Write | FileShare.Delete),
+                IntPtr.Zero, (Int32) FileMode.Open, NativeMethods.FileFlagBackupSemantics, IntPtr.Zero);
             if (!handle.IsInvalid)
             {
                 return handle;
@@ -37,6 +37,7 @@ namespace Common_Library.LongPath
             Console.WriteLine(@"error {0} with {1}{2}", ex.Message, normalizedPath, ex.StackTrace);
             throw ex;
         }
+
         public static void SetAttributes(String path, FileAttributes fileAttributes)
         {
             Common.SetAttributes(path, fileAttributes);
@@ -69,21 +70,23 @@ namespace Common_Library.LongPath
 			   the symbolic link.
 			*/
 
-            try 
+            try
             {
                 const FileAttributes reparseFlags = FileAttributes.Directory | FileAttributes.ReparsePoint;
                 Boolean isDirectoryReparsePoint = (Common.GetAttributes(path) & reparseFlags) == reparseFlags;
 
-                if (isDirectoryReparsePoint) {
+                if (isDirectoryReparsePoint)
+                {
                     Delete(path);
                     return;
                 }
             }
-            catch (FileNotFoundException) {
+            catch (FileNotFoundException)
+            {
                 // ignore: not there when we try to delete, it doesn't matter
             }
 
-            if (recursive == false) 
+            if (recursive == false)
             {
                 Delete(path);
                 return;
@@ -213,7 +216,7 @@ namespace Common_Library.LongPath
 
             return Common.Exists(path, out Boolean isDirectory) && isDirectory;
         }
-		
+
         /// <summary>
         ///     Returns a enumerable containing the directory names of the specified directory.
         /// </summary>
@@ -258,9 +261,11 @@ namespace Common_Library.LongPath
         /// </exception>
         public static IEnumerable<String> EnumerateDirectories(String path)
         {
-            return Common.IsRunningOnMono() ? System.IO.Directory.EnumerateDirectories(path) : EnumerateFileSystemEntries(path, "*", true, false, SearchOption.TopDirectoryOnly);
+            return Common.IsRunningOnMono()
+                ? System.IO.Directory.EnumerateDirectories(path)
+                : EnumerateFileSystemEntries(path, "*", true, false, SearchOption.TopDirectoryOnly);
         }
-		
+
         /// <summary>
         ///     Returns a enumerable containing the directory names of the specified directory that
         ///     match the specified search pattern.
@@ -312,14 +317,18 @@ namespace Common_Library.LongPath
         /// </exception>
         public static IEnumerable<String> EnumerateDirectories(String path, String searchPattern)
         {
-            return Common.IsRunningOnMono() ? System.IO.Directory.EnumerateDirectories(path, searchPattern) : EnumerateFileSystemEntries(path, searchPattern, true, false, SearchOption.TopDirectoryOnly);
+            return Common.IsRunningOnMono()
+                ? System.IO.Directory.EnumerateDirectories(path, searchPattern)
+                : EnumerateFileSystemEntries(path, searchPattern, true, false, SearchOption.TopDirectoryOnly);
         }
 
         public static IEnumerable<String> EnumerateDirectories(String path, String searchPattern, SearchOption options)
         {
-            return Common.IsRunningOnMono() ? System.IO.Directory.EnumerateDirectories(path, searchPattern, options) : EnumerateFileSystemEntries(path, searchPattern, true, false, options);
+            return Common.IsRunningOnMono()
+                ? System.IO.Directory.EnumerateDirectories(path, searchPattern, options)
+                : EnumerateFileSystemEntries(path, searchPattern, true, false, options);
         }
-		
+
         /// <summary>
         ///     Returns a enumerable containing the file names of the specified directory.
         /// </summary>
@@ -364,12 +373,16 @@ namespace Common_Library.LongPath
         /// </exception>
         public static IEnumerable<String> EnumerateFiles(String path)
         {
-            return Common.IsRunningOnMono() ? System.IO.Directory.EnumerateFiles(path) : EnumerateFileSystemEntries(path, "*", false, true, SearchOption.TopDirectoryOnly);
+            return Common.IsRunningOnMono()
+                ? System.IO.Directory.EnumerateFiles(path)
+                : EnumerateFileSystemEntries(path, "*", false, true, SearchOption.TopDirectoryOnly);
         }
 
         public static IEnumerable<String> EnumerateFiles(String path, String searchPattern, SearchOption options)
         {
-            return Common.IsRunningOnMono() ? System.IO.Directory.EnumerateFiles(path, searchPattern, options) : EnumerateFileSystemEntries(path, searchPattern, false, true, options);
+            return Common.IsRunningOnMono()
+                ? System.IO.Directory.EnumerateFiles(path, searchPattern, options)
+                : EnumerateFileSystemEntries(path, searchPattern, false, true, options);
         }
 
         /// <summary>
@@ -423,7 +436,9 @@ namespace Common_Library.LongPath
         /// </exception>
         public static IEnumerable<String> EnumerateFiles(String path, String searchPattern)
         {
-            return Common.IsRunningOnMono() ? System.IO.Directory.EnumerateFiles(path, searchPattern) : EnumerateFileSystemEntries(path, searchPattern, false, true, SearchOption.TopDirectoryOnly);
+            return Common.IsRunningOnMono()
+                ? System.IO.Directory.EnumerateFiles(path, searchPattern)
+                : EnumerateFileSystemEntries(path, searchPattern, false, true, SearchOption.TopDirectoryOnly);
         }
 
         /// <summary>
@@ -471,7 +486,9 @@ namespace Common_Library.LongPath
         /// </exception>
         public static IEnumerable<String> EnumerateFileSystemEntries(String path)
         {
-            return Common.IsRunningOnMono() ? System.IO.Directory.EnumerateFileSystemEntries(path) : EnumerateFileSystemEntries(path, null, true, true, SearchOption.TopDirectoryOnly);
+            return Common.IsRunningOnMono()
+                ? System.IO.Directory.EnumerateFileSystemEntries(path)
+                : EnumerateFileSystemEntries(path, null, true, true, SearchOption.TopDirectoryOnly);
         }
 
         /// <summary>
@@ -525,15 +542,20 @@ namespace Common_Library.LongPath
         /// </exception>
         public static IEnumerable<String> EnumerateFileSystemEntries(String path, String searchPattern)
         {
-            return Common.IsRunningOnMono() ? System.IO.Directory.EnumerateFileSystemEntries(path, searchPattern) : EnumerateFileSystemEntries(path, searchPattern, true, true, SearchOption.TopDirectoryOnly);
+            return Common.IsRunningOnMono()
+                ? System.IO.Directory.EnumerateFileSystemEntries(path, searchPattern)
+                : EnumerateFileSystemEntries(path, searchPattern, true, true, SearchOption.TopDirectoryOnly);
         }
 
         public static IEnumerable<String> EnumerateFileSystemEntries(String path, String searchPattern, SearchOption options)
         {
-            return Common.IsRunningOnMono() ? System.IO.Directory.EnumerateFileSystemEntries(path, searchPattern, options) : EnumerateFileSystemEntries(path, searchPattern, true, true, options);
+            return Common.IsRunningOnMono()
+                ? System.IO.Directory.EnumerateFileSystemEntries(path, searchPattern, options)
+                : EnumerateFileSystemEntries(path, searchPattern, true, true, options);
         }
 
-        internal static IEnumerable<String> EnumerateFileSystemEntries(String path, String searchPattern, Boolean includeDirectories, Boolean includeFiles, SearchOption option)
+        internal static IEnumerable<String> EnumerateFileSystemEntries(String path, String searchPattern, Boolean includeDirectories,
+            Boolean includeFiles, SearchOption option)
         {
             String normalizedSearchPattern = Common.NormalizeSearchPattern(searchPattern);
             String normalizedPath = Path.NormalizeLongPath(path);
@@ -560,13 +582,15 @@ namespace Common_Library.LongPath
             return EnumerateFileSystemIterator(normalizedPath, normalizedSearchPattern, includeDirectories, includeFiles);
         }
 
-        private static IEnumerable<String> EnumerateFileSystemIterator(String normalizedPath, String normalizedSearchPattern, Boolean includeDirectories, Boolean includeFiles)
+        private static IEnumerable<String> EnumerateFileSystemIterator(String normalizedPath, String normalizedSearchPattern,
+            Boolean includeDirectories, Boolean includeFiles)
         {
             // NOTE: Any exceptions thrown from this method are thrown on a call to IEnumerator<string>.MoveNext()
 
             String path = Common.IsPathUnc(normalizedPath) ? normalizedPath : Path.RemoveLongPathPrefix(normalizedPath);
 
-            using SafeFindHandle handle = BeginFind(Path.Combine(normalizedPath, normalizedSearchPattern), out NativeMethods.Win32FindData findData);
+            using SafeFindHandle handle = BeginFind(Path.Combine(normalizedPath, normalizedSearchPattern),
+                out NativeMethods.Win32FindData findData);
             if (handle == null)
             {
                 yield break;
@@ -602,7 +626,8 @@ namespace Common_Library.LongPath
             }
         }
 
-        private static IEnumerable<String> EnumerateFileSystemIteratorRecursive(String normalizedPath, String normalizedSearchPattern, Boolean includeDirectories, Boolean includeFiles)
+        private static IEnumerable<String> EnumerateFileSystemIteratorRecursive(String normalizedPath, String normalizedSearchPattern,
+            Boolean includeDirectories, Boolean includeFiles)
         {
             // NOTE: Any exceptions thrown from this method are thrown on a call to IEnumerator<string>.MoveNext()
             Queue<String> pendingDirectories = new Queue<String>();
@@ -611,14 +636,16 @@ namespace Common_Library.LongPath
             {
                 normalizedPath = pendingDirectories.Dequeue();
                 // get all subdirs to recurse in the next iteration
-                foreach (String subdir in EnumerateNormalizedFileSystemEntries(true, false, SearchOption.TopDirectoryOnly, normalizedPath, "*"))
+                foreach (String subdir in EnumerateNormalizedFileSystemEntries(true, false, SearchOption.TopDirectoryOnly, normalizedPath,
+                    "*"))
                 {
                     pendingDirectories.Enqueue(Path.NormalizeLongPath(subdir));
                 }
 
                 String path = Common.IsPathUnc(normalizedPath) ? normalizedPath : Path.RemoveLongPathPrefix(normalizedPath);
 
-                using SafeFindHandle handle = BeginFind(Path.Combine(normalizedPath, normalizedSearchPattern), out NativeMethods.Win32FindData findData);
+                using SafeFindHandle handle = BeginFind(Path.Combine(normalizedPath, normalizedSearchPattern),
+                    out NativeMethods.Win32FindData findData);
                 if (handle == null)
                 {
                     continue;
@@ -681,7 +708,8 @@ namespace Common_Library.LongPath
 
         private static Boolean IsCurrentOrParentDirectory(String directoryName)
         {
-            return directoryName.Equals(".", StringComparison.OrdinalIgnoreCase) || directoryName.Equals("..", StringComparison.OrdinalIgnoreCase);
+            return directoryName.Equals(".", StringComparison.OrdinalIgnoreCase) ||
+                   directoryName.Equals("..", StringComparison.OrdinalIgnoreCase);
         }
 
         public static void Move(String sourcePath, String destinationPath)
@@ -738,6 +766,7 @@ namespace Common_Library.LongPath
                     }
                 }
             }
+
             while (pathComponents.Count > 0)
             {
                 String str = Path.NormalizeLongPath(pathComponents[pathComponents.Count - 1]);
@@ -755,6 +784,7 @@ namespace Common_Library.LongPath
                     throw Common.GetExceptionFromWin32Error(errorCode);
                 }
             }
+
             return new DirectoryInfo(path);
         }
 
@@ -843,6 +873,7 @@ namespace Common_Library.LongPath
                     }
                 }
             }
+
             while (pathComponents.Count > 0)
             {
                 String str = pathComponents[pathComponents.Count - 1];
@@ -860,17 +891,22 @@ namespace Common_Library.LongPath
                     throw Common.GetExceptionFromWin32Error(errorCode);
                 }
             }
+
             return new DirectoryInfo(fullPath);
         }
 
         public static String[] GetDirectories(String path, String searchPattern, SearchOption searchOption)
         {
-            return Common.IsRunningOnMono() ? System.IO.Directory.GetDirectories(path, searchPattern, searchOption) : EnumerateFileSystemEntries(path, searchPattern, true, false, searchOption).ToArray();
+            return Common.IsRunningOnMono()
+                ? System.IO.Directory.GetDirectories(path, searchPattern, searchOption)
+                : EnumerateFileSystemEntries(path, searchPattern, true, false, searchOption).ToArray();
         }
 
         public static String[] GetFiles(String path)
         {
-            return Common.IsRunningOnMono() ? System.IO.Directory.GetFiles(path) : EnumerateFileSystemEntries(path, "*", false, true, SearchOption.TopDirectoryOnly).ToArray();
+            return Common.IsRunningOnMono()
+                ? System.IO.Directory.GetFiles(path)
+                : EnumerateFileSystemEntries(path, "*", false, true, SearchOption.TopDirectoryOnly).ToArray();
         }
 
         /// <summary>
@@ -896,10 +932,14 @@ namespace Common_Library.LongPath
 
                 try
                 {
-                    AuthorizationRuleCollection rules = GetAccessControl(directoryPath).GetAccessRules(true, true, typeof(SecurityIdentifier));
+                    AuthorizationRuleCollection rules = GetAccessControl(directoryPath)
+                        .GetAccessRules(true, true, typeof(SecurityIdentifier));
                     WindowsIdentity identity = WindowsIdentity.GetCurrent();
 
-                    if ((from FileSystemAccessRule rule in rules where identity.Groups != null && identity.Groups.Contains(rule.IdentityReference) where (accessRight & rule.FileSystemRights) == accessRight select rule).Any(rule => rule.AccessControlType != AccessControlType.Deny))
+                    if ((from FileSystemAccessRule rule in rules
+                        where identity.Groups != null && identity.Groups.Contains(rule.IdentityReference)
+                        where (accessRight & rule.FileSystemRights) == accessRight
+                        select rule).Any(rule => rule.AccessControlType != AccessControlType.Deny))
                     {
                         return true;
                     }
@@ -942,6 +982,7 @@ namespace Common_Library.LongPath
                 System.IO.Directory.SetLastWriteTimeUtc(path, lastWriteTimeUtc);
                 return;
             }
+
             String normalizedPath = Path.NormalizeLongPath(Path.GetFullPath(path));
 
             using SafeFileHandle handle = GetDirectoryHandle(normalizedPath);
@@ -993,7 +1034,8 @@ namespace Common_Library.LongPath
 
         public static DirectorySecurity GetAccessControl(String path)
         {
-            const AccessControlSections includeSections = AccessControlSections.Access | AccessControlSections.Owner | AccessControlSections.Group;
+            const AccessControlSections includeSections =
+                AccessControlSections.Access | AccessControlSections.Owner | AccessControlSections.Group;
             return GetAccessControl(path, includeSections);
         }
 
@@ -1007,9 +1049,9 @@ namespace Common_Library.LongPath
             String normalizedPath = Path.NormalizeLongPath(Path.GetFullPath(path));
             SecurityInfos securityInfos = Common.ToSecurityInfos(includeSections);
 
-            Int32 errorCode = (Int32)NativeMethods.GetSecurityInfoByName(normalizedPath,
-                (UInt32)ResourceType.FileObject,
-                (UInt32)securityInfos,
+            Int32 errorCode = (Int32) NativeMethods.GetSecurityInfoByName(normalizedPath,
+                (UInt32) ResourceType.FileObject,
+                (UInt32) securityInfos,
                 out IntPtr _,
                 out IntPtr _,
                 out IntPtr _,
@@ -1022,7 +1064,7 @@ namespace Common_Library.LongPath
 
             Byte[] binaryForm = new Byte[length];
 
-            Marshal.Copy(byteArray, binaryForm, 0, (Int32)length);
+            Marshal.Copy(byteArray, binaryForm, 0, (Int32) length);
 
             NativeMethods.LocalFree(byteArray);
             DirectorySecurity ds = new DirectorySecurity();
@@ -1043,12 +1085,16 @@ namespace Common_Library.LongPath
 
         public static String[] GetDirectories(String path)
         {
-            return Common.IsRunningOnMono() ? System.IO.Directory.GetDirectories(path) : EnumerateFileSystemEntries(path, "*", true, false, SearchOption.TopDirectoryOnly).ToArray();
+            return Common.IsRunningOnMono()
+                ? System.IO.Directory.GetDirectories(path)
+                : EnumerateFileSystemEntries(path, "*", true, false, SearchOption.TopDirectoryOnly).ToArray();
         }
 
         public static String[] GetDirectories(String path, String searchPattern)
         {
-            return Common.IsRunningOnMono() ? System.IO.Directory.GetDirectories(path, searchPattern) : EnumerateFileSystemEntries(path, searchPattern, true, false, SearchOption.TopDirectoryOnly).ToArray();
+            return Common.IsRunningOnMono()
+                ? System.IO.Directory.GetDirectories(path, searchPattern)
+                : EnumerateFileSystemEntries(path, searchPattern, true, false, SearchOption.TopDirectoryOnly).ToArray();
         }
 
         public static String GetDirectoryRoot(String path)
@@ -1059,27 +1105,37 @@ namespace Common_Library.LongPath
 
         public static String[] GetFiles(String path, String searchPattern)
         {
-            return Common.IsRunningOnMono() ? System.IO.Directory.GetFiles(path, searchPattern) : EnumerateFileSystemEntries(path, searchPattern, false, true, SearchOption.TopDirectoryOnly).ToArray();
+            return Common.IsRunningOnMono()
+                ? System.IO.Directory.GetFiles(path, searchPattern)
+                : EnumerateFileSystemEntries(path, searchPattern, false, true, SearchOption.TopDirectoryOnly).ToArray();
         }
 
         public static String[] GetFiles(String path, String searchPattern, SearchOption options)
         {
-            return Common.IsRunningOnMono() ? System.IO.Directory.GetFiles(path, searchPattern, options) : EnumerateFileSystemEntries(path, searchPattern, false, true, options).ToArray();
+            return Common.IsRunningOnMono()
+                ? System.IO.Directory.GetFiles(path, searchPattern, options)
+                : EnumerateFileSystemEntries(path, searchPattern, false, true, options).ToArray();
         }
 
         public static String[] GetFileSystemEntries(String path)
         {
-            return Common.IsRunningOnMono() ? System.IO.Directory.GetFileSystemEntries(path) : EnumerateFileSystemEntries(path, null, true, true, SearchOption.TopDirectoryOnly).ToArray();
+            return Common.IsRunningOnMono()
+                ? System.IO.Directory.GetFileSystemEntries(path)
+                : EnumerateFileSystemEntries(path, null, true, true, SearchOption.TopDirectoryOnly).ToArray();
         }
 
         public static String[] GetFileSystemEntries(String path, String searchPattern)
         {
-            return Common.IsRunningOnMono() ? System.IO.Directory.GetFileSystemEntries(path, searchPattern) : EnumerateFileSystemEntries(path, searchPattern, true, true, SearchOption.TopDirectoryOnly).ToArray();
+            return Common.IsRunningOnMono()
+                ? System.IO.Directory.GetFileSystemEntries(path, searchPattern)
+                : EnumerateFileSystemEntries(path, searchPattern, true, true, SearchOption.TopDirectoryOnly).ToArray();
         }
 
         public static String[] GetFileSystemEntries(String path, String searchPattern, SearchOption options)
         {
-            return Common.IsRunningOnMono() ? System.IO.Directory.GetFileSystemEntries(path, searchPattern) : EnumerateFileSystemEntries(path, searchPattern, true, true, options).ToArray();
+            return Common.IsRunningOnMono()
+                ? System.IO.Directory.GetFileSystemEntries(path, searchPattern)
+                : EnumerateFileSystemEntries(path, searchPattern, true, true, options).ToArray();
         }
 
         public static DateTime GetLastAccessTime(String path)

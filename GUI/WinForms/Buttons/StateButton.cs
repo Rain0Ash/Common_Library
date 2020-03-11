@@ -57,7 +57,7 @@ namespace Common_Library.GUI.WinForms.Buttons
             MaximumStatesChanged += OnMaximumStatesChanged;
             Click += OnButtonClick;
         }
-        
+
         private void OnButtonClick(Object sender, EventArgs e)
         {
             if (State >= MaximumStates)
@@ -65,10 +65,10 @@ namespace Common_Library.GUI.WinForms.Buttons
                 State = 0;
                 return;
             }
-                
+
             State++;
         }
-        
+
         private void OnMaximumStatesChanged(Int32 number)
         {
             State = number;

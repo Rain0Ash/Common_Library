@@ -36,6 +36,7 @@ namespace Common_Library.GUI.WinForms.TextBoxes
         public event Handlers.EmptyHandler PathTypeChanged;
 
         private PathType _pathType = PathType.All;
+
         public PathType PathType
         {
             get
@@ -53,7 +54,7 @@ namespace Common_Library.GUI.WinForms.TextBoxes
                 PathTypeChanged?.Invoke();
             }
         }
-        
+
         public PathTextBox()
         {
             PasswdChar = '\0';
@@ -65,11 +66,11 @@ namespace Common_Library.GUI.WinForms.TextBoxes
         {
             return !CheckWellFormed || IsWellFormed();
         }
-        
+
         protected override void CheckValidFormatColor()
         {
             Boolean check = CheckValidFormat();
-            
+
             if (PathUtils.IsValidPath(Text, PathType) && check)
             {
                 BackColor = Color.White;
@@ -88,22 +89,22 @@ namespace Common_Library.GUI.WinForms.TextBoxes
         {
             return IsValid(PathType);
         }
-        
+
         public virtual Boolean IsValid(PathType type)
         {
             return IsValidPath(type);
         }
-        
+
         public Boolean IsWellFormed()
         {
-            return StringUtils.CheckWellFormed(Text);
+            return StringUtils.IsBracketsWellFormed(Text);
         }
-        
+
         public Boolean IsValidPath()
         {
             return IsValidPath(PathType);
         }
-        
+
         public Boolean IsValidPath(PathType type)
         {
             return PathUtils.IsValidPath(Text, type);
@@ -119,7 +120,7 @@ namespace Common_Library.GUI.WinForms.TextBoxes
             String absolutePath = PathUtils.GetFullPath(Text);
             return absolutePath == null ? null : PathUtils.GetRelativePath(absolutePath, Directory.GetCurrentDirectory());
         }
-        
+
         public String GetRelativePath(String relativePath)
         {
             String absolutePath = PathUtils.GetFullPath(relativePath);

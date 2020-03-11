@@ -9,7 +9,7 @@ namespace Common_Library.Config.Registry
     public sealed class REGConfig : Config
     {
         private readonly Common_Library.Registry.Registry _registry;
-        
+
         public override Boolean IsReadOnly
         {
             get
@@ -22,7 +22,7 @@ namespace Common_Library.Config.Registry
                 {
                     return;
                 }
-                
+
                 _registry.IsReadOnly = value;
             }
         }
@@ -33,21 +33,14 @@ namespace Common_Library.Config.Registry
             _registry = new Common_Library.Registry.Registry(ConfigPath, readOnly);
         }
 
-        protected override String this[String key, params String[] sections]
+        protected override String Get(String key, params String[] sections)
         {
-            get
-            {
-                return _registry.GetValue(key)?.ToString();
-            }
-            set
-            {
-                if (CheckReadOnly())
-                {
-                    return;
-                }
-                
-                _registry.SetValue(key, value);
-            }
+            return _registry.GetValue(key)?.ToString();
+        }
+
+        protected override void Set(String key, String value, params String[] sections)
+        {
+            _registry.SetValue(key, value);
         }
 
         public override void Dispose()

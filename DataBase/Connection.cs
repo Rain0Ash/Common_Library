@@ -10,19 +10,19 @@ namespace Common_Library.DataBase
     {
         None
     }
-    
+
     public enum CharSet
     {
         Utf8
     }
-    
+
     public class Connection
     {
         public static implicit operator String(Connection connection)
         {
             return connection.ToString();
         }
-        
+
         public String Host { get; set; }
         public UInt16 Port { get; set; }
         public String User { get; set; }
@@ -53,10 +53,11 @@ namespace Common_Library.DataBase
         {
             return DataBase.Create(this);
         }
-        
+
         public override String ToString()
         {
-            return $"Server={Host},{Port};User={User};Password={Password};Database={Database};Pooling={Pooling};Min Pool Size={MinPoolSize};Max Pool Size={MaxPoolSize};Connection Timeout={Timeout};Connection Lifetime={Lifetime}";
+            return
+                $"Server={Host},{Port};User={User};Password={Password};Database={Database};Pooling={Pooling};Min Pool Size={MinPoolSize};Max Pool Size={MaxPoolSize};Connection Timeout={Timeout};Connection Lifetime={Lifetime}";
         }
     }
 }

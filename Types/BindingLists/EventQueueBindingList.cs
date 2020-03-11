@@ -24,7 +24,7 @@ namespace System.Collections.Generic
                 }
 
                 _maximumLength = val;
-                
+
                 if (Count <= val)
                 {
                     return;
@@ -52,7 +52,7 @@ namespace System.Collections.Generic
             {
                 RemoveAt(Count - 1);
             }
-            
+
             base.Add(item);
         }
 

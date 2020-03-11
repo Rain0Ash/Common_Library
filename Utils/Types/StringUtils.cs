@@ -9,31 +9,38 @@ using System.Text.RegularExpressions;
 
 namespace Common_Library.Utils
 {
+    public enum SplitByEnum
+    {
+        NewLine,
+        UpperCase
+    }
+
     public static class StringUtils
     {
         public const String FormatVariableRegexPattern = @"\{([^\{\}]+)\}";
 
         public static IEnumerable<String> GetFormatVariables(String str)
         {
-            return Regex.Matches(str, FormatVariableRegexPattern)
+            return Regex.Matches(str, FormatVariableRegexPattern, RegexOptions.Compiled)
                 .OfType<Match>().Select(match => match.Value)
                 .Select(format => Regex.Replace(format.ToLower(), @"\{|\}", String.Empty));
         }
-        
-        public static Boolean CheckWellFormed(String input)
+
+        public static Boolean IsBracketsWellFormed(String str)
         {
-            Dictionary<Char, Char> bracketPairs = new Dictionary<Char, Char> {
-                { '(', ')' },
-                { '{', '}' },
-                { '[', ']' },
-                { '<', '>' }
+            IReadOnlyDictionary<Char, Char> bracketPairs = new Dictionary<Char, Char>
+            {
+                {'(', ')'},
+                {'{', '}'},
+                {'[', ']'},
+                {'<', '>'}
             };
 
             Stack<Char> brackets = new Stack<Char>();
 
             try
             {
-                foreach (Char c in input)
+                foreach (Char c in str)
                 {
                     if (bracketPairs.Keys.Contains(c))
                     {
@@ -70,37 +77,39 @@ namespace Common_Library.Utils
         {
             return ReplaceFromDictionary(source, replaceDict.ToDictionary(key => key.Key, value => value.Value?.ToString()));
         }
-        
+
         public static String ReplaceFromDictionary(this String source, IDictionary<String, String> replaceDict)
         {
-            return Regex.Replace(source, $@"\b({String.Join("|", replaceDict.Keys)})\b", m => replaceDict[m.Value]?.ToString() ?? String.Empty);
+            return Regex.Replace(source, $@"\b({String.Join("|", replaceDict.Keys)})\b",
+                m => replaceDict[m.Value]?.ToString() ?? String.Empty);
         }
-        
-        public static String FormatFromDictionary(this String source, IDictionary<String, Object> valueDict) 
+
+        public static String FormatFromDictionary(this String source, IDictionary<String, Object> valueDict)
         {
             Int32 i = 0;
             StringBuilder newFormatString = new StringBuilder(source);
-            Dictionary<String, Int32> keyToInt = new Dictionary<String,Int32>();
+            Dictionary<String, Int32> keyToInt = new Dictionary<String, Int32>();
             foreach (KeyValuePair<String, Object> tuple in valueDict)
             {
                 newFormatString = newFormatString.Replace("{" + tuple.Key + "}", "{" + i + "}");
                 keyToInt.Add(tuple.Key, i);
-                i++;                    
+                i++;
             }
+
             return String.Format(newFormatString.ToString(), valueDict.OrderBy(x => keyToInt[x.Key]).Select(x => x.Value).ToArray());
         }
 
         public static Int32 FormatArgsExpected(String str)
         {
             const String pattern = @"(?<!\{)(?>\{\{)*\{\d(.*?)";
-            MatchCollection matches = Regex.Matches(str, pattern);
+            MatchCollection matches = Regex.Matches(str, pattern, RegexOptions.Compiled);
             return matches.OfType<Match>().Select(m => m.Value).Distinct().Count();
         }
 
-        public static String BeforeFormatVariables(String path)
+        public static String BeforeFormatVariables(String str)
         {
-            Match match = Regex.Match(path, FormatVariableRegexPattern);
-            return match.Success ? path.Substring(0, match.Index) : null;
+            Match match = Regex.Match(str, FormatVariableRegexPattern, RegexOptions.Compiled);
+            return match.Success ? str.Substring(0, match.Index) : null;
         }
 
         public static String Format(this String source, params Object[] args)
@@ -109,17 +118,19 @@ namespace Common_Library.Utils
             {
                 throw new ArgumentNullException();
             }
-            
+
             Int32 argsExpected = FormatArgsExpected(source);
-            
+
             if (argsExpected <= 0)
             {
                 return source;
             }
 
             const String nullArgs = @"null";
-            
-            args = args.Length < argsExpected ? args.Concat(Enumerable.Repeat(nullArgs, argsExpected - args.Length)).ToArray() : args.Take(argsExpected).ToArray();
+
+            args = args.Length < argsExpected
+                ? args.Concat(Enumerable.Repeat(nullArgs, argsExpected - args.Length)).ToArray()
+                : args.Take(argsExpected).ToArray();
 
             return String.Format(source, args);
         }
@@ -127,6 +138,21 @@ namespace Common_Library.Utils
         public static Boolean IsNull(this String str)
         {
             return str == null;
+        }
+
+        public static Boolean IsEmpty(this String str)
+        {
+            return str == String.Empty;
+        }
+
+        public static Boolean IsWhiteSpace(this String str)
+        {
+            return str.Length > 0 && IsEmptyOrWhiteSpace(str);
+        }
+
+        public static Boolean IsEmptyOrWhiteSpace(this String str)
+        {
+            return str.All(Char.IsWhiteSpace);
         }
 
         public static Boolean IsNullOrEmpty(this String str)
@@ -139,26 +165,47 @@ namespace Common_Library.Utils
             return String.IsNullOrWhiteSpace(str);
         }
 
+        public static String[] SplitByUpperCase(String str)
+        {
+            //TODO: perfomance improvements
+            return str.Split(' ')
+                .Select(val =>
+                    Regex.Replace(
+                        Regex.Replace(val, @"(\P{Ll})(\P{Ll}\p{Ll})", "$1 $2"),
+                        @"(\p{Ll})(\P{Ll})", "$1 $2"))
+                .SelectMany(split => split.Split(' ')).ToArray();
+        }
+
+        public static String[] SplitBy(this String str, SplitByEnum splitByEnum = SplitByEnum.NewLine)
+        {
+            return splitByEnum switch
+            {
+                SplitByEnum.NewLine => str.Split('\n', StringSplitOptions.RemoveEmptyEntries),
+                SplitByEnum.UpperCase => SplitByUpperCase(str),
+                _ => throw new NotImplementedException()
+            };
+        }
+
         public static String Join<T>(this String str, IEnumerable<T> values)
         {
             return String.Join(str, values);
         }
-        
+
         public static String Join(this String str, IEnumerable<String> values)
         {
             return String.Join(str, values);
         }
-        
+
         public static String Join(this String str, params Object[] value)
         {
             return String.Join(str, value);
         }
-        
+
         public static String Join(this String str, params String[] value)
         {
             return String.Join(str, value);
         }
-        
+
         public static String CapitalizeFirstChar(this String input)
         {
             if (String.IsNullOrEmpty(input))

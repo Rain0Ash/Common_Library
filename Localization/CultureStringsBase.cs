@@ -10,90 +10,91 @@ using Common_Library.Utils;
 namespace Common_Library.Localization
 {
     [SuppressMessage("ReSharper", "InconsistentNaming")]
+    [SuppressMessage("ReSharper", "ClassWithVirtualMembersNeverInherited.Global")]
     public class CultureStringsBase
+    {
+        public static CultureComparer Comparer
         {
-            public static CultureComparer Comparer
+            get
             {
-                get
-                {
-                    return LocalizationBase.DefaultComparer;
-                }
-            }
-
-            public static implicit operator String(CultureStringsBase obj)
-            {
-                return obj.ToString();
-            }
-
-            protected const String StringMissing = @"String is missing";
-
-            internal static IEnumerable<String> DefaultLocalization { get; } = new[] {"en"}.Select(code => code.ToLower());
-            
-            public virtual IEnumerable<Int32> AvailableLocalization
-            {
-                get
-                {
-                    return DefaultLocalization.Select(GetLCID);
-                }
-            }
-            
-            protected readonly Dictionary<Int32, String> Localization;
-
-            protected static Int32 GetLCID(String code)
-            {
-                return LocalizationBase.CodeByLCID.TryGetValue(code, LocalizationBase.DefaultCulture.LCID);
-            }
-
-            private static readonly Int32 DefaultLCID = GetLCID(LocalizationBase.DefaultCulture.Code);
-
-            private String Default
-            {
-                get
-                {
-                    return Localization.TryGetValue(DefaultLCID, StringMissing);
-                }
-                set
-                {
-                    Localization[DefaultLCID] = value ?? String.Empty;
-                }
-            }
-            
-            public String en
-            {
-                get
-                {
-                    return Default;
-                }
-                protected set
-                {
-                    Default = value;
-                }
-            }
-
-            public CultureStringsBase()
-                : this(StringMissing)
-            {
-            }
-            
-            public CultureStringsBase([NotNull]String english)
-            {
-                Localization = AvailableLocalization.ToDictionary(lcid => lcid, lcid => (String)null);
-                en = english ?? StringMissing;
-            }
-
-            public IEnumerable<CultureInfoFixed> GetCultures()
-            {
-                return Localization.Keys.Select(lcid => LocalizationBase.CultureByLCID[lcid]).OrderBy(culture => culture.Code, Comparer);
-            }
-
-            public override String ToString()
-            {
-                return ToString(LocalizationBase.CurrentCulture.LCID);
-            }
-            
-            public String ToString(Int32 lcid)
-            {
-                return Localization.TryGetValue(lcid, Default) ?? Default;
+                return LocalizationBase.DefaultComparer;
             }
         }
+
+        public static implicit operator String(CultureStringsBase obj)
+        {
+            return obj.ToString();
+        }
+
+        protected const String StringMissing = @"String is missing";
+
+        internal static IEnumerable<String> DefaultLocalization { get; } = new[] {LocalizationBase.DefaultCulture.Code};
+
+        public virtual IEnumerable<Int32> AvailableLocalization
+        {
+            get
+            {
+                return DefaultLocalization.Select(GetLCID);
+            }
+        }
+
+        protected readonly Dictionary<Int32, String> Localization;
+
+        protected static Int32 GetLCID(String code)
+        {
+            return LocalizationBase.CodeByLCID.TryGetValue(code, LocalizationBase.DefaultCulture.LCID);
+        }
+
+        private static readonly Int32 DefaultLCID = GetLCID(LocalizationBase.DefaultCulture.Code);
+
+        private String Default
+        {
+            get
+            {
+                return Localization.TryGetValue(DefaultLCID, StringMissing);
+            }
+            set
+            {
+                Localization[DefaultLCID] = value ?? String.Empty;
+            }
+        }
+
+        public String en
+        {
+            get
+            {
+                return Default;
+            }
+            protected set
+            {
+                Default = value;
+            }
+        }
+
+        public CultureStringsBase()
+            : this(StringMissing)
+        {
+        }
+
+        public CultureStringsBase([NotNull] String english)
+        {
+            Localization = AvailableLocalization.ToDictionary(lcid => lcid, lcid => (String) null);
+            en = english ?? StringMissing;
+        }
+
+        public IEnumerable<CultureInfoFixed> GetCultures()
+        {
+            return Localization.Keys.Select(lcid => LocalizationBase.CultureByLCID[lcid]).OrderBy(culture => culture.Code, Comparer);
+        }
+
+        public override String ToString()
+        {
+            return ToString(LocalizationBase.CurrentCulture.LCID);
+        }
+
+        public String ToString(Int32 lcid)
+        {
+            return Localization.TryGetValue(lcid, Default) ?? Default;
+        }
+    }
 }

@@ -21,7 +21,7 @@ namespace Common_Library.Comparers.Enum
 
                 Wrapper = Expression.Lambda<Func<TEnum, Int32>>(c, p).Compile();
             }
-            
+
             public static Int32 ToInt(TEnum @enum)
             {
                 return Wrapper(@enum);
@@ -38,8 +38,9 @@ namespace Common_Library.Comparers.Enum
             return BoxAvoidance.ToInt(firstEnum);
         }
     }
-    
-    public struct EnumEqualityComparer<TEnum, TInt> : IEqualityComparer<TEnum> where TEnum : System.Enum where TInt : unmanaged, IConvertible, IEquatable<TInt>
+
+    public struct EnumEqualityComparer<TEnum, TInt> : IEqualityComparer<TEnum> where TEnum : System.Enum
+        where TInt : unmanaged, IConvertible, IEquatable<TInt>
     {
         private static class BoxAvoidance
         {
@@ -52,7 +53,7 @@ namespace Common_Library.Comparers.Enum
 
                 Wrapper = Expression.Lambda<Func<TEnum, TInt>>(c, p).Compile();
             }
-            
+
             public static TInt ToInt(TEnum @enum)
             {
                 return Wrapper(@enum);

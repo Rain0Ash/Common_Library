@@ -121,7 +121,8 @@ namespace Common_Library.Colorful
             System.Console.ForegroundColor = oldSystemColor;
         }
 
-        private static void WriteChunkInColorAlternating(Action<String> action, Char[] buffer, Int32 index, Int32 count, ColorAlternator alternator)
+        private static void WriteChunkInColorAlternating(Action<String> action, Char[] buffer, Int32 index, Int32 count,
+            ColorAlternator alternator)
         {
             String chunk = buffer.AsString().Substring(index, count);
 
@@ -139,7 +140,9 @@ namespace Common_Library.Colorful
         private static void WriteAsciiInColorStyled(String trailer, StyledString target, StyleSheet styleSheet)
         {
             TextAnnotator annotator = new TextAnnotator(styleSheet);
-            List<KeyValuePair<String, Color>> annotationMap = annotator.GetAnnotationMap(target.AbstractValue); // Should eventually be target.AsStyledString() everywhere...?
+            List<KeyValuePair<String, Color>>
+                annotationMap =
+                    annotator.GetAnnotationMap(target.AbstractValue); // Should eventually be target.AsStyledString() everywhere...?
 
             PopulateColorGeometry(annotationMap, target);
 
@@ -214,7 +217,8 @@ namespace Common_Library.Colorful
         private static void WriteInColorFormatted<T, TU>(String trailer, T target0, TU target1, Color styledColor, Color defaultColor)
         {
             TextFormatter formatter = new TextFormatter(defaultColor);
-            List<KeyValuePair<String, Color>> formatMap = formatter.GetFormatMap(target0.ToString(), target1.Normalize(), new[] { styledColor });
+            List<KeyValuePair<String, Color>> formatMap =
+                formatter.GetFormatMap(target0.ToString(), target1.Normalize(), new[] {styledColor});
 
             MapToScreen(formatMap, trailer);
         }
@@ -222,7 +226,8 @@ namespace Common_Library.Colorful
         private static void WriteInColorFormatted<T>(String trailer, T target0, Formatter target1, Color defaultColor)
         {
             TextFormatter formatter = new TextFormatter(defaultColor);
-            List<KeyValuePair<String, Color>> formatMap = formatter.GetFormatMap(target0.ToString(), new[] { target1.Target }, new[] { target1.Color });
+            List<KeyValuePair<String, Color>> formatMap =
+                formatter.GetFormatMap(target0.ToString(), new[] {target1.Target}, new[] {target1.Color});
 
             MapToScreen(formatMap, trailer);
         }
@@ -235,7 +240,8 @@ namespace Common_Library.Colorful
             System.Console.ForegroundColor = oldSystemColor;
         }
 
-        private static void WriteInColorAlternating<T, TU>(Action<T, TU, TU> action, T target0, TU target1, TU target2, ColorAlternator alternator)
+        private static void WriteInColorAlternating<T, TU>(Action<T, TU, TU> action, T target0, TU target1, TU target2,
+            ColorAlternator alternator)
         {
             String formatted = String.Format(target0.ToString(), target1, target2); // NOT FORMATTING
             Color color = alternator.GetNextColor(formatted);
@@ -256,10 +262,12 @@ namespace Common_Library.Colorful
             MapToScreen(annotationMap, trailer);
         }
 
-        private static void WriteInColorFormatted<T, TU>(String trailer, T target0, TU target1, TU target2, Color styledColor, Color defaultColor)
+        private static void WriteInColorFormatted<T, TU>(String trailer, T target0, TU target1, TU target2, Color styledColor,
+            Color defaultColor)
         {
             TextFormatter formatter = new TextFormatter(defaultColor);
-            List<KeyValuePair<String, Color>> formatMap = formatter.GetFormatMap(target0.ToString(), new[] { target1, target2 }.Normalize(), new[] { styledColor });
+            List<KeyValuePair<String, Color>> formatMap =
+                formatter.GetFormatMap(target0.ToString(), new[] {target1, target2}.Normalize(), new[] {styledColor});
 
             MapToScreen(formatMap, trailer);
         }
@@ -267,7 +275,8 @@ namespace Common_Library.Colorful
         private static void WriteInColorFormatted<T>(String trailer, T target0, Formatter target1, Formatter target2, Color defaultColor)
         {
             TextFormatter formatter = new TextFormatter(defaultColor);
-            List<KeyValuePair<String, Color>> formatMap = formatter.GetFormatMap(target0.ToString(), new[] { target1.Target, target2.Target }, new[] { target1.Color, target2.Color });
+            List<KeyValuePair<String, Color>> formatMap = formatter.GetFormatMap(target0.ToString(), new[] {target1.Target, target2.Target},
+                new[] {target1.Color, target2.Color});
 
             MapToScreen(formatMap, trailer);
         }
@@ -280,7 +289,8 @@ namespace Common_Library.Colorful
             System.Console.ForegroundColor = oldSystemColor;
         }
 
-        private static void WriteInColorAlternating<T, TU>(Action<T, TU, TU, TU> action, T target0, TU target1, TU target2, TU target3, ColorAlternator alternator)
+        private static void WriteInColorAlternating<T, TU>(Action<T, TU, TU, TU> action, T target0, TU target1, TU target2, TU target3,
+            ColorAlternator alternator)
         {
             String formatted = String.Format(target0.ToString(), target1, target2, target3);
             Color color = alternator.GetNextColor(formatted);
@@ -301,18 +311,22 @@ namespace Common_Library.Colorful
             MapToScreen(annotationMap, trailer);
         }
 
-        private static void WriteInColorFormatted<T, TU>(String trailer, T target0, TU target1, TU target2, TU target3, Color styledColor, Color defaultColor)
+        private static void WriteInColorFormatted<T, TU>(String trailer, T target0, TU target1, TU target2, TU target3, Color styledColor,
+            Color defaultColor)
         {
             TextFormatter formatter = new TextFormatter(defaultColor);
-            List<KeyValuePair<String, Color>> formatMap = formatter.GetFormatMap(target0.ToString(), new[] { target1, target2, target3 }.Normalize(), new[] { styledColor });
+            List<KeyValuePair<String, Color>> formatMap = formatter.GetFormatMap(target0.ToString(),
+                new[] {target1, target2, target3}.Normalize(), new[] {styledColor});
 
             MapToScreen(formatMap, trailer);
         }
 
-        private static void WriteInColorFormatted<T>(String trailer, T target0, Formatter target1, Formatter target2, Formatter target3, Color defaultColor)
+        private static void WriteInColorFormatted<T>(String trailer, T target0, Formatter target1, Formatter target2, Formatter target3,
+            Color defaultColor)
         {
             TextFormatter styler = new TextFormatter(defaultColor);
-            List<KeyValuePair<String, Color>> formatMap = styler.GetFormatMap(target0.ToString(), new[] { target1.Target, target2.Target, target3.Target }, new[] { target1.Color, target2.Color, target3.Color });
+            List<KeyValuePair<String, Color>> formatMap = styler.GetFormatMap(target0.ToString(),
+                new[] {target1.Target, target2.Target, target3.Target}, new[] {target1.Color, target2.Color, target3.Color});
 
             MapToScreen(formatMap, trailer);
         }
@@ -320,12 +334,14 @@ namespace Common_Library.Colorful
         private static void WriteInColorFormatted<T>(String trailer, T target0, Formatter[] targets, Color defaultColor)
         {
             TextFormatter styler = new TextFormatter(defaultColor);
-            List<KeyValuePair<String, Color>> formatMap = styler.GetFormatMap(target0.ToString(), targets.Select(formatter => formatter.Target).ToArray(), targets.Select(formatter => formatter.Color).ToArray());
+            List<KeyValuePair<String, Color>> formatMap = styler.GetFormatMap(target0.ToString(),
+                targets.Select(formatter => formatter.Target).ToArray(), targets.Select(formatter => formatter.Color).ToArray());
 
             MapToScreen(formatMap, trailer);
         }
 
-        private static void DoWithGradient<T>(Action<Object, Color> writeAction, IEnumerable<T> input, Color startColor, Color endColor, Int32 maxColorsInGradient)
+        private static void DoWithGradient<T>(Action<Object, Color> writeAction, IEnumerable<T> input, Color startColor, Color endColor,
+            Int32 maxColorsInGradient)
         {
             GradientGenerator generator = new GradientGenerator();
             List<StyleClass<T>> gradient = generator.GenerateGradient(input, startColor, endColor, maxColorsInGradient);

@@ -26,13 +26,14 @@ namespace Common_Library.GUI.WinForms.ListBoxes
                 ListBox.PathType = value;
             }
         }
+
         public readonly Button RecursiveButton = new Button
         {
             Text = @"R",
         };
 
         public new readonly DialogButton AddButton = new DialogButton();
-        
+
         public override String AddButtonToolTip
         {
             get
@@ -56,7 +57,7 @@ namespace Common_Library.GUI.WinForms.ListBoxes
                 HelpToolTip.SetToolTip(RemoveButton, value);
             }
         }
-        
+
         public String RecursiveButtonToolTip
         {
             get
@@ -68,7 +69,7 @@ namespace Common_Library.GUI.WinForms.ListBoxes
                 HelpToolTip.SetToolTip(RecursiveButton, value);
             }
         }
-        
+
         public AdvancedPathListBox()
         {
             AddButton.OpenFileDialog.Multiselect = true;
@@ -82,10 +83,13 @@ namespace Common_Library.GUI.WinForms.ListBoxes
                         path.Recursive = !path.Recursive;
                     }
                 }
+
                 ListBox.Update();
             };
-            AddButton.PathBeenSelected += path => ListBox.Add(new PathObject(path, PathType, PathStatus.Exist){Recursive = true});
-            AddButton.PathsBeenSelected += paths => ListBox.AddRange(paths.Select(path => new PathObject(path.ToString(), PathType, PathStatus.Exist){Recursive = true}).ToArray());
+            AddButton.PathBeenSelected += path => ListBox.Add(new PathObject(path, PathType, PathStatus.Exist) {Recursive = true});
+            AddButton.PathsBeenSelected += paths =>
+                ListBox.AddRange(paths.Select(path => new PathObject(path.ToString(), PathType, PathStatus.Exist) {Recursive = true})
+                    .ToArray());
             RemoveButton.Click += (sender, args) => ListBox.RemoveAt(ListBox.SelectedIndices);
             Controls.Add(AddButton);
             Controls.Add(RemoveButton);

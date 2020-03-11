@@ -14,10 +14,10 @@ namespace Common_Library.GUI.WinForms.Forms
             DoubleBuffered = true;
             FormClosing += OnForm_Closing;
         }
-        
+
         private void OnForm_Closing(Object sender, FormClosingEventArgs e)
         {
-            Size iconSize = new Size(32,32);
+            Size iconSize = new Size(32, 32);
             if (new Rectangle(Location, iconSize).Contains(Cursor.Position) && e.CloseReason == CloseReason.UserClosing)
             {
                 e.Cancel = true;

@@ -11,13 +11,16 @@ namespace Common_Library.Utils
     {
         public static FileStream WaitForFile(String fullPath, FileMode mode, FileAccess access, FileShare share)
         {
-            for (Int32 numTries = 0; numTries < 10; numTries++) {
+            for (Int32 numTries = 0; numTries < 10; numTries++)
+            {
                 FileStream fs = null;
-                try {
+                try
+                {
                     fs = new FileStream(fullPath, mode, access, share);
                     return fs;
                 }
-                catch (IOException) {
+                catch (IOException)
+                {
                     fs?.Dispose();
                     Thread.Sleep(250);
                 }
@@ -25,7 +28,7 @@ namespace Common_Library.Utils
 
             return null;
         }
-        
+
         public static Byte[] ReadFileBytes(String path, Boolean isThrow = false)
         {
             try
@@ -38,11 +41,11 @@ namespace Common_Library.Utils
                 {
                     throw;
                 }
-                
+
                 return null;
             }
         }
-        
+
         public static String ReadFileText(String path, Boolean isThrow = false)
         {
             try
@@ -55,11 +58,11 @@ namespace Common_Library.Utils
                 {
                     throw;
                 }
-                
+
                 return null;
             }
         }
-        
+
         public static String[] ReadFileLines(String path, Boolean isThrow = false)
         {
             try
@@ -72,11 +75,11 @@ namespace Common_Library.Utils
                 {
                     throw;
                 }
-                
+
                 return null;
             }
         }
-        
+
         public static String GetFileContents(String file, Int32 timeOut = 5000)
         {
             StreamReader reader = null;

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Common_Library.Localization;
 using Common_Library.Logger;
+using Common_Library.Utils;
 using Common_Library.Utils.OS;
 
 namespace Common_Library.GUI.WinForms.RichTextBoxes
@@ -15,6 +16,7 @@ namespace Common_Library.GUI.WinForms.RichTextBoxes
     public class LoggerRichTextBox : RichTextBox
     {
         private readonly EventQueueList<LogMessage> _messages = new EventQueueList<LogMessage>();
+
         public Int32 MaximumLength
         {
             get
@@ -23,12 +25,15 @@ namespace Common_Library.GUI.WinForms.RichTextBoxes
             }
             set
             {
-                _messages.MaximumLength = Math.Max(value, 0);
+                _messages.MaximumLength = MathUtils.Range(value);
                 UpdateLog();
             }
         }
+
         private Boolean _reversed = true;
-        public Boolean Reversed {
+
+        public Boolean Reversed
+        {
             get
             {
                 return _reversed;
@@ -76,10 +81,11 @@ namespace Common_Library.GUI.WinForms.RichTextBoxes
                     first = false;
                     continue;
                 }
+
                 Display(item, item.GetColor(), item.NewLine);
             }
         }
-        
+
         public void ClearLog()
         {
             _messages.Clear();
@@ -97,22 +103,24 @@ namespace Common_Library.GUI.WinForms.RichTextBoxes
             Log(text, MessageType.Default, formatList, ConsoleColor.White, 0, MessageAdditions.CurrentTime, newLine);
         }
 
-        public void Log(String message, MessageType messageType = MessageType.Default, IEnumerable<Object> formatList = null, ConsoleColor? color = null, Int32 priority = 0, MessageAdditions messageAdditions = MessageAdditions.CurrentTime, Boolean newLine = true)
+        public void Log(String message, MessageType messageType = MessageType.Default, IEnumerable<Object> formatList = null,
+            ConsoleColor? color = null, Int32 priority = 0, MessageAdditions messageAdditions = MessageAdditions.CurrentTime,
+            Boolean newLine = true)
         {
-            foreach (String msg in message.Split(new []{"\n"}, StringSplitOptions.RemoveEmptyEntries))
+            foreach (String msg in message.Split(new[] {"\n"}, StringSplitOptions.RemoveEmptyEntries))
             {
                 if (MaximumLength > 0 && _messages.Count >= MaximumLength - 1)
                 {
                     _messages.RemoveRange(0, _messages.Count - MaximumLength + 1);
                 }
-                
+
                 // ReSharper disable once PossibleMultipleEnumeration
                 _messages.Add(new LogMessage(msg, messageType, formatList, color, priority, messageAdditions, newLine));
             }
-            
+
             UpdateLog();
         }
-        
+
         private void Display(String message, Color color, Boolean newLine)
         {
             if (newLine)

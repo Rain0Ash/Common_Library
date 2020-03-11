@@ -65,7 +65,7 @@ namespace Common_Library.Colorful
             Int32 chocolateEnd = 0;
             String vanilla;
             for (Int32 i = 0; i < locations.Count(); i++)
-			{
+            {
                 Int32 styledIndex = Int32.Parse(indices[i].TrimStart('{').TrimEnd('}'));
 
                 Int32 vanillaStart = 0;
@@ -82,7 +82,7 @@ namespace Common_Library.Colorful
 
                 formatMap.Add(new KeyValuePair<String, Color>(vanilla, _defaultColor));
                 formatMap.Add(new KeyValuePair<String, Color>(chocolate, colors[styledIndex]));
-			}
+            }
 
             if (chocolateEnd >= input.Length)
             {

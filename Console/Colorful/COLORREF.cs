@@ -18,7 +18,7 @@ namespace Common_Library.Colorful
 
         internal COLORREF(Color color)
         {
-            ColorDWORD = color.R + ((UInt32)color.G << 8) + ((UInt32)color.B << 16);
+            ColorDWORD = color.R + ((UInt32) color.G << 8) + ((UInt32) color.B << 16);
         }
 
         internal COLORREF(UInt32 r, UInt32 g, UInt32 b)

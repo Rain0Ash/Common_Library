@@ -15,7 +15,7 @@ namespace Common_Library.Utils
             TryConvert(obj, out T value);
             return value;
         }
-        
+
         public static T Convert<T>(this String input)
         {
             TryConvert(input, out T value);
@@ -28,43 +28,47 @@ namespace Common_Library.Utils
         {
             return System.Convert.ToSByte(MathUtils.Range(value, SByte.MinValue, SByte.MaxValue));
         }
-        
+
         public static Byte ToByte(this Decimal value)
         {
-            return value >= 0 ? System.Convert.ToByte(MathUtils.Range(value, Byte.MinValue, Byte.MaxValue))
+            return value >= 0
+                ? System.Convert.ToByte(MathUtils.Range(value, Byte.MinValue, Byte.MaxValue))
                 : Convert(ToSByte(value));
         }
-        
+
         public static Int16 ToInt16(this Decimal value)
         {
             return System.Convert.ToInt16(MathUtils.Range(value, Int16.MinValue, Int16.MaxValue));
         }
-        
+
         public static UInt16 ToUInt16(this Decimal value)
         {
-            return value >= 0 ? System.Convert.ToUInt16(MathUtils.Range(value, UInt16.MinValue, UInt16.MaxValue))
+            return value >= 0
+                ? System.Convert.ToUInt16(MathUtils.Range(value, UInt16.MinValue, UInt16.MaxValue))
                 : Convert(ToInt16(value));
         }
-        
+
         public static Int32 ToInt32(this Decimal value)
         {
             return System.Convert.ToInt32(MathUtils.Range(value, Int32.MinValue, Int32.MaxValue));
         }
-        
+
         public static UInt32 ToUInt32(this Decimal value)
         {
-            return value >= 0 ? System.Convert.ToUInt32(MathUtils.Range(value, UInt32.MinValue, UInt32.MaxValue)) 
+            return value >= 0
+                ? System.Convert.ToUInt32(MathUtils.Range(value, UInt32.MinValue, UInt32.MaxValue))
                 : Convert(ToInt32(value));
         }
-        
+
         public static Int64 ToInt64(this Decimal value)
         {
             return System.Convert.ToInt64(MathUtils.Range(value, Int64.MinValue, Int64.MaxValue));
         }
-        
+
         public static UInt64 ToUInt64(this Decimal value)
         {
-            return value >= 0 ? System.Convert.ToUInt64(MathUtils.Range(value, UInt64.MinValue, UInt64.MaxValue)) 
+            return value >= 0
+                ? System.Convert.ToUInt64(MathUtils.Range(value, UInt64.MinValue, UInt64.MaxValue))
                 : Convert(ToInt64(value));
         }
 
@@ -84,7 +88,7 @@ namespace Common_Library.Utils
                 return (Byte) (value + SByte.MaxValue);
             }
         }
-        
+
         public static UInt16 Convert(Int16 value)
         {
             unchecked
@@ -97,7 +101,7 @@ namespace Common_Library.Utils
                 return (UInt16) (value + Int16.MaxValue);
             }
         }
-        
+
         public static UInt32 Convert(Int32 value)
         {
             unchecked
@@ -110,7 +114,7 @@ namespace Common_Library.Utils
                 return (UInt32) (value + Int32.MaxValue);
             }
         }
-        
+
         public static UInt64 Convert(Int64 value)
         {
             unchecked
@@ -136,8 +140,8 @@ namespace Common_Library.Utils
             try
             {
                 TypeConverter converter = TypeDescriptor.GetConverter(typeof(T));
-                
-                value = (T)converter.ConvertFromString(input);
+
+                value = (T) converter.ConvertFromString(input);
 
                 return true;
             }
@@ -164,7 +168,7 @@ namespace Common_Library.Utils
                 return false;
             }
         }
-        
+
         public static Boolean ToBoolean<T>(this T obj)
         {
             return obj switch
@@ -174,7 +178,7 @@ namespace Common_Library.Utils
                 _ => !obj.Equals(default(T))
             };
         }
-        
+
         public static Boolean ToBoolean(this String str)
         {
             return str?.ToUpper() switch
@@ -191,7 +195,7 @@ namespace Common_Library.Utils
         {
             return collection?.Count > 0;
         }
-        
+
         public static String ToByteString(this Byte[] data)
         {
             return data == null ? null : BitConverter.ToString(data).Replace("-", String.Empty);

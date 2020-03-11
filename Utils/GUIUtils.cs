@@ -18,9 +18,8 @@ namespace Common_Library.Utils
         Change = 64,
         All = 127
     }
-    
+
     public class GUIUtils
     {
-        
     }
 }

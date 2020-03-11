@@ -18,7 +18,7 @@ namespace Common_Library.Utils
             {
                 return false;
             }
-            
+
             return true;
         }
     }

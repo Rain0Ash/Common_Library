@@ -3,7 +3,7 @@
 
 using System;
 
- namespace Common_Library.Converters.BitEndian
+namespace Common_Library.Converters.BitEndian
 {
     /// <summary>
     /// Implementation of EndianBitConverter which converts to/from little-endian byte arrays.
@@ -29,7 +29,10 @@ using System;
         /// </summary>
         public override Endianness Endianness
         {
-            get { return Endianness.LittleEndian; }
+            get
+            {
+                return Endianness.LittleEndian;
+            }
         }
 
         /// <summary>
@@ -43,7 +46,7 @@ using System;
         {
             for (Int32 i = 0; i < bytes; i++)
             {
-                buffer[i + index] = unchecked((Byte)(value & 0xff));
+                buffer[i + index] = unchecked((Byte) (value & 0xff));
                 value >>= 8;
             }
         }
@@ -59,15 +62,14 @@ using System;
         protected override Int64 FromBytes(Byte[] buffer, Int32 startIndex, Int32 bytesToConvert)
         {
             Int32 endOffset = startIndex + bytesToConvert - 1;
-            
+
             Int64 ret = 0;
             for (Int32 i = 0; i < bytesToConvert; i++)
             {
                 ret = unchecked((ret << 8) | buffer[endOffset - i]);
             }
-            
+
             return ret;
         }
     }
-
 }

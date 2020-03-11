@@ -67,7 +67,7 @@ namespace Common_Library.Colorful
             else
             {
                 _writeCount++;
-                NextColorIndex = (Int32)Math.Floor(_writeCount / (Double)_alternationFrequency);
+                NextColorIndex = (Int32) Math.Floor(_writeCount / (Double) _alternationFrequency);
             }
         }
     }

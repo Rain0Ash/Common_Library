@@ -32,7 +32,7 @@ namespace System.Collections.Generic
             OnRemove?.Invoke(item);
             ItemsChanged?.Invoke();
         }
-        
+
         public new void RemoveAt(Int32 index)
         {
             T item = this[index];
@@ -60,8 +60,8 @@ namespace System.Collections.Generic
             {
                 throw new IndexOutOfRangeException();
             }
-            
-            foreach(T item in this.Skip(index).Take(count))
+
+            foreach (T item in this.Skip(index).Take(count))
             {
                 Remove(item);
             }

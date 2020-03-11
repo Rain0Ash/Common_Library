@@ -20,7 +20,7 @@ namespace Common_Library.GUI.WinForms.ListBoxes
                     {
                         return;
                     }
-                    
+
                     try
                     {
                         foreach (Int32 index in SelectedIndices)
@@ -38,7 +38,7 @@ namespace Common_Library.GUI.WinForms.ListBoxes
                 default:
                     break;
             }
-            
+
             base.OnKeyDown(e);
         }
     }

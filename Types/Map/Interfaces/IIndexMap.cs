@@ -9,11 +9,11 @@ namespace Common_Library.Types.Map
     public interface IIndexMap<TKey, TValue> : IMap<TKey, TValue>, IReadOnlyIndexMap<TKey, TValue>, IIndexDictionary<TKey, TValue>
     {
         public void Insert(TValue key, TKey value);
-        
+
         public void Insert(Int32 index, TValue key, TKey value);
 
         public Boolean TryInsert(TValue key, TKey value);
-        
+
         public Boolean TryInsert(Int32 index, TValue key, TKey value);
     }
 }

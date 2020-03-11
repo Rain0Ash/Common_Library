@@ -36,13 +36,13 @@ namespace Common_Library.GUI.WinForms.ListBoxes
                 {
                     return;
                 }
-                
+
                 _defaultTextBrush = value ?? Brushes.Black;
-                
+
                 RefreshItems();
             }
         }
-        
+
         private Brush _defaultBackgroundBrush = Brushes.White;
 
         public Brush DefaultBackgroundBrush
@@ -57,13 +57,13 @@ namespace Common_Library.GUI.WinForms.ListBoxes
                 {
                     return;
                 }
-                
+
                 _defaultBackgroundBrush = value ?? Brushes.White;
-                
+
                 RefreshItems();
             }
         }
-        
+
         private Image _defaultImage;
 
         public Image DefaultImage
@@ -80,12 +80,13 @@ namespace Common_Library.GUI.WinForms.ListBoxes
                 }
 
                 _defaultImage = value;
-                
+
                 RefreshItems();
             }
         }
 
         private Boolean _firstByIndex = true;
+
         public Boolean FirstByIndex
         {
             get
@@ -100,7 +101,7 @@ namespace Common_Library.GUI.WinForms.ListBoxes
                 }
 
                 _firstByIndex = value;
-                
+
                 RefreshItems();
             }
         }
@@ -147,7 +148,7 @@ namespace Common_Library.GUI.WinForms.ListBoxes
             {
                 return;
             }
-            
+
             Object item = Items[index];
             (Brush backgroundColor, Brush textColor) color = colors ?? (DefaultBackgroundBrush, DefaultTextBrush);
 
@@ -199,7 +200,7 @@ namespace Common_Library.GUI.WinForms.ListBoxes
                     }
                 }
             }
-            
+
             OnDrawItem(e, image, color);
         }
 
@@ -210,7 +211,7 @@ namespace Common_Library.GUI.WinForms.ListBoxes
             {
                 return;
             }
-            
+
             Object item = Items[index];
             Graphics graphics = e.Graphics;
             Rectangle bounds = e.Bounds;
@@ -223,9 +224,9 @@ namespace Common_Library.GUI.WinForms.ListBoxes
             {
                 Pen pen = Pens.Red;
                 graphics.DrawLine(pen, new Point(bounds.X, bounds.Y), new Point(bounds.Width - 1, bounds.Y));
-            
+
                 graphics.DrawLine(pen, new Point(bounds.X, bounds.Height), new Point(bounds.Width - 1, bounds.Height));
-                
+
                 graphics.DrawLine(pen, new Point(bounds.X, bounds.Y), new Point(bounds.X, bounds.Height));
                 graphics.DrawLine(pen, new Point(bounds.Width - 1, bounds.Y), new Point(bounds.Width - 1, bounds.Height));
             }
@@ -233,19 +234,21 @@ namespace Common_Library.GUI.WinForms.ListBoxes
             if (image != null)
             {
                 graphics.DrawImage(image, new Rectangle(bounds.X, bounds.Y, bounds.Height, bounds.Height));
-                
-                graphics.DrawString(item.ToString(), e.Font, textColor ?? DefaultTextBrush, new Rectangle(bounds.X + bounds.Height, bounds.Y, bounds.Width - bounds.Height, bounds.Height), StringFormat.GenericDefault);
+
+                graphics.DrawString(item.ToString(), e.Font, textColor ?? DefaultTextBrush,
+                    new Rectangle(bounds.X + bounds.Height, bounds.Y, bounds.Width - bounds.Height, bounds.Height),
+                    StringFormat.GenericDefault);
             }
             else
             {
                 graphics.DrawString(item.ToString(), e.Font, textColor ?? DefaultTextBrush, bounds, StringFormat.GenericDefault);
             }
         }
-        
+
         protected override void OnDrawItem(DrawItemEventArgs e)
         {
             base.OnDrawItem(e);
-            
+
             e.DrawBackground();
 
             Draw(e, null, null);
@@ -258,7 +261,7 @@ namespace Common_Library.GUI.WinForms.ListBoxes
             _indexColorDictionary.Set(index, (backgroundColor, textColor));
             RefreshItem(index);
         }
-        
+
         public void SetColor(Object item, Brush backgroundColor, Brush textColor = default)
         {
             _itemsColorDictionary.Set(item, (backgroundColor, textColor));
@@ -276,13 +279,13 @@ namespace Common_Library.GUI.WinForms.ListBoxes
             _itemsColorDictionary.Remove(item);
             RefreshItem(Items.IndexOf(item));
         }
-        
+
         public void SetImageByIndex(Int32 index, Image image)
         {
             _indexImageDictionary.Set(index, image);
             RefreshItem(index);
         }
-        
+
         public void SetImage(Object item, Image image)
         {
             _itemsImageDictionary.Set(item, image);

@@ -10,13 +10,14 @@ namespace Common_Library.Utils
 {
     public static class ImageUtils
     {
-        public static Icon IconFromImage(Image img) {
+        public static Icon IconFromImage(Image img)
+        {
             MemoryStream ms = new MemoryStream();
             BinaryWriter bw = new BinaryWriter(ms);
             // Header
-            bw.Write((Int16)0);   // 0 : reserved
-            bw.Write((Int16)1);   // 2 : 1=ico, 2=cur
-            bw.Write((Int16)1);   // 4 : number of images
+            bw.Write((Int16) 0); // 0 : reserved
+            bw.Write((Int16) 1); // 2 : 1=ico, 2=cur
+            bw.Write((Int16) 1); // 4 : number of images
             // Image directory
             Int32 w = img.Width;
             if (w >= 256)
@@ -24,25 +25,25 @@ namespace Common_Library.Utils
                 w = 0;
             }
 
-            bw.Write((Byte)w);    // 0 : width of image
+            bw.Write((Byte) w); // 0 : width of image
             Int32 h = img.Height;
             if (h > 255)
             {
                 h = 0;
             }
 
-            bw.Write((Byte)h);    // 1 : height of image
-            bw.Write((Byte)0);    // 2 : number of colors in palette
-            bw.Write((Byte)0);    // 3 : reserved
-            bw.Write((Int16)0);   // 4 : number of color planes
-            bw.Write((Int16)0);   // 6 : bits per pixel
+            bw.Write((Byte) h); // 1 : height of image
+            bw.Write((Byte) 0); // 2 : number of colors in palette
+            bw.Write((Byte) 0); // 3 : reserved
+            bw.Write((Int16) 0); // 4 : number of color planes
+            bw.Write((Int16) 0); // 6 : bits per pixel
             Int64 sizeHere = ms.Position;
-            bw.Write(0);     // 8 : image size
-            Int32 start = (Int32)ms.Position + 4;
-            bw.Write(start);      // 12: offset of image data
+            bw.Write(0); // 8 : image size
+            Int32 start = (Int32) ms.Position + 4;
+            bw.Write(start); // 12: offset of image data
             // Image data
             img.Save(ms, ImageFormat.Png);
-            Int32 imageSize = (Int32)ms.Position - start;
+            Int32 imageSize = (Int32) ms.Position - start;
             ms.Seek(sizeHere, SeekOrigin.Begin);
             bw.Write(imageSize);
             ms.Seek(0, SeekOrigin.Begin);
@@ -50,7 +51,7 @@ namespace Common_Library.Utils
             // And load it
             return new Icon(ms);
         }
-        
+
         public static Byte[] ImageToBytes(Image img)
         {
             using MemoryStream stream = new MemoryStream();

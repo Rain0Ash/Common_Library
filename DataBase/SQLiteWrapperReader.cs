@@ -18,7 +18,10 @@ namespace Common_Library.DataBase
             _ordinal = new Dictionary<String, Int32>();
         }
 
-        public Boolean Read() => _reader.Read();
+        public Boolean Read()
+        {
+            return _reader.Read();
+        }
 
         public Object GetValue(String column)
         {
@@ -44,7 +47,6 @@ namespace Common_Library.DataBase
 
             String value = GetString(column);
             return value == "t" || value == "1";
-
         }
 
         public Byte GetByte(String column)
@@ -83,7 +85,10 @@ namespace Common_Library.DataBase
             return _reader.GetInt16(GetOrdinal(column));
         }
 
-        public UInt16 GetUInt16(String column) => (UInt16) GetInt16(column);
+        public UInt16 GetUInt16(String column)
+        {
+            return (UInt16) GetInt16(column);
+        }
 
         public Int32 GetInt32(String column)
         {
@@ -96,7 +101,10 @@ namespace Common_Library.DataBase
             return _reader.IsDBNull(ordinal) ? defaultValue : _reader.GetInt32(ordinal);
         }
 
-        public UInt32 GetUInt32(String column) => (UInt32) GetInt32(column);
+        public UInt32 GetUInt32(String column)
+        {
+            return (UInt32) GetInt32(column);
+        }
 
         public UInt32 GetUInt32(String column, UInt32 defaultValue)
         {
@@ -114,7 +122,10 @@ namespace Common_Library.DataBase
             return _reader.GetInt64(GetOrdinal(column));
         }
 
-        public UInt64 GetUInt64(String column) => (UInt64) GetInt64(column);
+        public UInt64 GetUInt64(String column)
+        {
+            return (UInt64) GetInt64(column);
+        }
 
         public Single GetFloat(String column)
         {

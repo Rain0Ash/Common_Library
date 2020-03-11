@@ -10,7 +10,7 @@ namespace Common_Library.Comparers
     public class OrderedComparer : OrderedComparer<Object>
     {
     }
-    
+
     public class OrderedComparer<T> : IComparer<T>
     {
         private readonly List<T> _orderList;
@@ -32,7 +32,7 @@ namespace Common_Library.Comparers
         {
             Int32 indexOfX = _orderList.IndexOf(x);
             Int32 indexOfY = _orderList.IndexOf(y);
-                    
+
             Int32 ix = indexOfX != -1 ? indexOfX : _orderList.Count + 1;
             Int32 iy = indexOfY != -1 ? indexOfY : _orderList.Count + 1;
             return ix.CompareTo(iy);

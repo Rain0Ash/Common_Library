@@ -5,15 +5,14 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 
-namespace Common_Library.Random 
+namespace Common_Library.Random
 {
-
     /// <summary>
     /// 
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class RandomSelectorBuilder<T> : IRandomSelectorBuilder<T> {
-    
+    public class RandomSelectorBuilder<T> : IRandomSelectorBuilder<T>
+    {
         private readonly System.Random _random;
         private readonly List<T> _itemBuffer;
         private readonly List<Single> _weightBuffer;
@@ -36,8 +35,8 @@ namespace Common_Library.Random
         /// </summary>
         /// <param name="item">Item that will be returned on random selection</param>
         /// <param name="weight">Non-zero non-normalized weight</param>
-        public void Add(T item, Single weight) {
-
+        public void Add(T item, Single weight)
+        {
             // ignore zero weight items
             if (Math.Abs(weight) < Single.Epsilon)
             {
@@ -55,23 +54,23 @@ namespace Common_Library.Random
                 Add(item, weight);
             }
         }
-        
+
         /// <summary>
         /// Builds StaticRandomSelector & clears internal buffers. Must be called after you finish Add-ing items.
         /// </summary>
         /// <param name="seed">Seed for random selector. If you leave it -1, the internal random will generate one.</param>
         /// <returns>Returns IRandomSelector, underlying objects are either StaticRandomSelectorLinear or StaticRandomSelectorBinary. Both are non-mutable.</returns>
-        public IRandomSelector<T> Build(Int32 seed = -1) {
-
+        public IRandomSelector<T> Build(Int32 seed = -1)
+        {
             T[] items = _itemBuffer.ToArray();
             Single[] cda = _weightBuffer.ToArray();
-            
-            _itemBuffer.Clear();     
+
+            _itemBuffer.Clear();
             _weightBuffer.Clear();
 
             RandomMath.BuildCumulativeDistribution(cda);
-            
-            if(seed == -1)
+
+            if (seed == -1)
             {
                 seed = _random.Next();
             }
@@ -95,11 +94,11 @@ namespace Common_Library.Random
         /// <param name="itemsArray">Array of items</param>
         /// <param name="weightsArray">Array of non-zero non-normalized weights. Have to be same length as itemsArray.</param>
         /// <returns></returns>
-        public static IRandomSelector<T> Build(T[] itemsArray, Single[] weightsArray) {
+        public static IRandomSelector<T> Build(T[] itemsArray, Single[] weightsArray)
+        {
+            StaticBuilder.Clear();
 
-            StaticBuilder.Clear();    
-
-            for(Int32 i = 0; i < itemsArray.Length; i++)
+            for (Int32 i = 0; i < itemsArray.Length; i++)
             {
                 StaticBuilder.Add(itemsArray[i], weightsArray[i]);
             }
@@ -115,8 +114,8 @@ namespace Common_Library.Random
         /// <param name="itemsList">List of weights</param>
         /// <param name="weightsList">List of non-zero non-normalized weights. Have to be same length as itemsList.</param>
         /// <returns></returns>
-        public static IRandomSelector<T> Build(List<T> itemsList, List<Single> weightsList) {
-            
+        public static IRandomSelector<T> Build(List<T> itemsList, List<Single> weightsList)
+        {
             StaticBuilder.Clear();
 
             for (Int32 i = 0; i < itemsList.Count; i++)
@@ -126,11 +125,11 @@ namespace Common_Library.Random
 
             return StaticBuilder.Build();
         }
-        
-        private void Clear() {
 
+        private void Clear()
+        {
             _itemBuffer.Clear();
             _weightBuffer.Clear();
         }
-    }  
+    }
 }

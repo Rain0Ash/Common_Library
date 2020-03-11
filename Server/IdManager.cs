@@ -1,12 +1,12 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
- using System.Linq;
+using System.Linq;
 using System.Threading;
 using AAEmu.Commons.Utils;
- using Common_Library.Utils;
- using MySql.Data.MySqlClient;
+using Common_Library.Utils;
+using MySql.Data.MySqlClient;
 
- namespace AAEmu.Login.Utils
+namespace AAEmu.Login.Utils
 {
     public class IdManager
     {
@@ -53,9 +53,9 @@ using AAEmu.Commons.Utils;
                     Int32 objectId = (Int32) (usedObjectId - _firstId);
                     if (usedObjectId < _firstId)
                     {
-                        #if NLOG
+#if NLOG
                         _log.Warn("{0}: Object ID {1} in DB is less than {2}", _name, usedObjectId, _firstId);
-                        #endif
+#endif
                         continue;
                     }
 
@@ -69,16 +69,16 @@ using AAEmu.Commons.Utils;
                 }
 
                 _nextFreeId = _freeIds.NextClear(0);
-                #if NLOG
+#if NLOG
                 _log.Info("{0} successfully initialized", _name);
-                #endif
+#endif
             }
             catch (Exception e)
             {
-                #if NLOG
+#if NLOG
                 _log.Error("{0} could not be initialized correctly", _name);
                 _log.Error(e);
-                #endif
+#endif
                 return false;
             }
 
@@ -129,10 +129,10 @@ using AAEmu.Commons.Utils;
                     }
 
                     UInt32[] result = new UInt32[count];
-                    
-                    #if NLOG
+
+#if NLOG
                     _log.Info("{0}: Extracting {1} used id's from data tables...", _name, count);
-                    #endif
+#endif
 
                     command.CommandText = query;
                     command.Prepare();
@@ -145,9 +145,9 @@ using AAEmu.Commons.Utils;
                             idx++;
                         }
 
-                        #if NLOG
+#if NLOG
                         _log.Info("{0}: Successfully extracted {1} used id's from data tables.", _name, idx);
-                        #endif
+#endif
                     }
 
                     return result;
@@ -170,9 +170,9 @@ using AAEmu.Commons.Utils;
             }
             else
             {
-                #if NLOG
+#if NLOG
                 _log.Warn("{0}: release objectId {1} failed", _name, usedObjectId);
-                #endif
+#endif
             }
         }
 

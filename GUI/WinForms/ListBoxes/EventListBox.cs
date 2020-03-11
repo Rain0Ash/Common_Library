@@ -24,7 +24,7 @@ namespace Common_Library.GUI.WinForms.ListBoxes
             {
                 return;
             }
-            
+
             Items.Add(item);
             ItemAdded?.Invoke(item, Items.Count - 1);
             ItemsChanged?.Invoke();
@@ -47,10 +47,10 @@ namespace Common_Library.GUI.WinForms.ListBoxes
             ItemAdded?.Invoke(item);
             ItemsChanged?.Invoke();
             */
-            
+
             ItemSourceAdded?.Invoke(item, -1);
         }
-        
+
         public void Add(Object item)
         {
             if (DataSource != null)
@@ -58,7 +58,7 @@ namespace Common_Library.GUI.WinForms.ListBoxes
                 AddToSource(item);
                 return;
             }
-            
+
             AddToItems(item);
         }
 
@@ -67,25 +67,25 @@ namespace Common_Library.GUI.WinForms.ListBoxes
             Add(item);
             SetImage(item, image);
         }
-        
+
         public void Add(Object item, Brush color)
         {
             Add(item);
             SetColor(item, color);
         }
-        
+
         public void Add(Object item, Image image, Brush color)
         {
             Add(item, image);
             SetColor(item, color);
         }
-        
+
         public void Add(Object item, Brush backgroundColor, Brush textColor)
         {
             Add(item);
             SetColor(item, backgroundColor, textColor);
         }
-        
+
         public void Add(Object item, Image image, Brush backgroundColor, Brush textColor)
         {
             Add(item, image);
@@ -104,7 +104,7 @@ namespace Common_Library.GUI.WinForms.ListBoxes
             ItemAdded?.Invoke(item, index);
             ItemsChanged?.Invoke();
         }
-        
+
         private void InsertToSource(Object item, Int32 index = 0)
         {
             /*
@@ -122,10 +122,10 @@ namespace Common_Library.GUI.WinForms.ListBoxes
             ItemAdded?.Invoke(item);
             ItemsChanged?.Invoke();
             */
-            
+
             ItemSourceAdded?.Invoke(item, index);
         }
-        
+
         public void Insert(Object item, Int32 index = 0)
         {
             if (DataSource != null)
@@ -133,34 +133,34 @@ namespace Common_Library.GUI.WinForms.ListBoxes
                 InsertToSource(item, index);
                 return;
             }
-            
+
             InsertToItems(item, index);
         }
-        
+
         public void Insert(Object item, Image image, Int32 index = 0)
         {
             Insert(item, index);
             SetImage(item, image);
         }
-        
+
         public void Insert(Object item, Int32 index, Brush color)
         {
             Insert(item, index);
             SetColor(item, color);
         }
-        
+
         public void Insert(Object item, Image image, Int32 index, Brush color)
         {
             Insert(item, image, index);
             SetColor(item, color);
         }
-        
+
         public void Insert(Object item, Int32 index, Brush backgroundColor, Brush textColor)
         {
             Insert(item, index);
             SetColor(item, backgroundColor, textColor);
         }
-        
+
         public void Insert(Object item, Image image, Int32 index, Brush backgroundColor, Brush textColor)
         {
             Insert(item, image, index);
@@ -182,10 +182,10 @@ namespace Common_Library.GUI.WinForms.ListBoxes
             
             RemoveAt(source.IndexOf(item));
             */
-            
+
             ItemSourceRemoved?.Invoke(item, -1);
         }
-        
+
         public void Remove(Object item)
         {
             if (DataSource != null)
@@ -193,10 +193,10 @@ namespace Common_Library.GUI.WinForms.ListBoxes
                 RemoveFromSource(item);
                 return;
             }
-            
+
             RemoveFromItems(item);
         }
-        
+
         public void Remove(IEnumerable<Object> items)
         {
             foreach (Object item in items)
@@ -221,7 +221,6 @@ namespace Common_Library.GUI.WinForms.ListBoxes
             }
             catch (ArgumentOutOfRangeException)
             {
-                
             }
         }
 
@@ -250,10 +249,10 @@ namespace Common_Library.GUI.WinForms.ListBoxes
                 
             }
             */
-            
+
             ItemSourceRemoved?.Invoke(null, index);
         }
-        
+
         public void RemoveAt(SelectedIndexCollection indexes)
         {
             if (DataSource != null)
@@ -262,10 +261,10 @@ namespace Common_Library.GUI.WinForms.ListBoxes
                 {
                     RemoveAt(index);
                 }
-                
+
                 return;
             }
-            
+
             Remove(new List<Object>(Items.OfType<Object>()).Where(item => indexes.Contains(Items.IndexOf(item))));
         }
 
@@ -275,13 +274,13 @@ namespace Common_Library.GUI.WinForms.ListBoxes
             {
                 return;
             }
-            
+
             if (DataSource != null)
             {
                 RemoveAtFromSource(index);
                 return;
             }
-            
+
             RemoveAtFromItems(index);
         }
 

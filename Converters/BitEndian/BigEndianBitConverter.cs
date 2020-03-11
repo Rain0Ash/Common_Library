@@ -3,7 +3,7 @@
 
 using System;
 
- namespace Common_Library.Converters.BitEndian
+namespace Common_Library.Converters.BitEndian
 {
     /// <summary>
     /// Implementation of EndianBitConverter which converts to/from big-endian byte arrays.
@@ -47,7 +47,7 @@ using System;
             Int32 endOffset = index + bytes - 1;
             for (Int32 i = 0; i < bytes; i++)
             {
-                buffer[endOffset - i] = unchecked((Byte)(value & 0xff));
+                buffer[endOffset - i] = unchecked((Byte) (value & 0xff));
                 value >>= 8;
             }
         }
@@ -67,7 +67,7 @@ using System;
             {
                 ret = unchecked((ret << 8) | buffer[startIndex + i]);
             }
-            
+
             return ret;
         }
     }

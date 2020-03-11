@@ -16,6 +16,7 @@ namespace System.Collections.Generic
             return orderedSet;
         }
     }
+
     public class OrderedSet<T> : ICollection<T>
     {
         private readonly IDictionary<T, LinkedListNode<T>> _mDictionary;
@@ -38,18 +39,25 @@ namespace System.Collections.Generic
             {
                 Add(item);
             }
+
             _mDictionary = new Dictionary<T, LinkedListNode<T>>(comparer ?? EqualityComparer<T>.Default);
             _mLinkedList = new LinkedList<T>();
         }
 
         public Int32 Count
         {
-            get { return _mDictionary.Count; }
+            get
+            {
+                return _mDictionary.Count;
+            }
         }
 
         public Boolean IsReadOnly
         {
-            get { return _mDictionary.IsReadOnly; }
+            get
+            {
+                return _mDictionary.IsReadOnly;
+            }
         }
 
         void ICollection<T>.Add(T item)

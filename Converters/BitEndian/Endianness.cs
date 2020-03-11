@@ -12,6 +12,7 @@ namespace Common_Library.Converters.BitEndian
         /// Little endian - least significant byte first
         /// </summary>
         LittleEndian,
+
         /// <summary>
         /// Big endian - most significant byte first
         /// </summary>

@@ -42,7 +42,7 @@ namespace Common_Library.GUI.WinForms.TextBoxes
             Text = DefaultPort.ToString();
             Leave += (sender, args) => Text = CheckValidFormat() ? Text : DefaultPort.ToString();
         }
-        
+
         public override Boolean CheckValidFormat()
         {
             return NetworkUtils.CheckPort(Text);
@@ -55,7 +55,7 @@ namespace Common_Library.GUI.WinForms.TextBoxes
                 base.OnKeyPress(e);
                 return;
             }
-            
+
             e.Handled = true;
         }
 

@@ -14,7 +14,7 @@ namespace Common_Library.GUI.WinForms.Labels
         {
             TabStop = false;
         }
-          
+
         protected override CreateParams CreateParams
         {
             get
@@ -24,12 +24,12 @@ namespace Common_Library.GUI.WinForms.Labels
                 return cp;
             }
         }
-        
+
         protected override void OnPaintBackground(PaintEventArgs e)
         {
             // do nothing
         }
-        
+
         protected override void OnPaint(PaintEventArgs e)
         {
             DrawText();
@@ -97,11 +97,12 @@ namespace Common_Library.GUI.WinForms.Labels
 
                     break;
             }
+
             graphics.DrawString(Text, Font, brush, left, top);
             graphics.Dispose();
             brush.Dispose();
         }
-        
+
         public override String Text
         {
             get
@@ -114,7 +115,7 @@ namespace Common_Library.GUI.WinForms.Labels
                 RecreateHandle();
             }
         }
-        
+
         public override RightToLeft RightToLeft
         {
             get
@@ -127,7 +128,7 @@ namespace Common_Library.GUI.WinForms.Labels
                 RecreateHandle();
             }
         }
-        
+
         public override Font Font
         {
             get
@@ -145,10 +146,13 @@ namespace Common_Library.GUI.WinForms.Labels
 
         public ContentAlignment TextAlign
         {
-            get { return _textAlign; }
+            get
+            {
+                return _textAlign;
+            }
             set
             {
-                _textAlign = value; 
+                _textAlign = value;
                 RecreateHandle();
             }
         }

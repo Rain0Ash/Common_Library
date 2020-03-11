@@ -16,7 +16,9 @@ namespace Common_Library.Colorful
         // NOTE: I still feel that there's too much overlap between this class and the TextFormatter class.
 
         private readonly StyleSheet _styleSheet;
-        private readonly Dictionary<StyleClass<TextPattern>, Styler.MatchFound> _matchFoundHandlers = new Dictionary<StyleClass<TextPattern>, Styler.MatchFound>();
+
+        private readonly Dictionary<StyleClass<TextPattern>, Styler.MatchFound> _matchFoundHandlers =
+            new Dictionary<StyleClass<TextPattern>, Styler.MatchFound>();
 
         /// <summary>
         /// Exposes methods and properties used in batch styling of text.
@@ -31,7 +33,7 @@ namespace Common_Library.Colorful
                 _matchFoundHandlers.Add(styleClass, (styleClass as Styler)?.MatchFoundHandler);
             }
         }
-        
+
         /// <summary>
         /// Partitions the input text into styled and unstyled pieces.
         /// </summary>
@@ -46,7 +48,8 @@ namespace Common_Library.Colorful
 
         private List<KeyValuePair<StyleClass<TextPattern>, MatchLocation>> GetStyleTargets(String input)
         {
-            List<KeyValuePair<StyleClass<TextPattern>, MatchLocation>> matches = new List<KeyValuePair<StyleClass<TextPattern>, MatchLocation>>();
+            List<KeyValuePair<StyleClass<TextPattern>, MatchLocation>> matches =
+                new List<KeyValuePair<StyleClass<TextPattern>, MatchLocation>>();
             List<MatchLocation> locations = new List<MatchLocation>();
 
             foreach (StyleClass<TextPattern> pattern in _styleSheet.Styles)
@@ -70,14 +73,15 @@ namespace Common_Library.Colorful
             return matches;
         }
 
-        private List<KeyValuePair<String, Color>> GenerateStyleMap(IEnumerable<KeyValuePair<StyleClass<TextPattern>, MatchLocation>> targets, String input)
+        private List<KeyValuePair<String, Color>> GenerateStyleMap(
+            IEnumerable<KeyValuePair<StyleClass<TextPattern>, MatchLocation>> targets, String input)
         {
             List<KeyValuePair<String, Color>> styleMap = new List<KeyValuePair<String, Color>>();
 
             MatchLocation previousLocation = new MatchLocation(0, 0);
             Int32 chocolateEnd = 0;
             String vanilla;
-            
+
             foreach ((StyleClass<TextPattern> key, MatchLocation value) in targets)
             {
                 MatchLocation currentLocation = value;
@@ -94,12 +98,14 @@ namespace Common_Library.Colorful
 
                 vanilla = input.Substring(vanillaStart, vanillaEnd - vanillaStart);
 
-                String chocolate = _matchFoundHandlers[key].Invoke(input, value, input.Substring(chocolateStart, chocolateEnd - chocolateStart));
+                String chocolate = _matchFoundHandlers[key]
+                    .Invoke(input, value, input.Substring(chocolateStart, chocolateEnd - chocolateStart));
 
                 if (vanilla != "")
                 {
                     styleMap.Add(new KeyValuePair<String, Color>(vanilla, _styleSheet.UnstyledColor));
                 }
+
                 if (chocolate != "")
                 {
                     styleMap.Add(new KeyValuePair<String, Color>(chocolate, key.Color));

@@ -22,7 +22,7 @@ namespace System.Windows.Forms
         }
 
         public IEnumerable<FormatedField> AvailableFormatingPartsGroupList;
-        
+
         public event Handlers.EmptyHandler AvailableFormatingPartsChanged;
 
         private OrderedSet<String> _availableFormatingParts = new OrderedSet<String>();
@@ -46,7 +46,7 @@ namespace System.Windows.Forms
         }
 
         public Boolean EnableUniquenessFormatingParts { get; set; } = true;
-        
+
         public event Handlers.EmptyHandler UniqueFormatingPartsChanged;
 
         private OrderedSet<String> _uniqueFormatingParts = new OrderedSet<String>();
@@ -68,7 +68,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentException();
                 }
-                
+
                 _uniqueFormatingParts = value?.ToOrderedSet();
                 UniqueFormatingPartsChanged?.Invoke();
             }
@@ -105,18 +105,18 @@ namespace System.Windows.Forms
 
 
                     AvailableFormatingParts.Add(linkedName);
-                        
+
                     if (attr.Uniqueness)
                     {
                         UniqueFormatingParts.Add(linkedName);
                     }
-                    
+
                     foreach (String attribute in attr.Attributes)
                     {
                         String str = linkedName + ":" + attribute;
-                        
+
                         AvailableFormatingParts.Add(str);
-                        
+
                         if (attr.Uniqueness)
                         {
                             UniqueFormatingParts.Add(str);
@@ -144,7 +144,7 @@ namespace System.Windows.Forms
             {
                 return true;
             }
-            
+
             String[] linkedNames = StringUtils.GetFormatVariables(Text).ToArray();
 
             check &= linkedNames.All(format => AvailableFormatingParts.Contains(format));

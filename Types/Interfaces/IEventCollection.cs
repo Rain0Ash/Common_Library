@@ -7,10 +7,10 @@ namespace Common_Library.Types.Interfaces
     {
         public event Handlers.RTypeHandler<T> OnAdd;
 
-        public event Handlers.RTypeHandler<T> OnSet; 
-        
+        public event Handlers.RTypeHandler<T> OnSet;
+
         public event Handlers.RTypeHandler<T> OnRemove;
-        
+
         public event Handlers.RTypeHandler<T> OnChange;
     }
 }

@@ -20,10 +20,10 @@ namespace Common_Library.Utils
             {
                 throw new ArgumentException("Port is not valid");
             }
-            
+
             login ??= String.Empty;
             password ??= String.Empty;
-            
+
             return new WebProxy(address, port)
             {
                 Credentials = new NetworkCredential(login, password)
@@ -37,11 +37,12 @@ namespace Common_Library.Utils
             {
                 return HttpStatusCode.ServiceUnavailable;
             }
-            
+
             const String checkAddress = "http://google.com";
-            const String userAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36";
-            
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(checkAddress);
+            const String userAgent =
+                "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36";
+
+            HttpWebRequest request = (HttpWebRequest) WebRequest.Create(checkAddress);
             request.Proxy = proxy;
             request.UserAgent = userAgent;
             request.Timeout = 2000;

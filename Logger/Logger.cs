@@ -22,7 +22,7 @@ namespace Common_Library.Logger
         FatalError,
         UnknownError
     }
-        
+
     public enum MessageAdditions
     {
         None = 0,
@@ -30,7 +30,7 @@ namespace Common_Library.Logger
         CurrentTime = 2,
         CurrentDateTime = 3
     }
-    
+
     public class Logger
     {
         public delegate void LogHandler(LogMessage logMessage);
@@ -50,7 +50,7 @@ namespace Common_Library.Logger
                 Messages.MaximumLength = value;
             }
         }
-        
+
         public static readonly EventQueueList<LogMessage> GlobalMessages = new EventQueueList<LogMessage>();
         public readonly EventQueueList<LogMessage> Messages = new EventQueueList<LogMessage>();
 
@@ -60,13 +60,15 @@ namespace Common_Library.Logger
             GlobalLogged?.Invoke(logMessage);
         }
 
-        public static void GlobalLog(CultureStringsBase message, MessageType messageType = MessageType.Default, IEnumerable<Object> formatList = null, ConsoleColor? messageColor = null, Int32 priority = 0, MessageAdditions messageAdditions = MessageAdditions.None)
+        public static void GlobalLog(CultureStringsBase message, MessageType messageType = MessageType.Default,
+            IEnumerable<Object> formatList = null, ConsoleColor? messageColor = null, Int32 priority = 0,
+            MessageAdditions messageAdditions = MessageAdditions.None)
         {
             LogMessage logMessage = new LogMessage(message, messageType, formatList, messageColor, priority, messageAdditions);
             GlobalMessages.Add(logMessage);
             GlobalLogged?.Invoke(logMessage);
         }
-        
+
         public Logger(Int32 savedMessageCount = 255)
         {
             SavedMessageCount = savedMessageCount;
@@ -77,8 +79,9 @@ namespace Common_Library.Logger
             Messages.Add(logMessage);
             Logged?.Invoke(logMessage);
         }
-        
-        public void Log(CultureStringsBase message, MessageType messageType = MessageType.Default, IEnumerable<Object> formatList = null, ConsoleColor? messageColor = null, Int32 priority = 0, MessageAdditions messageAdditions = MessageAdditions.None)
+
+        public void Log(CultureStringsBase message, MessageType messageType = MessageType.Default, IEnumerable<Object> formatList = null,
+            ConsoleColor? messageColor = null, Int32 priority = 0, MessageAdditions messageAdditions = MessageAdditions.None)
         {
             LogMessage logMessage = new LogMessage(message, messageType, formatList, messageColor, priority, messageAdditions);
             Messages.Add(logMessage);

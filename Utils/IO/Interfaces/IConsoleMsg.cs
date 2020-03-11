@@ -12,7 +12,7 @@ namespace Common_Library.Utils
         {
             return this.Convert(provider);
         }
-        
+
         void ToConsole(Boolean newLine = true, IFormatProvider provider = null)
         {
             GetConsoleText(provider).ToConsole(newLine, provider);
@@ -22,7 +22,7 @@ namespace Common_Library.Utils
         {
             GetConsoleText(provider).ToConsole(color, newLine, provider);
         }
-        
+
         void ToConsole(Color color, Boolean newLine = true, IFormatProvider provider = null)
         {
             GetConsoleText(provider).ToConsole(color, newLine, provider);
@@ -32,7 +32,7 @@ namespace Common_Library.Utils
         {
             GetConsoleText(provider).ToConsole(color, bColor, newLine, provider);
         }
-        
+
         void ToConsole(Color color, Color bColor, Boolean newLine = true, IFormatProvider provider = null)
         {
             GetConsoleText(provider).ToConsole(color, bColor, newLine, provider);

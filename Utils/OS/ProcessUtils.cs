@@ -13,7 +13,7 @@ namespace Common_Library.Utils.OS
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+                Process.Start(new ProcessStartInfo(url) {UseShellExecute = true});
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {

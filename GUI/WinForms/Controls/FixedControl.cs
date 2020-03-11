@@ -15,8 +15,8 @@ namespace Common_Library.GUI.WinForms.Controls
 
         // ReSharper disable once UnassignedField.Global
         public IButtonControl AcceptButton;
-        
-        protected override Boolean ProcessCmdKey(ref Message msg, Keys keyData) 
+
+        protected override Boolean ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (AcceptButton == null || keyData != Keys.Enter)
             {

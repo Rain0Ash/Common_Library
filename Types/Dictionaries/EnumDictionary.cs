@@ -18,12 +18,12 @@ namespace System.Collections.Generic
             : base(dictionary, new EnumEqualityComparer<TKey>())
         {
         }
-        
+
         public EnumDictionary(IEnumerable<KeyValuePair<TKey, TValue>> collection)
             : base(collection, new EnumEqualityComparer<TKey>())
         {
         }
-        
+
         public EnumDictionary(Int32 capacity)
             : base(capacity, new EnumEqualityComparer<TKey>())
         {

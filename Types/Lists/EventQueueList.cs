@@ -24,7 +24,7 @@ namespace System.Collections.Generic
                 }
 
                 _maximumLength = val;
-                
+
                 if (Count <= val)
                 {
                     return;
@@ -39,17 +39,17 @@ namespace System.Collections.Generic
         public EventQueueList()
         {
         }
-        
+
         public EventQueueList(IEnumerable<T> collection)
             : base(collection)
         {
         }
-        
+
         public EventQueueList(Int32 capacity)
             : base(capacity)
         {
         }
-        
+
         public void Enqueue(T item)
         {
             Add(item);
@@ -66,7 +66,7 @@ namespace System.Collections.Generic
             {
                 RemoveAt(Count - 1);
             }
-            
+
             base.Add(item);
         }
 

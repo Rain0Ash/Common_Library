@@ -17,122 +17,284 @@ namespace Common_Library.Colorful
     {
         public static Color BackgroundColor
         {
-            get => colorManager.GetColor(System.Console.BackgroundColor);
-            set => System.Console.BackgroundColor = colorManager.GetConsoleColor(value);
+            get
+            {
+                return colorManager.GetColor(System.Console.BackgroundColor);
+            }
+            set
+            {
+                System.Console.BackgroundColor = colorManager.GetConsoleColor(value);
+            }
         }
 
         public static Int32 BufferHeight
         {
-            get => System.Console.BufferHeight;
-            set => System.Console.BufferHeight = value;
+            get
+            {
+                return System.Console.BufferHeight;
+            }
+            set
+            {
+                System.Console.BufferHeight = value;
+            }
         }
 
         public static Int32 BufferWidth
         {
-            get => System.Console.BufferWidth;
-            set => System.Console.BufferWidth = value;
+            get
+            {
+                return System.Console.BufferWidth;
+            }
+            set
+            {
+                System.Console.BufferWidth = value;
+            }
         }
 
-        public static Boolean CapsLock => System.Console.CapsLock;
+        public static Boolean CapsLock
+        {
+            get
+            {
+                return System.Console.CapsLock;
+            }
+        }
 
         public static Int32 CursorLeft
         {
-            get => System.Console.CursorLeft;
-            set => System.Console.CursorLeft = value;
+            get
+            {
+                return System.Console.CursorLeft;
+            }
+            set
+            {
+                System.Console.CursorLeft = value;
+            }
         }
 
         public static Int32 CursorSize
         {
-            get => System.Console.CursorSize;
-            set => System.Console.CursorSize = value;
+            get
+            {
+                return System.Console.CursorSize;
+            }
+            set
+            {
+                System.Console.CursorSize = value;
+            }
         }
 
         public static Int32 CursorTop
         {
-            get => System.Console.CursorTop;
-            set => System.Console.CursorTop = value;
+            get
+            {
+                return System.Console.CursorTop;
+            }
+            set
+            {
+                System.Console.CursorTop = value;
+            }
         }
 
         public static Boolean CursorVisible
         {
-            get => System.Console.CursorVisible;
-            set => System.Console.CursorVisible = value;
+            get
+            {
+                return System.Console.CursorVisible;
+            }
+            set
+            {
+                System.Console.CursorVisible = value;
+            }
         }
 
-        public static TextWriter Error => System.Console.Error;
+        public static TextWriter Error
+        {
+            get
+            {
+                return System.Console.Error;
+            }
+        }
 
         public static Color ForegroundColor
         {
-            get => colorManager.GetColor(System.Console.ForegroundColor);
-            set => System.Console.ForegroundColor = colorManager.GetConsoleColor(value);
+            get
+            {
+                return colorManager.GetColor(System.Console.ForegroundColor);
+            }
+            set
+            {
+                System.Console.ForegroundColor = colorManager.GetConsoleColor(value);
+            }
         }
 
-        public static TextReader In => System.Console.In;
+        public static TextReader In
+        {
+            get
+            {
+                return System.Console.In;
+            }
+        }
 
         public static Encoding InputEncoding
         {
-            get => System.Console.InputEncoding;
-            set => System.Console.InputEncoding = value;
+            get
+            {
+                return System.Console.InputEncoding;
+            }
+            set
+            {
+                System.Console.InputEncoding = value;
+            }
         }
 
 #if !NET40
-        public static Boolean IsErrorRedirected => System.Console.IsErrorRedirected;
+        public static Boolean IsErrorRedirected
+        {
+            get
+            {
+                return System.Console.IsErrorRedirected;
+            }
+        }
 
-        public static Boolean IsInputRedirected => System.Console.IsInputRedirected;
+        public static Boolean IsInputRedirected
+        {
+            get
+            {
+                return System.Console.IsInputRedirected;
+            }
+        }
 
-        public static Boolean IsOutputRedirected => System.Console.IsOutputRedirected;
+        public static Boolean IsOutputRedirected
+        {
+            get
+            {
+                return System.Console.IsOutputRedirected;
+            }
+        }
 #endif
 
-        public static Boolean KeyAvailable => System.Console.KeyAvailable;
+        public static Boolean KeyAvailable
+        {
+            get
+            {
+                return System.Console.KeyAvailable;
+            }
+        }
 
-        public static Int32 LargestWindowHeight => System.Console.LargestWindowHeight;
+        public static Int32 LargestWindowHeight
+        {
+            get
+            {
+                return System.Console.LargestWindowHeight;
+            }
+        }
 
-        public static Int32 LargestWindowWidth => System.Console.LargestWindowWidth;
+        public static Int32 LargestWindowWidth
+        {
+            get
+            {
+                return System.Console.LargestWindowWidth;
+            }
+        }
 
-        public static Boolean NumberLock => System.Console.NumberLock;
+        public static Boolean NumberLock
+        {
+            get
+            {
+                return System.Console.NumberLock;
+            }
+        }
 
-        public static TextWriter Out => System.Console.Out;
+        public static TextWriter Out
+        {
+            get
+            {
+                return System.Console.Out;
+            }
+        }
 
         public static Encoding OutputEncoding
         {
-            get => System.Console.OutputEncoding;
-            set => System.Console.OutputEncoding = value;
+            get
+            {
+                return System.Console.OutputEncoding;
+            }
+            set
+            {
+                System.Console.OutputEncoding = value;
+            }
         }
 
         public static String Title
         {
-            get => System.Console.Title;
-            set => System.Console.Title = value;
+            get
+            {
+                return System.Console.Title;
+            }
+            set
+            {
+                System.Console.Title = value;
+            }
         }
 
         public static Boolean TreatControlCAsInput
         {
-            get => System.Console.TreatControlCAsInput;
-            set => System.Console.TreatControlCAsInput = value;
+            get
+            {
+                return System.Console.TreatControlCAsInput;
+            }
+            set
+            {
+                System.Console.TreatControlCAsInput = value;
+            }
         }
 
         public static Int32 WindowHeight
         {
-            get => System.Console.WindowHeight;
-            set => System.Console.WindowHeight = value;
+            get
+            {
+                return System.Console.WindowHeight;
+            }
+            set
+            {
+                System.Console.WindowHeight = value;
+            }
         }
 
         public static Int32 WindowLeft
         {
-            get => System.Console.WindowLeft;
-            set => System.Console.WindowLeft = value;
+            get
+            {
+                return System.Console.WindowLeft;
+            }
+            set
+            {
+                System.Console.WindowLeft = value;
+            }
         }
 
         public static Int32 WindowTop
         {
-            get => System.Console.WindowTop;
-            set => System.Console.WindowTop = value;
+            get
+            {
+                return System.Console.WindowTop;
+            }
+            set
+            {
+                System.Console.WindowTop = value;
+            }
         }
 
         public static Int32 WindowWidth
         {
-            get => System.Console.WindowWidth;
-            set => System.Console.WindowWidth = value;
+            get
+            {
+                return System.Console.WindowWidth;
+            }
+            set
+            {
+                System.Console.WindowWidth = value;
+            }
         }
 
         public static event ConsoleCancelEventHandler CancelKeyPress = delegate { };
@@ -143,7 +305,10 @@ namespace Common_Library.Colorful
             IsWindows = ColorManager.IsWindows();
             try
             {
-                if (IsWindows) DefaultColorMap = new ColorMapper().GetBufferColors();
+                if (IsWindows)
+                {
+                    DefaultColorMap = new ColorMapper().GetBufferColors();
+                }
             }
             catch (ConsoleAccessException)
             {
@@ -1046,7 +1211,9 @@ namespace Common_Library.Colorful
         public static void WriteAsciiAlternating(String value, FigletFont font, ColorAlternator alternator)
         {
             foreach (String line in GetFiglet(font).ToAscii(value).ConcreteValue.Split('\n'))
+            {
                 WriteLineAlternating(line, alternator);
+            }
         }
 
         public static void WriteAsciiStyled(String value, StyleSheet styleSheet)
@@ -1199,7 +1366,9 @@ namespace Common_Library.Colorful
 
             // There's no need to do this if in compatibility mode (or if not on Windows), as more than 16 colors won't be used, anyway.
             if (!colorManager.IsInCompatibilityMode && IsWindows)
+            {
                 new ColorMapper().SetBatchBufferColors(DefaultColorMap);
+            }
         }
 
         public static void Beep(Int32 frequency, Int32 duration)

@@ -26,9 +26,15 @@ namespace Common_Library.Colorful
 
         public StyledString ToAscii(String value)
         {
-            if (value == null) { throw new ArgumentNullException(nameof(value)); }
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
 
-            if (Encoding.UTF8.GetByteCount(value) != value.Length) { throw new ArgumentException("String contains non-ascii characters"); }
+            if (Encoding.UTF8.GetByteCount(value) != value.Length)
+            {
+                throw new ArgumentException("String contains non-ascii characters");
+            }
 
             StringBuilder stringBuilder = new StringBuilder();
 
@@ -41,7 +47,7 @@ namespace Common_Library.Colorful
             {
                 Int32 runningWidthTotal = 0;
 
-                for (Int32 c = 0; c < value.Length; c++) 
+                for (Int32 c = 0; c < value.Length; c++)
                 {
                     Char character = value[c];
                     String fragment = GetCharacter(_font, character, line);
@@ -66,7 +72,8 @@ namespace Common_Library.Colorful
             return styledString;
         }
 
-        private static void CalculateCharacterGeometries(String fragment, Int32 characterIndex, Int32 runningWidthTotal, Int32 line, Char[,] charGeometry, Int32[,] indexGeometry)
+        private static void CalculateCharacterGeometries(String fragment, Int32 characterIndex, Int32 runningWidthTotal, Int32 line,
+            Char[,] charGeometry, Int32[,] indexGeometry)
         {
             for (Int32 i = runningWidthTotal; i < runningWidthTotal + fragment.Length; i++)
             {

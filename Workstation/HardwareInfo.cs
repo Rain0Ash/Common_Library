@@ -81,7 +81,6 @@ namespace Common_Library.Workstation
             /// <returns></returns>
             public static String GetBoardMaker()
             {
-
                 ManagementObjectSearcher searcher =
                     new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_BaseBoard");
 
@@ -107,7 +106,6 @@ namespace Common_Library.Workstation
             /// <returns></returns>
             public static String GetBoardProductID()
             {
-
                 ManagementObjectSearcher searcher =
                     new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_BaseBoard");
 
@@ -132,7 +130,6 @@ namespace Common_Library.Workstation
             /// <returns></returns>
             public static String GetCDRomDrive()
             {
-
                 ManagementObjectSearcher searcher =
                     new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_CDROMDrive");
 
@@ -157,7 +154,6 @@ namespace Common_Library.Workstation
             /// <returns></returns>
             public static String GetBIOSMaker()
             {
-
                 ManagementObjectSearcher searcher =
                     new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_BIOS");
 
@@ -182,7 +178,6 @@ namespace Common_Library.Workstation
             /// <returns></returns>
             public static String GetBIOSSerialNumber()
             {
-
                 ManagementObjectSearcher searcher =
                     new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_BIOS");
 
@@ -207,7 +202,6 @@ namespace Common_Library.Workstation
             /// <returns></returns>
             public static String GetBIOSCaption()
             {
-
                 ManagementObjectSearcher searcher =
                     new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_BIOS");
 
@@ -232,7 +226,6 @@ namespace Common_Library.Workstation
             /// <returns></returns>
             public static String GetAccountName()
             {
-
                 ManagementObjectSearcher searcher =
                     new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_UserAccount");
 
@@ -270,7 +263,7 @@ namespace Common_Library.Workstation
                     Int64 mCap = Convert.ToInt64(obj["Capacity"]);
                     memSize += mCap;
                 }
-                
+
                 return memSize;
             }
 
@@ -413,7 +406,6 @@ namespace Common_Library.Workstation
             /// <returns></returns>
             public static String GetCurrentLanguage()
             {
-
                 ManagementObjectSearcher searcher =
                     new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_BIOS");
 
@@ -430,7 +422,6 @@ namespace Common_Library.Workstation
                 }
 
                 return "BIOS Maker: Unknown";
-
             }
 
             /// <summary>

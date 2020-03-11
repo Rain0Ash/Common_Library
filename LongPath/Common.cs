@@ -80,7 +80,7 @@ namespace Common_Library.LongPath
             if (Path.TryNormalizeLongPath(path, out String normalizedPath) || IsPathUnc(path))
             {
                 Int32 errorCode = TryGetFileAttributes(normalizedPath, out FileAttributes attributes);
-                if (errorCode == 0 && (Int32)attributes != NativeMethods.InvalidFileAttributes)
+                if (errorCode == 0 && (Int32) attributes != NativeMethods.InvalidFileAttributes)
                 {
                     isDirectory = Directory.IsDirectory(attributes);
                     return true;
@@ -106,7 +106,6 @@ namespace Common_Library.LongPath
             try
             {
                 success = NativeMethods.GetFileAttributesEx(normalizedPath, 0, ref data);
-
             }
             finally
             {
@@ -115,7 +114,7 @@ namespace Common_Library.LongPath
 
             if (!success)
             {
-                attributes = (FileAttributes)NativeMethods.InvalidFileAttributes;
+                attributes = (FileAttributes) NativeMethods.InvalidFileAttributes;
                 return Marshal.GetLastWin32Error();
             }
 
@@ -128,7 +127,7 @@ namespace Common_Library.LongPath
             return GetExceptionFromWin32Error(Marshal.GetLastWin32Error(), parameterName);
         }
 
-        
+
         internal static Exception? GetExceptionFromWin32Error(Int32 errorCode, String parameterName = "path")
         {
             String message = GetMessageFromErrorCode(errorCode);
@@ -150,8 +149,10 @@ namespace Common_Library.LongPath
         {
             StringBuilder buffer = new StringBuilder(512);
 
-            NativeMethods.FormatMessage(NativeMethods.FormatMessageIgnoreInserts | NativeMethods.FormatMessageFromSystem | NativeMethods.FormatMessageArgumentArray, IntPtr.Zero, errorCode, 0, buffer, buffer.Capacity, IntPtr.Zero);
-			
+            NativeMethods.FormatMessage(
+                NativeMethods.FormatMessageIgnoreInserts | NativeMethods.FormatMessageFromSystem | NativeMethods.FormatMessageArgumentArray,
+                IntPtr.Zero, errorCode, 0, buffer, buffer.Capacity, IntPtr.Zero);
+
             return buffer.ToString();
         }
 
@@ -217,7 +218,7 @@ namespace Common_Library.LongPath
                     }
 
                     throw new IOException($"Sharing violation: {str}", NativeMethods.MakeHrFromErrorCode(errorCode));
-                  
+
                 case NativeMethods.ErrorFileExists:
                     if (String.IsNullOrEmpty(str))
                     {
@@ -296,15 +297,16 @@ namespace Common_Library.LongPath
         {
             //security.WriteLock();
             AccessControlSections includeSections = AccessControlSections.Owner | AccessControlSections.Group;
-            if(security.GetAccessRules(true, false, typeof(SecurityIdentifier)).Count > 0)
+            if (security.GetAccessRules(true, false, typeof(SecurityIdentifier)).Count > 0)
             {
                 includeSections |= AccessControlSections.Access;
             }
+
             if (security.GetAuditRules(true, false, typeof(SecurityIdentifier)).Count > 0)
             {
                 includeSections |= AccessControlSections.Audit;
             }
-			
+
             SecurityInfos securityInfo = 0;
             SecurityIdentifier owner = null;
             SecurityIdentifier group = null;
@@ -312,7 +314,7 @@ namespace Common_Library.LongPath
             DiscretionaryAcl dacl = null;
             if ((includeSections & AccessControlSections.Owner) != AccessControlSections.None)
             {
-                owner = (SecurityIdentifier)security.GetOwner(typeof(SecurityIdentifier));
+                owner = (SecurityIdentifier) security.GetOwner(typeof(SecurityIdentifier));
                 if (owner != null)
                 {
                     securityInfo |= SecurityInfos.Owner;
@@ -321,15 +323,17 @@ namespace Common_Library.LongPath
 
             if ((includeSections & AccessControlSections.Group) != AccessControlSections.None)
             {
-                group = (SecurityIdentifier)security.GetGroup(typeof(SecurityIdentifier));
+                group = (SecurityIdentifier) security.GetGroup(typeof(SecurityIdentifier));
                 if (group != null)
                 {
                     securityInfo |= SecurityInfos.Group;
                 }
             }
+
             Byte[] securityDescriptorBinaryForm = security.GetSecurityDescriptorBinaryForm();
             RawSecurityDescriptor rawSecurityDescriptor = new RawSecurityDescriptor(securityDescriptorBinaryForm, 0);
-            Boolean isDiscretionaryAclPresent = (rawSecurityDescriptor.ControlFlags & ControlFlags.DiscretionaryAclPresent) != ControlFlags.None;
+            Boolean isDiscretionaryAclPresent =
+                (rawSecurityDescriptor.ControlFlags & ControlFlags.DiscretionaryAclPresent) != ControlFlags.None;
 
             if ((includeSections & AccessControlSections.Audit) != AccessControlSections.None)
             {
@@ -345,19 +349,26 @@ namespace Common_Library.LongPath
                         sacl = new SystemAcl(notAContainer, notADirectoryObjectACL,
                             rawSecurityDescriptor.SystemAcl);
                     }
-                    securityInfo = (SecurityInfos)((rawSecurityDescriptor.ControlFlags & ControlFlags.SystemAclProtected) == ControlFlags.None ?
-                        (UInt32)securityInfo | UnprotectedSystemAcl : (UInt32)securityInfo | ProtectedSystemAcl);
+
+                    securityInfo =
+                        (SecurityInfos) ((rawSecurityDescriptor.ControlFlags & ControlFlags.SystemAclProtected) == ControlFlags.None
+                            ? (UInt32) securityInfo | UnprotectedSystemAcl
+                            : (UInt32) securityInfo | ProtectedSystemAcl);
                 }
             }
+
             if ((includeSections & AccessControlSections.Access) != AccessControlSections.None && isDiscretionaryAclPresent)
             {
                 securityInfo |= SecurityInfos.DiscretionaryAcl;
                 {
                     dacl = new DiscretionaryAcl(false, false, rawSecurityDescriptor.DiscretionaryAcl);
                 }
-                securityInfo = (SecurityInfos)((rawSecurityDescriptor.ControlFlags & ControlFlags.DiscretionaryAclProtected) == ControlFlags.None ?
-                    (UInt32)securityInfo | UnprotectedDiscretionaryAcl : (UInt32)securityInfo | ProtectedDiscretionaryAcl);
+                securityInfo =
+                    (SecurityInfos) ((rawSecurityDescriptor.ControlFlags & ControlFlags.DiscretionaryAclProtected) == ControlFlags.None
+                        ? (UInt32) securityInfo | UnprotectedDiscretionaryAcl
+                        : (UInt32) securityInfo | ProtectedDiscretionaryAcl);
             }
+
             if (securityInfo == 0)
             {
                 return;
@@ -409,6 +420,7 @@ namespace Common_Library.LongPath
                     break;
                 }
             }
+
             throw exception;
         }
 
@@ -492,7 +504,8 @@ namespace Common_Library.LongPath
 
                 if (name != null)
                 {
-                    errorCode = (Int32)NativeMethods.SetSecurityInfoByName(name, (UInt32)type, (UInt32)securityInformation, ownerBinary, groupBinary, daclBinary, saclBinary);
+                    errorCode = (Int32) NativeMethods.SetSecurityInfoByName(name, (UInt32) type, (UInt32) securityInformation, ownerBinary,
+                        groupBinary, daclBinary, saclBinary);
                 }
                 else if (handle != null)
                 {
@@ -501,7 +514,8 @@ namespace Common_Library.LongPath
                         throw new ArgumentException("Invalid safe handle");
                     }
 
-                    errorCode = (Int32)NativeMethods.SetSecurityInfoByHandle(handle, (UInt32)type, (UInt32)securityInformation, ownerBinary, groupBinary, daclBinary, saclBinary);
+                    errorCode = (Int32) NativeMethods.SetSecurityInfoByHandle(handle, (UInt32) type, (UInt32) securityInformation,
+                        ownerBinary, groupBinary, daclBinary, saclBinary);
                 }
                 else
                 {
@@ -553,7 +567,8 @@ namespace Common_Library.LongPath
 
         public static Boolean IsPathUnc(String path)
         {
-            return !String.IsNullOrEmpty(path) && path.StartsWith(Path.UNCLongPathPrefix, StringComparison.InvariantCultureIgnoreCase) || Uri.TryCreate(path, UriKind.Absolute, out Uri uri) && uri.IsUnc;
+            return !String.IsNullOrEmpty(path) && path.StartsWith(Path.UNCLongPathPrefix, StringComparison.InvariantCultureIgnoreCase) ||
+                   Uri.TryCreate(path, UriKind.Absolute, out Uri uri) && uri.IsUnc;
         }
 
         public static Boolean IsPathDots(String path)

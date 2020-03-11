@@ -6,16 +6,17 @@ using System.Text;
 using System.IO;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
+
 // ReSharper disable UnusedMember.Local
 
-namespace Common_Library.LongPath {
-
+namespace Common_Library.LongPath
+{
     /// <summary>
     /// PRELIMINARY Provides access to NTFS junction points in .Net.
     /// </summary>
     public static class JunctionPoint
     {
-		/// <summary>
+        /// <summary>
         /// Creates a junction point from the specified directory to the specified target directory.
         /// </summary>
         /// <remarks>
@@ -151,7 +152,7 @@ namespace Common_Library.LongPath {
         /// or some other error occurs</exception>
         public static Boolean Exists(String path)
         {
-            if (! Directory.Exists(path))
+            if (!Directory.Exists(path))
             {
                 return false;
             }
@@ -229,12 +230,11 @@ namespace Common_Library.LongPath {
             }
         }
 
-		
 
-		/// <summary>
-		/// The file or directory is not a reparse point.
-		/// </summary>
-		private const Int32 ErrorNotAReparsePoint = 4390;
+        /// <summary>
+        /// The file or directory is not a reparse point.
+        /// </summary>
+        private const Int32 ErrorNotAReparsePoint = 4390;
 
         /// <summary>
         /// The reparse point attribute cannot be set because it conflicts with an existing attribute.
@@ -285,27 +285,27 @@ namespace Common_Library.LongPath {
         [Flags]
         private enum EFileAccess : uint
         {
-            GenericRead    = 0x80000000,
-            GenericWrite   = 0x40000000,
+            GenericRead = 0x80000000,
+            GenericWrite = 0x40000000,
             GenericExecute = 0x20000000,
-            GenericAll     = 0x10000000
+            GenericAll = 0x10000000
         }
 
         [Flags]
         private enum EFileShare : uint
         {
-            None   = 0x00000000,
-            Read   = 0x00000001,
-            Write  = 0x00000002,
+            None = 0x00000000,
+            Read = 0x00000001,
+            Write = 0x00000002,
             Delete = 0x00000004
         }
 
         private enum ECreationDisposition : uint
         {
-            New              = 1,
-            CreateAlways     = 2,
-            OpenExisting     = 3,
-            OpenAlways       = 4,
+            New = 1,
+            CreateAlways = 2,
+            OpenExisting = 3,
+            OpenAlways = 4,
             TruncateExisting = 5
         }
 
@@ -408,7 +408,6 @@ namespace Common_Library.LongPath {
             IntPtr hTemplateFile);
 
 
-
         private static SafeFileHandle OpenReparsePoint(String reparsePoint, EFileAccess accessMode)
         {
             SafeFileHandle reparsePointHandle = new SafeFileHandle(CreateFile(reparsePoint, accessMode,
@@ -428,7 +427,5 @@ namespace Common_Library.LongPath {
         {
             throw new IOException(message, Marshal.GetExceptionForHR(Marshal.GetHRForLastWin32Error()));
         }
-
-		
-	}
+    }
 }

@@ -19,7 +19,7 @@ namespace System.Collections.Generic
                 {
                     base[key] = new NestedDictionary<TKey, TValue>();
                 }
-                
+
                 return base[key];
             }
             set
@@ -33,7 +33,7 @@ namespace System.Collections.Generic
             get
             {
                 NestedDictionary<TKey, TValue> dict = this;
-                
+
                 if (sections.Length <= 0)
                 {
                     return dict[key];
@@ -46,7 +46,7 @@ namespace System.Collections.Generic
             set
             {
                 NestedDictionary<TKey, TValue> dict = this;
-                
+
                 if (sections.Length <= 0)
                 {
                     dict[key] = value;

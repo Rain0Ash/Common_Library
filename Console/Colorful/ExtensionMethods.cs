@@ -39,7 +39,7 @@ namespace Common_Library.Colorful
             // that in most cases, if we're passing an array into String.Join, the intention is
             // for it to be "unrolled" into a collection of the array's elements, rather than the
             // default behavior described previously.
-            return String.Join(String.Empty, (dynamic)input);
+            return String.Join(String.Empty, (dynamic) input);
         }
 
         // TODO: NO DYNAMIC IN .NET CORE
@@ -64,7 +64,7 @@ namespace Common_Library.Colorful
             }
             else
             {
-                output.Add((dynamic)input);
+                output.Add((dynamic) input);
             }
 
             return output.ToArray();

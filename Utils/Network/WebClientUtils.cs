@@ -10,7 +10,8 @@ namespace Common_Library.Utils
 {
     public static class WebClientUtils
     {
-        public static async Task<String> DownloadStringTaskAsync(this WebClient webClient, String address, CancellationToken cancellationToken)
+        public static async Task<String> DownloadStringTaskAsync(this WebClient webClient, String address,
+            CancellationToken cancellationToken)
         {
             try
             {
@@ -26,8 +27,9 @@ namespace Common_Library.Utils
                 return null;
             }
         }
-        
-        public static async Task<Byte[]> DownloadDataTaskAsync(this WebClient webClient, String address, CancellationToken cancellationToken)
+
+        public static async Task<Byte[]> DownloadDataTaskAsync(this WebClient webClient, String address,
+            CancellationToken cancellationToken)
         {
             try
             {

@@ -10,7 +10,13 @@ namespace Common_Library.Colorful
 
     public class FigletFont
     {
-        public static FigletFont Default => Parse(DefaultFonts.SmallSlant);
+        public static FigletFont Default
+        {
+            get
+            {
+                return Parse(DefaultFonts.SmallSlant);
+            }
+        }
 
         public Int32 BaseLine { get; private set; }
 
@@ -46,7 +52,10 @@ namespace Common_Library.Colorful
 
         public static FigletFont Load(Stream stream)
         {
-            if (stream == null) { throw new ArgumentNullException(nameof(stream)); }
+            if (stream == null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
 
             List<String> fontLines = new List<String>();
             using (StreamReader streamReader = new StreamReader(stream))
@@ -62,21 +71,30 @@ namespace Common_Library.Colorful
 
         public static FigletFont Load(String filePath)
         {
-            if (filePath == null) { throw new ArgumentNullException(nameof(filePath)); }
+            if (filePath == null)
+            {
+                throw new ArgumentNullException(nameof(filePath));
+            }
 
             return Parse(File.ReadLines(filePath));
         }
 
         public static FigletFont Parse(String fontContent)
         {
-            if (fontContent == null) { throw new ArgumentNullException(nameof(fontContent)); }
+            if (fontContent == null)
+            {
+                throw new ArgumentNullException(nameof(fontContent));
+            }
 
-            return Parse(fontContent.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None));
+            return Parse(fontContent.Split(new[] {"\r\n", "\r", "\n"}, StringSplitOptions.None));
         }
 
         public static FigletFont Parse(IEnumerable<String> fontLines)
         {
-            if (fontLines == null) { throw new ArgumentNullException(nameof(fontLines)); }
+            if (fontLines == null)
+            {
+                throw new ArgumentNullException(nameof(fontLines));
+            }
 
             FigletFont font = new FigletFont()
             {
@@ -85,7 +103,7 @@ namespace Common_Library.Colorful
             String configString = font.Lines.First();
             String[] configArray = configString.Split(' ');
             font.Signature = configArray.First().Remove(configArray.First().Length - 1);
-            
+
             if (font.Signature != "flf2a")
             {
                 return font;

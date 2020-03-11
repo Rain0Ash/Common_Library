@@ -21,11 +21,11 @@ namespace Common_Library.Crypto
                 try
                 {
                     key ??= CurrentUserCryptoSIDHash();
-                    
+
                     Byte[] iv = new Byte[16];
 
                     key = Hash.MD5(key);
-                    
+
                     using Aes aes = Aes.Create();
                     if (aes == null)
                     {
@@ -53,7 +53,7 @@ namespace Common_Library.Crypto
                     return null;
                 }
             }
-            
+
             public static String Encrypt(String plainText, String key)
             {
                 return Encrypt(plainText, StringToBytes(key));
@@ -74,7 +74,7 @@ namespace Common_Library.Crypto
                     Byte[] buffer = Convert.FromBase64String(cipherText);
 
                     key = Hash.MD5(key);
-                    
+
                     using Aes aes = Aes.Create();
                     if (aes == null)
                     {
@@ -95,7 +95,7 @@ namespace Common_Library.Crypto
                     return null;
                 }
             }
-            
+
             public static String Decrypt(String plainText, String key)
             {
                 return Decrypt(plainText, StringToBytes(key));

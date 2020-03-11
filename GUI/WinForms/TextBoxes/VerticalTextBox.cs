@@ -10,6 +10,7 @@ namespace Common_Library.GUI.WinForms.TextBoxes
     {
         private ContentAlignment _textAlign = ContentAlignment.MiddleLeft;
         public new event Handlers.EmptyHandler TextAlignChanged;
+
         public new ContentAlignment TextAlign
         {
             get
@@ -27,6 +28,7 @@ namespace Common_Library.GUI.WinForms.TextBoxes
                 TextAlignChanged?.Invoke();
             }
         }
+
         public VerticalTextBox()
         {
             TextAlignChanged += OnTextAlignChanged;

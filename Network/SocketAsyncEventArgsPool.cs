@@ -13,12 +13,18 @@ namespace Common_Library.Network
 
         public Int32 Count
         {
-            get { return _pool.Count; }
+            get
+            {
+                return _pool.Count;
+            }
         }
 
         public Boolean IsEmpty
         {
-            get { return _pool.IsEmpty; }
+            get
+            {
+                return _pool.IsEmpty;
+            }
         }
 
         public SocketAsyncEventArgsPool()

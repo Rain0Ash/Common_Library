@@ -13,7 +13,7 @@ namespace Common_Library.Comparers
             {
                 return -2;
             }
-            
+
             if (x.ToString().Length == y.ToString().Length)
             {
                 return String.CompareOrdinal(x.ToString(), y.ToString());

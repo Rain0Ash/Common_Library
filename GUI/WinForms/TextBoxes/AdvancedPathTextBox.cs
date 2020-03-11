@@ -16,6 +16,7 @@ namespace Common_Library.GUI.WinForms.TextBoxes
     {
         private event Handlers.BooleanHandler PathDialogButtonChanged;
         public readonly DialogButton PathDialogButton;
+
         public CommonOpenFileDialog PathDialog
         {
             get
@@ -36,12 +37,12 @@ namespace Common_Library.GUI.WinForms.TextBoxes
                 {
                     return;
                 }
-                
+
                 PathDialogButton.Enabled = value;
                 PathDialogButtonChanged?.Invoke(value);
             }
         }
-        
+
         private event Handlers.BooleanHandler PathFormatHelpButtonChanged;
         private readonly Button _pathFormatHelpButton;
 
@@ -57,7 +58,7 @@ namespace Common_Library.GUI.WinForms.TextBoxes
                 {
                     return;
                 }
-                
+
                 _pathFormatHelpButton.Enabled = value;
                 PathFormatHelpButtonChanged?.Invoke(value);
             }
@@ -66,6 +67,7 @@ namespace Common_Library.GUI.WinForms.TextBoxes
         private readonly Button _pathTypeChangeButton;
 
         private event Handlers.BooleanHandler PathTypeChangeButtonChanged;
+
         public Boolean PathTypeChangeButtonEnabled
         {
             get
@@ -78,7 +80,7 @@ namespace Common_Library.GUI.WinForms.TextBoxes
                 {
                     return;
                 }
-                
+
                 _pathTypeChangeButton.Enabled = value;
                 PathTypeChangeButtonChanged?.Invoke(value);
             }
@@ -86,7 +88,8 @@ namespace Common_Library.GUI.WinForms.TextBoxes
 
         public new event EventHandler TextChanged;
 
-        public override String Text {
+        public override String Text
+        {
             get
             {
                 return TextBox.Text;
@@ -126,7 +129,7 @@ namespace Common_Library.GUI.WinForms.TextBoxes
                 TextBox.PathType = value;
             }
         }
-        
+
         public Boolean LongPath
         {
             get
@@ -138,14 +141,12 @@ namespace Common_Library.GUI.WinForms.TextBoxes
                 TextBox.MaxLength = value ? 65535 : 255;
             }
         }
-        
+
         public event Handlers.StringHandler PathBeenSelected;
         public event Handlers.EnumerableHandler PathsBeenSelected;
 
         public event EventHandler FormatHelpButtonClicked;
 
-        
-        
 
         public String PathTypeChangeToolTip
         {
@@ -178,6 +179,7 @@ namespace Common_Library.GUI.WinForms.TextBoxes
         }
 
         private String _pathTypeChangeToAbsoluteToolTip;
+
         public String PathTypeChangeToAbsoluteToolTip
         {
             get
@@ -220,9 +222,7 @@ namespace Common_Library.GUI.WinForms.TextBoxes
             }
         }
 
-        
 
-        
         public AdvancedPathTextBox()
             : base(new FormatPathTextBox
             {
@@ -261,7 +261,7 @@ namespace Common_Library.GUI.WinForms.TextBoxes
             FormatHelpButtonClicked += OnFormatHelpButton_Click;
 
             PathTypeChangeToolTipChanged += OnPathTextBoxTextChanged;
-            
+
             OnPathTextBoxTextChanged();
 
             Controls.Add(TextBox);
@@ -269,7 +269,7 @@ namespace Common_Library.GUI.WinForms.TextBoxes
             Controls.Add(_pathFormatHelpButton);
             Controls.Add(PathDialogButton);
         }
-        
+
         public void UpdateAvailableFormatingParts(IReflect type)
         {
             TextBox.UpdateAvailableFormatingParts(type);
@@ -291,7 +291,7 @@ namespace Common_Library.GUI.WinForms.TextBoxes
                                           GetType() != typeof(AdvancedPathTextBox) &&
                                           TextBox.AvailableFormatingParts != null && TextBox.AvailableFormatingParts.Any();
         }
-        
+
         protected virtual void OnFormatHelpButton_Click(Object sender, EventArgs e)
         {
             //override
@@ -305,11 +305,11 @@ namespace Common_Library.GUI.WinForms.TextBoxes
                 HelpToolTip.SetToolTip(_pathTypeChangeButton, PathTypeChangeToRelativeToolTip);
                 return;
             }
-            
+
             _pathTypeChangeButton.Text = @"A";
             HelpToolTip.SetToolTip(_pathTypeChangeButton, PathTypeChangeToAbsoluteToolTip);
         }
-        
+
         private void OnRelativeButtonClick()
         {
             String text = TextBox.Text;
@@ -318,7 +318,7 @@ namespace Common_Library.GUI.WinForms.TextBoxes
                 TextBox.Text = PathUtils.GetRelativePath(text) ?? text;
                 return;
             }
-            
+
             TextBox.Text = PathUtils.GetFullPath(text) ?? text;
         }
 
@@ -340,7 +340,7 @@ namespace Common_Library.GUI.WinForms.TextBoxes
             _pathTypeChangeButton.Size = new Size(PathTypeChangeButtonEnabled ? buttonHeightSize : 0, buttonHeightSize);
             PathDialogButton.Size = new Size(PathDialogButtonEnabled ? buttonHeightSize : 0, buttonHeightSize);
             _pathFormatHelpButton.Size = new Size(PathFormatHelpButtonEnabled ? buttonHeightSize : 0, buttonHeightSize);
-            
+
             Int32 imageHeightSize = Math.Max(buttonHeightSize / 2, 1);
             _pathFormatHelpButton.Image = new Bitmap(Images.Images.Basic.Question, new Size(imageHeightSize, imageHeightSize));
             TextBox.Size = new Size(
@@ -351,7 +351,8 @@ namespace Common_Library.GUI.WinForms.TextBoxes
             Int32 buttonHeightLocation = (Size.Height - buttonHeightSize) / 2;
             _pathTypeChangeButton.Location = new Point(0, buttonHeightLocation);
             _pathFormatHelpButton.Location = new Point(_pathTypeChangeButton.Size.Width + TextBox.Size.Width + 1, buttonHeightLocation);
-            PathDialogButton.Location = new Point(_pathTypeChangeButton.Size.Width + TextBox.Size.Width + _pathFormatHelpButton.Size.Width, buttonHeightLocation);
+            PathDialogButton.Location = new Point(_pathTypeChangeButton.Size.Width + TextBox.Size.Width + _pathFormatHelpButton.Size.Width,
+                buttonHeightLocation);
         }
     }
 }

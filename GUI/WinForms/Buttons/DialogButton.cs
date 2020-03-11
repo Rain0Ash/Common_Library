@@ -19,7 +19,7 @@ namespace Common_Library.GUI.WinForms.Buttons
         public event Handlers.EnumerableHandler PathsBeenSelected;
 
         public Boolean AddSeparatorToPickedFolder { get; set; } = true;
-        
+
         private CommonOpenFileDialog _openFileDialog;
 
         public CommonOpenFileDialog OpenFileDialog
@@ -43,7 +43,7 @@ namespace Common_Library.GUI.WinForms.Buttons
             : this(null)
         {
         }
-        
+
         public DialogButton(Control control)
         {
             OpenFileDialog = new CommonOpenFileDialog
@@ -51,7 +51,7 @@ namespace Common_Library.GUI.WinForms.Buttons
                 Multiselect = false,
                 IsFolderPicker = true,
             };
-            
+
             _linkedControl = control;
             Text = @"...";
             TextAlign = ContentAlignment.MiddleCenter;
@@ -74,7 +74,7 @@ namespace Common_Library.GUI.WinForms.Buttons
 
             return Directory.Exists(OpenFileDialog.InitialDirectory) ? OpenFileDialog.InitialDirectory : Directory.GetCurrentDirectory();
         }
-        
+
         protected override void OnClick(EventArgs e)
         {
             base.OnClick(e);
@@ -86,10 +86,12 @@ namespace Common_Library.GUI.WinForms.Buttons
             }
 
             Boolean addSeparator = OpenFileDialog.IsFolderPicker && AddSeparatorToPickedFolder;
-            
+
             if (OpenFileDialog.Multiselect)
             {
-                PathsBeenSelected?.Invoke(addSeparator ? OpenFileDialog.FileNames.Select(PathUtils.ConvertToFolder) : OpenFileDialog.FileNames);
+                PathsBeenSelected?.Invoke(addSeparator
+                    ? OpenFileDialog.FileNames.Select(PathUtils.ConvertToFolder)
+                    : OpenFileDialog.FileNames);
             }
             else
             {

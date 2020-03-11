@@ -14,11 +14,11 @@ namespace Common_Library.GUI.WinForms.ListBoxes
         {
             ItemsChanged += CheckValidFormatColor;
         }
-        
+
         protected virtual void CheckValidFormatColor()
         {
             SuspendLayout();
-            
+
             foreach (Object item in Items)
             {
                 if (!CheckValidFormatItem(item))
@@ -26,10 +26,10 @@ namespace Common_Library.GUI.WinForms.ListBoxes
                     SetColor(item, Brushes.Coral);
                     continue;
                 }
-                
+
                 RemoveColor(item);
             }
-            
+
             ResumeLayout(false);
             PerformLayout();
         }
@@ -43,7 +43,7 @@ namespace Common_Library.GUI.WinForms.ListBoxes
         {
             return CheckValidFormatItem(Items[index]);
         }
-        
+
         public Boolean CheckValidFormat()
         {
             return Items.OfType<Object>().All(CheckValidFormatItem);

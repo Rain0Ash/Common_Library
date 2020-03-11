@@ -15,12 +15,24 @@ namespace Common_Library.Colorful
         /// <summary>
         /// The object to be styled.
         /// </summary>
-        public Object Target => _backingClass.Target;
+        public Object Target
+        {
+            get
+            {
+                return _backingClass.Target;
+            }
+        }
 
         /// <summary>
         /// The color to be applied to the target.
         /// </summary>
-        public Color Color => _backingClass.Color;
+        public Color Color
+        {
+            get
+            {
+                return _backingClass.Color;
+            }
+        }
 
         private readonly StyleClass<Object> _backingClass;
 

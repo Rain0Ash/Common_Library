@@ -12,7 +12,7 @@ namespace Common_Library.Utils
         {
             return collection.TryGetValue(index, out T value) ? value : defaultValue;
         }
-        
+
         public static Boolean TryGetValue<T>(this IReadOnlyList<T> collection, Int32 index, out T value)
         {
             if (collection.InBounds(index))
@@ -24,14 +24,14 @@ namespace Common_Library.Utils
             value = default;
             return false;
         }
-        
+
         public static void Swap<T>(ref List<T> source, Int32 inx1, Int32 inx2)
         {
             T temp = source[inx1];
             source[inx1] = source[inx2];
             source[inx2] = temp;
         }
-        
+
         public static void Swap<T>(ref IList<T> source, Int32 inx1, Int32 inx2)
         {
             T temp = source[inx1];

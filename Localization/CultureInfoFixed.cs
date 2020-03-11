@@ -39,9 +39,9 @@ namespace Common_Library.Localization
         {
             get
             {
-                return _image ?? 
-                       (Image)(FlagsImages.ResourceManager.GetObject(TwoLetterISOLanguageName) ?? 
-                               FlagsImages.ResourceManager.GetObject($"_{TwoLetterISOLanguageName}")) ?? Images.Images.Basic.Null;
+                return _image ??
+                       (Image) (FlagsImages.ResourceManager.GetObject(TwoLetterISOLanguageName) ??
+                                FlagsImages.ResourceManager.GetObject($"_{TwoLetterISOLanguageName}")) ?? Images.Images.Basic.Null;
             }
             set
             {
@@ -66,12 +66,12 @@ namespace Common_Library.Localization
             : base(lcid, useUserOverride)
         {
         }
-        
+
         public CultureInfoFixed([NotNull] String name)
             : base(name)
         {
         }
-        
+
         public CultureInfoFixed([NotNull] String name, Boolean useUserOverride)
             : base(name, useUserOverride)
         {

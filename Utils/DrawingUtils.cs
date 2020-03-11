@@ -12,17 +12,17 @@ namespace Common_Library.Utils
         {
             g.DrawEllipse(pen, x, y, d, d);
         }
-        
+
         public static void DrawCircle(this Graphics g, Pen pen, Int32 x, Int32 y, Int32 d)
         {
             g.DrawEllipse(pen, x, y, d, d);
         }
-        
+
         public static void FillCircle(this Graphics g, Brush brush, Single x, Single y, Single d)
         {
             g.FillEllipse(brush, x, y, d, d);
         }
-        
+
         public static void FillCircle(this Graphics g, Brush brush, Int32 x, Int32 y, Int32 d)
         {
             g.FillEllipse(brush, x, y, d, d);

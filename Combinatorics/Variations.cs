@@ -375,7 +375,10 @@ namespace Common_Library.Combinatorics
         /// </summary>
         public Int32 UpperIndex
         {
-            get { return _values.Count; }
+            get
+            {
+                return _values.Count;
+            }
         }
 
         /// <summary>

@@ -14,7 +14,7 @@ namespace Common_Library.Attributes
     public class FormatedField : Attribute
     {
         public readonly Boolean Uniqueness;
-        
+
         private readonly OrderedSet<String> _linkedNames = new OrderedSet<String>();
 
         public String[] LinkedNames
@@ -25,9 +25,9 @@ namespace Common_Library.Attributes
                 return array;
             }
         }
-        
+
         private readonly OrderedSet<String> _attributes = new OrderedSet<String>();
-        
+
         public String[] Attributes
         {
             get
@@ -38,7 +38,7 @@ namespace Common_Library.Attributes
         }
 
         public FormatedField([CallerMemberName] String linkedName = null, Boolean uniqueness = false)
-            : this(new []{linkedName ?? throw new NullReferenceException()}, uniqueness)
+            : this(new[] {linkedName ?? throw new NullReferenceException()}, uniqueness)
         {
         }
 
@@ -46,7 +46,7 @@ namespace Common_Library.Attributes
         public FormatedField(String[] linkedNames, Boolean uniqueness = false)
         {
             Initialize(linkedNames);
-            
+
             Uniqueness = uniqueness;
         }
 
@@ -55,11 +55,11 @@ namespace Common_Library.Attributes
             foreach (String name in linkedNames)
             {
                 String[] names = name.Split(':');
-                
+
                 for (Int32 i = 0; i < names.Length; i++)
                 {
                     String str = names[i];
-                    
+
                     if (i == 0)
                     {
                         if (str.Length == 0)
@@ -85,7 +85,7 @@ namespace Common_Library.Attributes
             {
                 return String.Empty;
             }
-            
+
             try
             {
                 Dictionary<String, Object> replaceDictionary = new Dictionary<String, Object>();
@@ -102,12 +102,12 @@ namespace Common_Library.Attributes
                             String value = fieldValue is IEnumerable<Object> enumerable
                                 ? String.Join(enumerableSeparator, enumerable)
                                 : fieldValue.ToString();
-                            
+
                             if (String.IsNullOrEmpty(value))
                             {
                                 continue;
                             }
-                            
+
                             replaceDictionary[linkedName] = value;
                         }
                     }

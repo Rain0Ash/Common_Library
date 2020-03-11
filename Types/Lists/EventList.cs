@@ -15,24 +15,24 @@ namespace System.Collections.Generic
         public event Handlers.RTypeHandler<T> OnRemove;
         public event Handlers.RTypeHandler<T> OnChange;
 
-        public event Handlers.IndexRTypeHandler<T> OnChangeIndex; 
+        public event Handlers.IndexRTypeHandler<T> OnChangeIndex;
         public event Handlers.EmptyHandler OnClear;
         public event Handlers.EmptyHandler ItemsChanged;
 
         public EventList()
         {
         }
-        
+
         public EventList(IEnumerable<T> collection)
             : base(collection)
         {
         }
-        
+
         public EventList(Int32 capacity)
             : base(capacity)
         {
         }
-        
+
         public new void Add(T item)
         {
             base.Add(item);
@@ -51,7 +51,7 @@ namespace System.Collections.Generic
             OnRemove?.Invoke(ref item);
             ItemsChanged?.Invoke();
         }
-        
+
         public new void RemoveAt(Int32 index)
         {
             T item = this[index];

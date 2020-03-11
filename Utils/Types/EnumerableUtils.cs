@@ -9,18 +9,19 @@ namespace Common_Library.Utils
 {
     public static class EnumerableUtils
     {
-        public static IEnumerable<T> AggregateAdd<T>(this IEnumerable<T> source, Func<T, T, T> aggregateFunc, Func<T, T> addFunc, Boolean prepend = false)
+        public static IEnumerable<T> AggregateAdd<T>(this IEnumerable<T> source, Func<T, T, T> aggregateFunc, Func<T, T> addFunc,
+            Boolean prepend = false)
         {
             source = source.ToList();
 
             T value = addFunc(source.Aggregate(aggregateFunc));
-            
+
             return prepend ? source.Prepend(value) : source.Append(value);
         }
 
         public static IEnumerable<TOut> SelectWhere<T, TOut>(this IEnumerable<T> source, Func<T, (Boolean, TOut)> func)
         {
-            foreach(T item in source)
+            foreach (T item in source)
             {
                 (Boolean ok, TOut output) = func(item);
 
@@ -30,17 +31,17 @@ namespace Common_Library.Utils
                 }
             }
         }
-        
+
         public static T AsDefault<T>(this T value, T alternate)
         {
             return value.Equals(default(T)) ? alternate : value;
         }
-        
+
         public static T FirstOr<T>(this IEnumerable<T> source, T alternate)
         {
             return FirstOr(source, item => true, alternate);
         }
-        
+
         public static T FirstOr<T>(this IEnumerable<T> source, Func<T, Boolean> predicate, T alternate)
         {
             foreach (T item in source)
@@ -50,10 +51,10 @@ namespace Common_Library.Utils
                     return item;
                 }
             }
-            
+
             return alternate;
         }
-        
+
         public static IEnumerable<T> Replace<T>(this IEnumerable<T> source, T oldValue, T newValue, IEqualityComparer<T> comparer = null)
         {
             comparer ??= EqualityComparer<T>.Default;

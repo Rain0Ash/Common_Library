@@ -12,7 +12,7 @@ namespace Common_Library.GUI.WinForms.Forms
             base.OnLoad(e);
             CenterTo();
         }
-        
+
         protected virtual void CenterTo()
         {
             CenterToScreen();

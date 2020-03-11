@@ -29,6 +29,7 @@ namespace Common_Library.GUI.WinForms.Labels
                 ValueChanged?.Invoke();
             }
         }
+
         public String SecondString
         {
             get
@@ -46,6 +47,7 @@ namespace Common_Library.GUI.WinForms.Labels
                 ValueChanged?.Invoke();
             }
         }
+
         public String Separator
         {
             get

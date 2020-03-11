@@ -5,6 +5,7 @@ using System;
 using System.Globalization;
 using System.Linq;
 using Common_Library.Utils;
+
 // ReSharper disable MemberCanBePrivate.Global
 
 namespace Common_Library.GUI.WinForms.Labels
@@ -12,8 +13,9 @@ namespace Common_Library.GUI.WinForms.Labels
     public class CurrentMaxValueLabel : AdditionalsLabel
     {
         private event Handlers.EmptyHandler ValueChanged;
-        
+
         private Int32 _currentValue;
+
         public Int32 CurrentValue
         {
             get
@@ -32,8 +34,9 @@ namespace Common_Library.GUI.WinForms.Labels
                 ValueChanged?.Invoke();
             }
         }
-        
+
         private Int32 _maximumValue = 100;
+
         public Int32 MaximumValue
         {
             get
@@ -51,8 +54,9 @@ namespace Common_Library.GUI.WinForms.Labels
                 ValueChanged?.Invoke();
             }
         }
-        
+
         private String _separator = "\\";
+
         public String Separator
         {
             get
@@ -85,7 +89,7 @@ namespace Common_Library.GUI.WinForms.Labels
         {
             CurrentValue = MathUtils.Range(CurrentValue + Step, 0, MaximumValue, Loop);
         }
-        
+
         public CurrentMaxValueLabel()
         {
             ValueChanged += Display;
@@ -94,9 +98,11 @@ namespace Common_Library.GUI.WinForms.Labels
         protected virtual void Display()
         {
             String value = $"{CurrentValue}{Separator}{MaximumValue}";
-            Double percent = MathUtils.Round((Double) CurrentValue / MathUtils.ZeroCheck(MaximumValue) * 100, PercentFractionalCount, RoundType);
+            Double percent = MathUtils.Round((Double) CurrentValue / MathUtils.ZeroCheck(MaximumValue) * 100, PercentFractionalCount,
+                RoundType);
             Int32 digits = MathUtils.GetDigitsAfterPoint(percent);
-            String additionalZeros = $"{(FixedDecimalNumber ? (digits == 0 ? "." : String.Empty) + String.Concat(Enumerable.Repeat("0", PercentFractionalCount - digits)) : String.Empty)}";
+            String additionalZeros =
+                $"{(FixedDecimalNumber ? (digits == 0 ? "." : String.Empty) + String.Concat(Enumerable.Repeat("0", PercentFractionalCount - digits)) : String.Empty)}";
             String percentString = $"{percent.ToString(CultureInfo.InvariantCulture)}{additionalZeros}%";
             String text = DisplayType switch
             {

@@ -35,14 +35,14 @@ namespace Common_Library.GUI.WinForms.Labels
             ScaleFontChanged += Scale;
             TextChanged += (sender, args) => Scale();
         }
-        
+
         private void Scale()
         {
             if (!ScaleFont)
             {
                 return;
             }
-            
+
             SizeF extent = TextRenderer.MeasureText(Text, Font);
 
             Single hRatio = Height / extent.Height;

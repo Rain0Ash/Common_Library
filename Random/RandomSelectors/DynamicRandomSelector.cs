@@ -4,8 +4,8 @@
 using System.Collections.Generic;
 using System;
 
-namespace Common_Library.Random {
-
+namespace Common_Library.Random
+{
     /// <summary>
     /// DynamicRandomSelector allows you adding or removing items.
     /// Call "Build" after you finished modification.
@@ -13,14 +13,15 @@ namespace Common_Library.Random {
     /// depending on count of items, making it more performant for general use case.
     /// </summary>
     /// <typeparam name="T">Type of items you wish this selector returns</typeparam>
-    public class DynamicRandomSelector<T> : IRandomSelector<T>, IRandomSelectorBuilder<T> {
+    public class DynamicRandomSelector<T> : IRandomSelector<T>, IRandomSelectorBuilder<T>
+    {
         private System.Random _random;
-        
+
         // internal buffers
         private readonly List<T> _itemsList;
         private readonly List<Single> _weightsList;
         private readonly List<Single> _cdl; // Cummulative Distribution List
-        
+
         // internal function that gets dynamically swapped inside Build
         private Func<List<Single>, Single, Int32> _selectFunction;
 
@@ -29,13 +30,13 @@ namespace Common_Library.Random {
         /// </summary>
         /// <param name="seed">Leave it -1 if you want seed to be randomly picked</param>
         /// <param name="expectedNumberOfItems">Set this if you know how much items the collection will hold, to minimize Garbage Collection</param>
-        public DynamicRandomSelector(Int32 seed = -1, Int32 expectedNumberOfItems = 32) {
-        
+        public DynamicRandomSelector(Int32 seed = -1, Int32 expectedNumberOfItems = 32)
+        {
             _random = seed == -1 ? new System.Random() : new System.Random(seed);
 
-            _itemsList   = new List<T>(expectedNumberOfItems);
+            _itemsList = new List<T>(expectedNumberOfItems);
             _weightsList = new List<Single>(expectedNumberOfItems);
-            _cdl         = new List<Single>(expectedNumberOfItems);
+            _cdl = new List<Single>(expectedNumberOfItems);
         }
 
         /// <summary>
@@ -45,9 +46,10 @@ namespace Common_Library.Random {
         /// <param name="weights">Un-normalized weights/chances of items, should be same length as items array</param>
         /// /// <param name="seed">Leave it -1 if you want seed to be randomly picked</param>
         /// <param name="expectedNumberOfItems">Set this if you know how much items the collection will hold, to minimize Garbage Collection</param>
-        public DynamicRandomSelector(IReadOnlyList<T> items, IReadOnlyList<Single> weights, Int32 seed = -1, Int32 expectedNumberOfItems = 32)
-            : this(seed, expectedNumberOfItems) {
-
+        public DynamicRandomSelector(IReadOnlyList<T> items, IReadOnlyList<Single> weights, Int32 seed = -1,
+            Int32 expectedNumberOfItems = 32)
+            : this(seed, expectedNumberOfItems)
+        {
             for (Int32 i = 0; i < items.Count; i++)
             {
                 Add(items[i], weights[i]);
@@ -55,12 +57,12 @@ namespace Common_Library.Random {
 
             Build();
         }
-        
+
         /// <summary>
         /// Clears internal buffers, should make no garbage (unless internal lists hold objects that aren't referenced anywhere else)
         /// </summary>
-        public void Clear() {
-
+        public void Clear()
+        {
             _itemsList.Clear();
             _weightsList.Clear();
             _cdl.Clear();
@@ -73,8 +75,8 @@ namespace Common_Library.Random {
         /// </summary>
         /// <param name="item">Item that will be returned on random selection</param>
         /// <param name="weight">Non-zero non-normalized weight</param>
-        public void Add(T item, Single weight) {
-
+        public void Add(T item, Single weight)
+        {
             // ignore zero weight items
             if (Math.Abs(weight) < Single.Epsilon)
             {
@@ -84,14 +86,14 @@ namespace Common_Library.Random {
             _itemsList.Add(item);
             _weightsList.Add(weight);
         }
-        
+
         /// <summary>
         /// Remove existing item with weight into collection.
         /// Be sure to call Build() after you are done removing items.
         /// </summary>
         /// <param name="item">Item that will be removed out of collection, if found</param>
-        public void Remove(T item) {
-
+        public void Remove(T item)
+        {
             Int32 index = _itemsList.IndexOf(item);
 
             // nothing was found
@@ -104,7 +106,7 @@ namespace Common_Library.Random {
             _weightsList.RemoveAt(index);
             // no need to remove from CDL, should be rebuilt instead
         }
-        
+
         /// <summary>
         /// Re/Builds internal CDL (Cummulative Distribution List)
         /// Must be called after modifying (calling Add or Remove), or it will break. 
@@ -113,32 +115,34 @@ namespace Common_Library.Random {
         /// </summary>
         /// <param name="seed">You can specify seed for internal random gen or leave it alone</param>
         /// <returns>Returns itself</returns>
-        public IRandomSelector<T> Build(Int32 seed = -1) {
-
+        public IRandomSelector<T> Build(Int32 seed = -1)
+        {
             if (_itemsList.Count == 0)
             {
                 throw new Exception("Cannot build with no items.");
             }
 
             // clear list and then transfer weights
-            _cdl.Clear();           
+            _cdl.Clear();
             foreach (Single weight in _weightsList)
             {
                 _cdl.Add(weight);
             }
 
             RandomMath.BuildCumulativeDistribution(_cdl);
-            
+
             // default behavior
             // if seed wasn't specified (it is seed==-1), keep same seed - avoids garbage collection from making new random
-            if(seed != -1) {
-            
+            if (seed != -1)
+            {
                 // input -2 if you want to randomize seed
-                if(seed == -2) {
+                if (seed == -2)
+                {
                     seed = _random.Next();
                     _random = new System.Random(seed);
                 }
-                else {
+                else
+                {
                     _random = new System.Random(seed);
                 }
             }
@@ -163,8 +167,9 @@ namespace Common_Library.Random {
         /// </summary>
         /// <param name="randomValue">Random value from your uniform generator</param>
         /// <returns>Returns item</returns>
-        public T SelectRandomItem(Single randomValue) {
-            return _itemsList[ _selectFunction(_cdl, randomValue) ];
+        public T SelectRandomItem(Single randomValue)
+        {
+            return _itemsList[_selectFunction(_cdl, randomValue)];
         }
 
         /// <summary>
@@ -172,9 +177,10 @@ namespace Common_Library.Random {
         /// Uses linear search or binary search, depending on internal list size.
         /// </summary>
         /// <returns>Returns item</returns>
-        public T SelectRandomItem() {
+        public T SelectRandomItem()
+        {
             Single randomValue = (Single) _random.NextDouble();
-            return _itemsList[ _selectFunction(_cdl, randomValue) ];
+            return _itemsList[_selectFunction(_cdl, randomValue)];
         }
     }
 }

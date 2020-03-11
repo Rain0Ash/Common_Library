@@ -45,7 +45,7 @@ namespace Common_Library.GUI.WinForms.TextBoxes
                     {
                         return;
                     }
-                    
+
                     base.WndProc(ref m);
                     return;
                 case 0x301:
@@ -53,7 +53,7 @@ namespace Common_Library.GUI.WinForms.TextBoxes
                     {
                         return;
                     }
-                    
+
                     base.WndProc(ref m);
                     return;
                 case 0x302:
@@ -63,12 +63,12 @@ namespace Common_Library.GUI.WinForms.TextBoxes
                     }
 
                     IEnumerable<Char> allowedChar = Clipboard.GetText().Where(IsAllowedChar);
-                
+
                     if (MaxLength > 0)
                     {
                         allowedChar = allowedChar.Take(MaxLength - Text.Length + SelectedText.Length);
                     }
-                
+
                     SelectedText = String.Join(String.Empty, allowedChar);
 
                     return;
@@ -90,7 +90,7 @@ namespace Common_Library.GUI.WinForms.TextBoxes
                 Replace(keyValue.Key, keyValue.Value);
             }
         }
-        
+
         public void Replace(Dictionary<Regex, String> replaceDictionary)
         {
             foreach (KeyValuePair<Regex, String> keyValuePair in replaceDictionary)
@@ -98,8 +98,9 @@ namespace Common_Library.GUI.WinForms.TextBoxes
                 Replace(keyValuePair.Key, keyValuePair.Value);
             }
         }
-        
-        public void Replace(String pattern, String replacement, Int32 count = -1, Boolean isRegexPattern = false, RegexOptions options = RegexOptions.None)
+
+        public void Replace(String pattern, String replacement, Int32 count = -1, Boolean isRegexPattern = false,
+            RegexOptions options = RegexOptions.None)
         {
             Replace(new Regex(isRegexPattern ? pattern : $"({pattern})", options), replacement, count);
         }

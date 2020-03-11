@@ -7,7 +7,7 @@ namespace Common_Library.Types
 {
     public class LazySingleton<T> where T : LazySingleton<T>, new()
     {
-        private static readonly Lazy<LazySingleton<T>> Lazy = 
+        private static readonly Lazy<LazySingleton<T>> Lazy =
             new Lazy<LazySingleton<T>>(() => new LazySingleton<T>());
 
         public static LazySingleton<T> GetInstance()

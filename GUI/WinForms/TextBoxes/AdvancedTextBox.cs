@@ -8,11 +8,12 @@ using Common_Library.GUI.WinForms.ToolTips;
 
 namespace Common_Library.GUI.WinForms.TextBoxes
 {
-    public class AdvancedTextBox <T> : LocalizationControl where T : TextBox
+    public class AdvancedTextBox<T> : LocalizationControl where T : TextBox
     {
         public T TextBox { get; }
-        
+
         public new event EventHandler TextChanged;
+
         public override String Text
         {
             get
@@ -32,7 +33,7 @@ namespace Common_Library.GUI.WinForms.TextBoxes
         }
 
         protected HelpToolTip HelpToolTip { get; }
-        
+
         public AdvancedTextBox(T textBox)
         {
             AutoSize = false;

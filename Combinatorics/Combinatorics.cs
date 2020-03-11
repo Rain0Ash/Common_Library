@@ -9,7 +9,7 @@ namespace Common_Library.Combinatorics
         {
             Permutations,
             PermutationsWithRepetition,
-            
+
             Combinations,
             CombinationsWithRepetition,
 

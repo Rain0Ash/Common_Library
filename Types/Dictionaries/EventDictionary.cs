@@ -7,7 +7,7 @@ using Common_Library.Types.Interfaces;
 
 namespace System.Collections.Generic
 {
-    public class EventDictionary<TKey,TValue> : Dictionary<TKey, TValue>, IEventDictionary<TKey, TValue>
+    public class EventDictionary<TKey, TValue> : Dictionary<TKey, TValue>, IEventDictionary<TKey, TValue>
     {
         public event Handlers.TypeKeyValueHandler<TKey, TValue> OnAdd;
         public event Handlers.TypeKeyValueHandler<TKey, TValue> OnSet;
@@ -64,23 +64,23 @@ namespace System.Collections.Generic
             set
             {
                 Boolean succesfull = TryGetValue(key, out TValue val);
-                
+
                 if (succesfull && val?.Equals(value) == true)
                 {
                     return;
                 }
-                
+
                 base[key] = value;
-                
+
                 if (succesfull)
                 {
                     OnChange?.Invoke(key, value);
                 }
                 else
                 {
-                    OnAdd?.Invoke(key, value); 
+                    OnAdd?.Invoke(key, value);
                 }
-                
+
                 OnSet?.Invoke(key, value);
                 ItemsChanged?.Invoke();
             }

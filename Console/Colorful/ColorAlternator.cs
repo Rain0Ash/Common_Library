@@ -23,7 +23,7 @@ namespace Common_Library.Colorful
         /// </summary>
         public ColorAlternator()
         {
-            Colors = new Color[]{};
+            Colors = new Color[] { };
         }
 
         /// <summary>

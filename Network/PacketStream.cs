@@ -22,26 +22,23 @@ namespace Common_Library.Network
     /// </summary>
     public class PacketStream : ICloneable, IComparable
     {
-        
-
         private const Int32 DefaultSize = 128;
-
-        
-
-        
-
         public Byte[] Buffer { get; private set; }
 
         public Int32 Count { get; private set; }
 
         public Int32 Capacity
         {
-            get { return Buffer.Length; }
+            get
+            {
+                return Buffer.Length;
+            }
         }
 
         public Int32 Pos { get; set; }
 
         public Boolean IsLittleEndian { get; set; }
+
         public Boolean HasBytes
         {
             get
@@ -66,14 +63,16 @@ namespace Common_Library.Network
             }
         }
 
-        
-
-        
-
         public Byte this[Int32 index]
         {
-            set { Buffer[index] = value; }
-            get { return Buffer[index]; }
+            set
+            {
+                Buffer[index] = value;
+            }
+            get
+            {
+                return Buffer[index];
+            }
         }
 
         public static explicit operator PacketStream(Byte[] o)
@@ -86,11 +85,9 @@ namespace Common_Library.Network
             return o.GetBytes();
         }
 
-        
 
-        
-
-        public PacketStream() : this(DefaultSize)
+        public PacketStream()
+            : this(DefaultSize)
         {
         }
 
@@ -124,9 +121,6 @@ namespace Common_Library.Network
             Replace(sourcePacketStream, offset, count);
         }
 
-        
-
-        
 
         private static Byte[] Roundup(Int32 length)
         {
@@ -157,9 +151,6 @@ namespace Common_Library.Network
             }
         }
 
-        
-
-        
 
         /// <summary>
         /// Replace current PacketStream with provided one.
@@ -209,9 +200,6 @@ namespace Common_Library.Network
             return this;
         }
 
-        
-
-        
 
         /// <summary>
         /// Clears current stream.
@@ -224,9 +212,6 @@ namespace Common_Library.Network
             return this;
         }
 
-        
-
-        
 
         public PacketStream PushBack(Byte b)
         {
@@ -235,9 +220,6 @@ namespace Common_Library.Network
             return this;
         }
 
-        
-
-        
 
         public PacketStream Swap(PacketStream swapStream)
         {
@@ -251,9 +233,6 @@ namespace Common_Library.Network
             return this;
         }
 
-        
-
-        
 
         public void Rollback()
         {
@@ -265,9 +244,6 @@ namespace Common_Library.Network
             Pos -= len;
         }
 
-        
-
-        
 
         public PacketStream Erase(Int32 from)
         {
@@ -291,9 +267,6 @@ namespace Common_Library.Network
             return this;
         }
 
-        
-
-        
 
         public PacketStream Insert(Int32 offset, PacketStream copyStream)
         {
@@ -321,9 +294,6 @@ namespace Common_Library.Network
             return this;
         }
 
-        
-
-        
 
         public Byte[] GetBytes()
         {
@@ -332,9 +302,6 @@ namespace Common_Library.Network
             return temp;
         }
 
-        
-
-        
 
         public Boolean ReadBoolean()
         {
@@ -534,9 +501,6 @@ namespace Common_Library.Network
             return result;
         }
 
-        
-
-        
 
         public PacketStream ReadPacketStream()
         {
@@ -622,9 +586,6 @@ namespace Common_Library.Network
             return result;
         }
 
-        
-
-        
 
         public String ReadString()
         {
@@ -639,9 +600,6 @@ namespace Common_Library.Network
             return Encoding.UTF8.GetString(strBuf).Trim('\u0000');
         }
 
-        
-
-        
 
         public PacketStream Write(Boolean value)
         {
@@ -729,9 +687,6 @@ namespace Common_Library.Network
             return Write(Converter.GetBytes(value, 3));
         }
 
-        
-
-        
 
         public PacketStream Write(PacketMarshaler value)
         {
@@ -802,9 +757,6 @@ namespace Common_Library.Network
             return this;
         }
 
-        
-
-        
 
         public PacketStream Write(String value, Boolean appendSize = true, Boolean appendTerminator = false)
         {
@@ -812,18 +764,12 @@ namespace Common_Library.Network
             return Write(str, appendSize);
         }
 
-        
-
-        
 
         public override String ToString()
         {
             return BitConverter.ToString(GetBytes());
         }
 
-        
-
-        
 
         public Boolean Equals(PacketStream stream)
         {
@@ -858,18 +804,12 @@ namespace Common_Library.Network
             return Buffer.GetHashCode();
         }
 
-        
-
-        
 
         public Object Clone()
         {
             return new PacketStream(this);
         }
 
-        
-
-        
 
         public Int32 CompareTo(Object? obj)
         {
@@ -890,7 +830,5 @@ namespace Common_Library.Network
 
             return Count - stream.Count;
         }
-
-        
     }
 }

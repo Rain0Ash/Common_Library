@@ -40,7 +40,7 @@ namespace Common_Library.GUI.WinForms.ComboBoxes
         {
             SetLanguage(LocalizationBase.CurrentCulture.LCID);
         }
-        
+
         public void SetLanguage(Int32 lcid)
         {
             Int32 selectedIndex = LocalizationBase.GetLanguageOrderID(lcid);
@@ -64,7 +64,8 @@ namespace Common_Library.GUI.WinForms.ComboBoxes
 
         public Int32 GetLanguageLCID()
         {
-            return LocalizationBase.CultureByLCID.FirstOr(x => String.Equals(x.Value.CustomName, Text, StringComparison.CurrentCultureIgnoreCase), 
+            return LocalizationBase.CultureByLCID.FirstOr(
+                x => String.Equals(x.Value.CustomName, Text, StringComparison.CurrentCultureIgnoreCase),
                 new KeyValuePair<Int32, CultureInfoFixed>(LocalizationBase.DefaultCulture.LCID, LocalizationBase.DefaultCulture)).Key;
         }
 

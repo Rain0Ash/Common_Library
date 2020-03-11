@@ -34,7 +34,8 @@ namespace Common_Library.Colorful
         /// a given session.</param>
         /// <param name="initialColorChangeCountValue">The number of color changes which have already occurred.</param>
         /// <param name="isInCompatibilityMode"></param>
-        public ColorManager(ColorStore colorStore, ColorMapper colorMapper, Int32 maxColorChanges , Int32 initialColorChangeCountValue, Boolean isInCompatibilityMode)
+        public ColorManager(ColorStore colorStore, ColorMapper colorMapper, Int32 maxColorChanges, Int32 initialColorChangeCountValue,
+            Boolean isInCompatibilityMode)
         {
             _colorStore = colorStore;
             _colorMapper = colorMapper;
@@ -62,7 +63,11 @@ namespace Common_Library.Colorful
         public void ReplaceColor(Color oldColor, Color newColor)
         {
             // If the console exists and Common_Library.Colorful.Console is running on Windows.
-            if (IsInCompatibilityMode || !IsWindows()) return;
+            if (IsInCompatibilityMode || !IsWindows())
+            {
+                return;
+            }
+
             ConsoleColor consoleColor = _colorStore.Replace(oldColor, newColor);
             _colorMapper.MapColor(consoleColor, newColor);
         }
@@ -85,7 +90,7 @@ namespace Common_Library.Colorful
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
 #endif
-                    return GetConsoleColorNative(color);
+                return GetConsoleColorNative(color);
 
 #if NETSTANDARD2_0
                 }
@@ -127,7 +132,7 @@ namespace Common_Library.Colorful
         {
             if (CanChangeColor() && _colorStore.RequiresUpdate(color))
             {
-                ConsoleColor oldColor = (ConsoleColor)_colorChangeCount;
+                ConsoleColor oldColor = (ConsoleColor) _colorChangeCount;
 
                 _colorMapper.MapColor(oldColor, color);
                 _colorStore.Update(oldColor, color);

@@ -48,11 +48,14 @@ namespace Common_Library.Colorful
             }
 
             return Target.Equals(other.Target)
-                && Color == other.Color;
+                   && Color == other.Color;
         }
 
-        public override Boolean Equals(Object obj)=> Equals(obj as StyleClass<T>);
-        
+        public override Boolean Equals(Object obj)
+        {
+            return Equals(obj as StyleClass<T>);
+        }
+
         public override Int32 GetHashCode()
         {
             Int32 hash = 163;

@@ -34,6 +34,7 @@ namespace Common_Library.GUI.WinForms.ComboBoxes
             base.OnDrawItem(e);
         }
     }
+
     public sealed class DropDownItem
     {
         public CultureStringsBase Value { get; }

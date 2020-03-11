@@ -23,9 +23,12 @@ namespace Common_Library.Colorful
             foreach (ConsoleColor consoleColor in Enum.GetValues(typeof(ConsoleColor)))
             {
                 String consoleColorName = Enum.GetName(typeof(ConsoleColor), consoleColor);
-                consoleColorName = String.Equals(consoleColorName, nameof(ConsoleColor.DarkYellow), StringComparison.Ordinal) ? nameof(Color.Orange) : consoleColorName;
+                consoleColorName = String.Equals(consoleColorName, nameof(ConsoleColor.DarkYellow), StringComparison.Ordinal)
+                    ? nameof(Color.Orange)
+                    : consoleColorName;
                 Color rgbColor = Color.FromName(consoleColorName);
-                Double sum = Math.Pow(rgbColor.R - color.R, 2.0) + Math.Pow(rgbColor.G - color.G, 2.0) + Math.Pow(rgbColor.B - color.B, 2.0);
+                Double sum = Math.Pow(rgbColor.R - color.R, 2.0) + Math.Pow(rgbColor.G - color.G, 2.0) +
+                             Math.Pow(rgbColor.B - color.B, 2.0);
 
                 Double epsilon = 0.001;
                 if (sum < epsilon)

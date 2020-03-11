@@ -5,6 +5,5 @@ namespace Common_Library.GUI.WinForms.Labels
 {
     public class AdditionalsLabel : ScaledLabel
     {
-        
     }
 }

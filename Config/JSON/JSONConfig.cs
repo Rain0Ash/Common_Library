@@ -3,27 +3,18 @@
 
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
+using Common_Library.Config.RAM;
 using Common_Library.Utils;
-using JetBrains.Annotations;
 using Newtonsoft.Json;
 
-namespace Common_Library.Config
+namespace Common_Library.Config.JSON
 {
-    public class JSONConfig : Config
+    public class JSONConfig : RAMConfig
     {
-        [NotNull]
-        protected NestedDictionary<String, String> Config { get; set; }
-        
         public JSONConfig(String configPath = null, Boolean isReadOnly = true)
-            : base(PathUtils.IsValidFilePath(configPath) ? configPath : new LongPath.FileInfo($"{ConfigName}.json").FullName, isReadOnly)
-        {
-        }
-
-        protected override void Initialize()
+            : base(PathUtils.IsValidFilePath(configPath) ? configPath : new LongPath.FileInfo($"{DefaultName}.json").FullName, isReadOnly)
         {
             Config = ReadConfig();
-            MessageBox.Show(Config["API"].Value);
         }
 
         protected NestedDictionary<String, String> ReadConfig(String configPath = null)
@@ -38,30 +29,18 @@ namespace Common_Library.Config
                 return new NestedDictionary<String, String>();
             }
         }
-        
+
         protected void WriteConfig(String configPath = null)
         {
             String json = JsonConvert.SerializeObject(Config, Formatting.Indented);
             LongPath.File.WriteAllText(configPath ?? ConfigPath, json);
         }
 
-        protected override String this[String key, params String[] sections]
+        protected override void Set(String key, String value, params String[] sections)
         {
-            get
-            {
-                return Config[key].Value;
-            }
-            set
-            {
-                if (CheckReadOnly())
-                {
-                    return;
-                }
+            base.Set(key, value, sections);
 
-                Config[key].Value = value;
-                
-                WriteConfig();
-            }
+            WriteConfig();
         }
     }
 }

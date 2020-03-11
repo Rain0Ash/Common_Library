@@ -21,7 +21,7 @@ namespace Common_Library.Utils
                 return false;
             }
         }
-        
+
         public static T TryGetValue(IList<T> list, Int32 index, T defaultValue = default)
         {
             return TryGetValue(list, index, out T result) ? result : defaultValue;

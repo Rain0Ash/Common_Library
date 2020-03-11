@@ -13,12 +13,12 @@ namespace Common_Library.GUI.WinForms.TextBoxes
         {
             TextChanged += (sender, args) => CheckValidFormatColor();
         }
-        
+
         public virtual Boolean CheckValidFormat()
         {
             return true;
         }
-        
+
         protected virtual void CheckValidFormatColor()
         {
             BackColor = CheckValidFormat() ? Color.White : Color.Coral;

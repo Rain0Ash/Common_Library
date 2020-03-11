@@ -85,7 +85,7 @@ namespace Common_Library.Serialization
             XmlSerializer serializer = new XmlSerializer(typeof(T), new XmlRootAttribute(rootName));
             return (T) serializer.Deserialize(stream);
         }
-        
+
         /// <summary>
         /// Takes an XML file and exports the Object it holds
         /// </summary>

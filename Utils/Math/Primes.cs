@@ -8,10 +8,10 @@ namespace Common_Library.Utils
     public static partial class PrimeUtils
     {
         private static Int32[] PrimeCapacities { get; set; }
-        
+
         private static void Init()
         {
-            PrimeCapacities = new []
+            PrimeCapacities = new[]
             {
                 //chunk #0
                 LargestPrime,

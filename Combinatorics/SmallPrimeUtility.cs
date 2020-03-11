@@ -149,7 +149,10 @@ namespace Common_Library.Combinatorics
         /// </summary>
         public static IList<Int32> PrimeTable
         {
-            get { return primes; }
+            get
+            {
+                return primes;
+            }
         }
 
         private static List<Int32> primes = new List<Int32>();

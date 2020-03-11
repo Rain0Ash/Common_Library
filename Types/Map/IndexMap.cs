@@ -22,7 +22,7 @@ namespace Common_Library.Types.Map
                 return _orderList;
             }
         }
-        
+
         public IndexMap()
         {
             _orderList = new List<TKey>();
@@ -34,7 +34,8 @@ namespace Common_Library.Types.Map
             _orderList = new List<TKey>(dictionary.Keys);
         }
 
-        public IndexMap(IDictionary<TKey, TValue> dictionary, IEqualityComparer<TKey>? keyComparer, IEqualityComparer<TValue>? valueComparer)
+        public IndexMap(IDictionary<TKey, TValue> dictionary, IEqualityComparer<TKey>? keyComparer,
+            IEqualityComparer<TValue>? valueComparer)
             : base(dictionary, keyComparer, valueComparer)
         {
             _orderList = new List<TKey>(dictionary.Keys);
@@ -45,14 +46,15 @@ namespace Common_Library.Types.Map
         {
             _orderList = new List<TKey>();
         }
-        
+
         public IndexMap(IEnumerable<KeyValuePair<TKey, TValue>> collection)
             : base(collection)
         {
             _orderList = new List<TKey>(collection.Select(pair => pair.Key));
         }
 
-        public IndexMap(IEnumerable<KeyValuePair<TKey, TValue>> collection, IEqualityComparer<TKey>? keyComparer, IEqualityComparer<TValue>? valueComparer)
+        public IndexMap(IEnumerable<KeyValuePair<TKey, TValue>> collection, IEqualityComparer<TKey>? keyComparer,
+            IEqualityComparer<TValue>? valueComparer)
             : base(collection, keyComparer, valueComparer)
         {
             _orderList = new List<TKey>(collection.Select(pair => pair.Key));
@@ -69,7 +71,7 @@ namespace Common_Library.Types.Map
         {
             _orderList = new List<TKey>(capacity);
         }
-        
+
         protected IndexMap(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
@@ -80,7 +82,7 @@ namespace Common_Library.Types.Map
         {
             return this[GetReversedByIndex(index)];
         }
-        
+
         public TKey GetReversedByIndex(Int32 index)
         {
             return _orderList[index];
@@ -90,7 +92,7 @@ namespace Common_Library.Types.Map
         {
             return this.GetPair(GetReversedByIndex(index));
         }
-        
+
         public KeyValuePair<TValue, TKey> GetReversedPairByIndex(Int32 index)
         {
             return Reversed.GetPair(GetByIndex(index));
@@ -100,7 +102,7 @@ namespace Common_Library.Types.Map
         {
             return this.TryGetPair(GetReversedByIndex(index), out pair);
         }
-        
+
         public Boolean TryGetReversedPairByIndex(Int32 index, out KeyValuePair<TValue, TKey> pair)
         {
             return Reversed.TryGetPair(GetByIndex(index), out pair);
@@ -110,7 +112,7 @@ namespace Common_Library.Types.Map
         {
             return _orderList.IndexOf(key);
         }
-        
+
         public Int32 IndexOf(TValue key)
         {
             return IndexOf(Reversed[key]);
@@ -131,7 +133,7 @@ namespace Common_Library.Types.Map
             Add(key, value);
             _orderList.Insert(index, key);
         }
-        
+
         public void Insert(TValue key, TKey value)
         {
             Insert(0, key, value);
@@ -152,19 +154,19 @@ namespace Common_Library.Types.Map
         {
             return TryInsert(0, key, value);
         }
-        
+
         public Boolean TryInsert(Int32 index, TKey key, TValue value)
         {
             if (key == null)
             {
                 throw new ArgumentNullException(nameof(key));
             }
-            
+
             if (ContainsKey(key) || index < 0 || index >= _orderList.Count)
             {
                 return false;
             }
-            
+
             Insert(index, key, value);
             return true;
         }
@@ -173,7 +175,7 @@ namespace Common_Library.Types.Map
         {
             return TryInsert(0, key, value);
         }
-        
+
         public Boolean TryInsert(Int32 index, TValue key, TKey value)
         {
             return TryInsert(index, value, key);
@@ -189,33 +191,33 @@ namespace Common_Library.Types.Map
             base.Remove(key);
             _orderList.Remove(key);
         }
-        
+
         public new void Remove(TKey key, out TValue value)
         {
             base.Remove(key, out value);
             _orderList.Remove(key);
         }
-        
+
         public new void Remove(TValue key)
         {
             Remove(key, out _);
         }
-        
+
         public new void Remove(TValue key, out TKey value)
         {
             if (TryGetValue(key, out value))
             {
                 _orderList.Remove(value);
             }
-            
+
             base.Remove(key, out value);
         }
-        
+
         public void Reverse()
         {
             _orderList.Reverse();
         }
-        
+
         public void Reverse(Int32 index, Int32 count)
         {
             _orderList.Reverse(index, count);
@@ -225,22 +227,22 @@ namespace Common_Library.Types.Map
         {
             _orderList.Sort();
         }
-        
+
         public void Sort(Comparison<TKey> comparison)
         {
             _orderList.Sort(comparison);
         }
-        
+
         public void Sort(IComparer<TKey>? comparer)
         {
             _orderList.Sort(comparer);
         }
-        
+
         public void Sort(Int32 index, Int32 count, IComparer<TKey>? comparer)
         {
             _orderList.Sort(index, count, comparer);
         }
-        
+
         public new void Clear()
         {
             base.Clear();
@@ -259,7 +261,7 @@ namespace Common_Library.Types.Map
                 {
                     _orderList.Add(key);
                 }
-                
+
                 base[key] = value;
             }
         }

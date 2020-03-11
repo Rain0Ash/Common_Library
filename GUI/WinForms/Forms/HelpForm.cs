@@ -17,14 +17,14 @@ namespace System.Windows.Forms
                 OwnerDraw = true,
             };
         }
-        
+
         public void SetMessage(Control control, String message)
         {
             if (!Controls.Contains(control))
             {
                 return;
             }
-            
+
             _helpToolTip.SetToolTip(control, message);
         }
 

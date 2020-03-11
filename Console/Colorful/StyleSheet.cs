@@ -16,6 +16,7 @@ namespace Common_Library.Colorful
         /// The StyleSheet's collection of style classifications.
         /// </summary>
         public List<StyleClass<TextPattern>> Styles { get; private set; }
+
         /// <summary>
         /// The color to be associated with unstyled text.
         /// </summary>
@@ -54,7 +55,11 @@ namespace Common_Library.Colorful
         /// can be applied to the target.</param>
         public void AddStyle(String target, Color color, Styler.MatchFoundLite matchHandler)
         {
-            String Wrapper(String s, MatchLocation l, String m) => matchHandler.Invoke(m);
+            String Wrapper(String s, MatchLocation l, String m)
+            {
+                return matchHandler.Invoke(m);
+            }
+
             Styler styler = new Styler(target, color, Wrapper);
 
             Styles.Add(styler);
@@ -67,7 +72,11 @@ namespace Common_Library.Colorful
         /// <param name="color">The color to be applied to the target.</param>
         public void AddStyle(String target, Color color)
         {
-            String Handler(String s, MatchLocation l, String m) => m;
+            String Handler(String s, MatchLocation l, String m)
+            {
+                return m;
+            }
+
             Styler styler = new Styler(target, color, Handler);
 
             Styles.Add(styler);

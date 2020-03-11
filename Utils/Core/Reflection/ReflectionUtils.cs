@@ -14,7 +14,7 @@ namespace Common_Library.Utils
         {
             return GetTypesInNamespace(Assembly.GetEntryAssembly(), nameSpace);
         }
-        
+
         public static IEnumerable<Type> GetTypesInNamespace(Assembly assembly, String nameSpace)
         {
             return assembly.GetTypes().Where(type => String.Equals(type.Namespace, nameSpace, StringComparison.Ordinal)).ToArray();

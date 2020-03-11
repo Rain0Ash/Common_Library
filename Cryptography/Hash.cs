@@ -16,7 +16,7 @@ namespace Common_Library.Crypto
                 using SHA1 sha1 = new SHA1Managed();
                 return sha1.ComputeHash(data);
             }
-            
+
             public static String Sha1String(Byte[] data)
             {
                 return Sha1(data).ToByteString();
@@ -27,12 +27,12 @@ namespace Common_Library.Crypto
                 using SHA256 sha256 = new SHA256Managed();
                 return sha256.ComputeHash(data);
             }
-            
+
             public static String Sha256String(Byte[] data)
             {
                 return Sha256(data).ToByteString();
             }
-            
+
             public static Byte[] Sha384(Byte[] data)
             {
                 using SHA384 sha384 = new SHA384Managed();
@@ -49,7 +49,7 @@ namespace Common_Library.Crypto
                 using SHA512 sha512 = new SHA512Managed();
                 return sha512.ComputeHash(data);
             }
-            
+
             public static String Sha512String(Byte[] data)
             {
                 return Sha512(data).ToByteString();
@@ -60,18 +60,18 @@ namespace Common_Library.Crypto
                 using MD5 md5 = System.Security.Cryptography.MD5.Create();
                 return md5.ComputeHash(data);
             }
-            
+
             public static String MD5String(Byte[] data)
             {
                 return MD5(data).ToByteString();
             }
-            
+
             public static Byte Crc8(Byte[] data)
             {
                 Int32 size = data.Length;
                 return Crc8(data, size);
             }
-            
+
             public static Byte Crc8(Byte[] data, Int32 size)
             {
                 Int32 len = size;
@@ -82,7 +82,7 @@ namespace Common_Library.Crypto
                     checksum += data[i];
                 }
 
-                return (Byte)checksum;
+                return (Byte) checksum;
             }
         }
     }

@@ -25,7 +25,7 @@ namespace Common_Library.App
             OpenBeta,
             Release
         }
-        
+
         public enum Branch
         {
             Master,
@@ -53,7 +53,7 @@ namespace Common_Library.App
             [App.Status.OpenBeta] = "OB",
             [App.Status.Release] = "R",
         };
-        
+
         private static readonly IReadOnlyDictionary<App.Branch, String> BranchDictionary = new Dictionary<App.Branch, String>
         {
             [App.Branch.Master] = String.Empty,
@@ -66,22 +66,22 @@ namespace Common_Library.App
         {
             return first.CompareTo(second) == 0;
         }
-        
+
         public static Boolean operator !=(AppVersion first, AppVersion second)
         {
             return !(first == second);
         }
-        
+
         public static Boolean operator >(AppVersion first, AppVersion second)
         {
             return first.CompareTo(second) > 0;
         }
-        
+
         public static Boolean operator <(AppVersion first, AppVersion second)
         {
             return first.CompareTo(second) < 0;
         }
-        
+
         public static Boolean operator >=(AppVersion first, AppVersion second)
         {
             return first.CompareTo(second) >= 0;
@@ -95,7 +95,7 @@ namespace Common_Library.App
         public IComparable Version { get; }
 
         public App.Status Status { get; }
-        
+
         public App.Branch Branch { get; }
 
         public AppVersion(IComparable version, App.Status status = App.Status.Release, App.Branch branch = App.Branch.Master)
@@ -114,31 +114,31 @@ namespace Common_Library.App
         {
             return Convert.ToString(Version, CultureInfo.InvariantCulture);
         }
-        
+
         public String GetStatus()
         {
             return StatusDictionary[Status];
         }
-        
+
         public String GetBranch()
         {
             return BranchDictionary[Branch];
         }
-        
+
         public Int32 CompareTo(AppVersion other)
         {
             return CompareTo(other, false);
         }
-        
+
         public Int32 CompareTo(AppVersion other, Boolean versionFirst)
         {
             Int32 versionCompare = ComparerUtils.ToCompare(Version, other.Version, false) ?? 0;
-            
+
             if (versionFirst && versionCompare != 0)
             {
                 return versionCompare;
             }
-            
+
             if (Status != App.Status.None && other.Status != App.Status.None)
             {
                 return Status.CompareTo(other.Status);
@@ -154,7 +154,7 @@ namespace Common_Library.App
             String branch = GetBranch();
             return $"{version}:{status}{branch}";
         }
-        
+
         public Boolean Equals(AppVersion other)
         {
             return Version.Equals(other.Version) && Status == other.Status && Branch == other.Branch;

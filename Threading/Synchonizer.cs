@@ -6,12 +6,11 @@ using System.Collections.Generic;
 
 namespace Common_Library.Threading
 {
-        /// <summary>
+    /// <summary>
     /// Provides a way to lock a resource based on a value (such as an ID or path).
     /// </summary>
     public class Synchronizer<T>
     {
-
         private readonly Dictionary<T, SyncLock> _locks = new Dictionary<T, SyncLock>();
         private readonly Object _mLock = new Object();
 
@@ -53,7 +52,6 @@ namespace Common_Library.Threading
         public class SyncLock
             : IDisposable
         {
-
             /// <summary>
             /// This class should only be instantiated from the Synchronizer class.
             /// </summary>
@@ -82,8 +80,6 @@ namespace Common_Library.Threading
             /// Gets the synchronizer this lock was created from.
             /// </summary>
             private Synchronizer<T> Sync { get; set; }
-
         }
-
     }
 }

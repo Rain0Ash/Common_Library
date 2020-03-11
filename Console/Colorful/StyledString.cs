@@ -19,6 +19,7 @@ namespace Common_Library.Colorful
         /// The one-dimensional representation of the StyledString.  Maps 1:1 with System.String.
         /// </summary>
         public String AbstractValue { get; }
+
         /// <summary>
         /// The n-dimensional (n; 2, in this case) representation of the StyledString.  
         /// In the case of FIGlet fonts, for example, this would be the string's two-dimensional FIGlet representation.
@@ -67,11 +68,14 @@ namespace Common_Library.Colorful
             }
 
             return AbstractValue == other.AbstractValue
-                && ConcreteValue == other.ConcreteValue;
+                   && ConcreteValue == other.ConcreteValue;
         }
 
-        public override Boolean Equals(Object obj) => Equals(obj as StyledString);
-       
+        public override Boolean Equals(Object obj)
+        {
+            return Equals(obj as StyledString);
+        }
+
         // Does not take styling information into account...and it needs to be taken into account.
         public override Int32 GetHashCode()
         {
@@ -87,6 +91,9 @@ namespace Common_Library.Colorful
         /// Returns the StyledString's concrete representation.
         /// </summary>
         /// <returns></returns>
-        public override String ToString() => ConcreteValue;
+        public override String ToString()
+        {
+            return ConcreteValue;
+        }
     }
 }

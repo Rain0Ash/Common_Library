@@ -16,7 +16,7 @@ namespace Common_Library.GUI.WinForms.Controls
         public readonly EventQueueList<T> ControlsList;
 
         public event Handlers.EmptyHandler PositionChanged;
-        
+
         private TabAlignment _position = TabAlignment.Bottom;
 
         public TabAlignment Position
@@ -38,9 +38,9 @@ namespace Common_Library.GUI.WinForms.Controls
         }
 
         public event Handlers.EmptyHandler AligmentChanged;
-        
+
         private ContentAlignment _alignment = ContentAlignment.BottomLeft;
-        
+
         public ContentAlignment Alignment
         {
             get
@@ -66,22 +66,23 @@ namespace Common_Library.GUI.WinForms.Controls
         public readonly CurrentMaxValueLabel PageValueLabel;
 
         public Int32 ButtonHeight { get; set; } = 32;
+
         public PageControl()
         {
             ControlsList = new EventQueueList<T>();
-            
+
             Size size = new Size(100, ButtonHeight);
-            
+
             PreviousPageButton = new Button
             {
                 Size = size
             };
-            
+
             NextPageButton = new Button
             {
                 Size = size
             };
-            
+
             PageValueLabel = new CurrentMaxValueLabel
             {
                 TextAlign = ContentAlignment.MiddleCenter,
@@ -99,9 +100,10 @@ namespace Common_Library.GUI.WinForms.Controls
                     CurrentPage = MinimumPage;
                     return;
                 }
+
                 CurrentPage--;
             };
-            
+
             NextPageButton.Click += (sender, args) =>
             {
                 if (ModifierKeys == Keys.Shift)
@@ -119,11 +121,11 @@ namespace Common_Library.GUI.WinForms.Controls
             PositionChanged += SetSizeAndPosition;
             AligmentChanged += SetSizeAndPosition;
             ClientSizeChanged += (sender, args) => SetSizeAndPosition();
-            
+
             Controls.Add(PreviousPageButton);
             Controls.Add(NextPageButton);
             Controls.Add(PageValueLabel);
-            
+
             OnPageChanged();
         }
 
@@ -132,7 +134,7 @@ namespace Common_Library.GUI.WinForms.Controls
             Controls.Add(control);
             OnPageChanged();
         }
-        
+
         private void RemoveFromControls(ref T control)
         {
             Controls.Remove(control);
@@ -152,7 +154,7 @@ namespace Common_Library.GUI.WinForms.Controls
                 return ControlsList.Count;
             }
         }
-        
+
         public Int32 CurrentPage
         {
             get
@@ -184,7 +186,7 @@ namespace Common_Library.GUI.WinForms.Controls
                 ControlsList[MathUtils.Range(CurrentPage, MinimumPage, MaximumPage - 1)].Visible = true;
             }
         }
-        
+
         private void OnPageChanged()
         {
             PageValueLabel.MaximumValue = MaximumPage;
@@ -194,9 +196,10 @@ namespace Common_Library.GUI.WinForms.Controls
 
         protected virtual void SetLabelSize()
         {
-            PageValueLabel.Size = new Size((Int32) (TextRenderer.MeasureText(PageValueLabel.Text, PageValueLabel.Font).Width * 1.20), ButtonHeight);
+            PageValueLabel.Size = new Size((Int32) (TextRenderer.MeasureText(PageValueLabel.Text, PageValueLabel.Font).Width * 1.20),
+                ButtonHeight);
         }
-        
+
         protected virtual void SetSizeAndPosition()
         {
             InitializeButtons();
@@ -225,7 +228,8 @@ namespace Common_Library.GUI.WinForms.Controls
                     pageLabelLocationX = PreviousPageButton.Size.Width + NextPageButton.Size.Width;
                     break;
                 case ContentAlignment.TopCenter:
-                    previousPageLocationX = Size.Width - NextPageButton.Size.Width - PageValueLabel.Size.Width - PreviousPageButton.Size.Width;
+                    previousPageLocationX = Size.Width - NextPageButton.Size.Width - PageValueLabel.Size.Width -
+                                            PreviousPageButton.Size.Width;
                     pageLabelLocationX = Size.Width - NextPageButton.Size.Width - PageValueLabel.Size.Width;
                     nextPageLocationX = Size.Width - NextPageButton.Size.Width;
                     break;
@@ -235,14 +239,15 @@ namespace Common_Library.GUI.WinForms.Controls
                     nextPageLocationX = Size.Width - NextPageButton.Size.Width;
                     break;
                 case ContentAlignment.TopRight:
-                    previousPageLocationX = Size.Width - PageValueLabel.Size.Width - NextPageButton.Size.Width - PreviousPageButton.Size.Width;
+                    previousPageLocationX = Size.Width - PageValueLabel.Size.Width - NextPageButton.Size.Width -
+                                            PreviousPageButton.Size.Width;
                     nextPageLocationX = Size.Width - PageValueLabel.Size.Width - NextPageButton.Size.Width;
                     pageLabelLocationX = Size.Width - PageValueLabel.Size.Width;
                     break;
                 default:
                     throw new NotImplementedException();
             }
-            
+
             Int32 previousPageLocationY;
             Int32 nextPageLocationY;
             Int32 pageLabelLocationY;
@@ -259,7 +264,7 @@ namespace Common_Library.GUI.WinForms.Controls
                     pageLabelLocationY = 0;
                     break;
             }
-            
+
             PreviousPageButton.Location = new Point(previousPageLocationX, previousPageLocationY);
             NextPageButton.Location = new Point(nextPageLocationX, nextPageLocationY);
             PageValueLabel.Location = new Point(pageLabelLocationX, pageLabelLocationY);

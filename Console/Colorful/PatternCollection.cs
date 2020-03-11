@@ -17,7 +17,6 @@ namespace Common_Library.Colorful
         /// <summary>
         /// Represents a collection of Pattern objects.
         /// </summary>
-   
         public PatternCollection<T> Prototype()
         {
             return PrototypeCore();

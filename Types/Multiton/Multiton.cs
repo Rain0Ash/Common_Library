@@ -5,6 +5,5 @@ namespace Common_Library.Types
 {
     public class Multiton
     {
-        
     }
 }

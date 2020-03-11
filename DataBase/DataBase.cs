@@ -13,7 +13,7 @@ namespace Common_Library.DataBase
         MySQL,
         SQLite
     }
-    
+
     public static class DataBase
     {
         public static DbConnection Create(String connection, DbConnectionType type = DbConnectionType.MySQL)
@@ -36,7 +36,7 @@ namespace Common_Library.DataBase
 
             return cn;
         }
-        
+
         public static void Close(DbConnection connection)
         {
             connection.Close();

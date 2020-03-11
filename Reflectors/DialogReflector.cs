@@ -10,12 +10,12 @@ namespace Common_Library.Reflectors
     {
         private readonly String _nms;
         private readonly Assembly _assembly;
-        
+
         public DialogReflector(String assemblyName, String namespaceName)
         {
             _nms = namespaceName;
             _assembly = null;
-            AssemblyName[] alist=Assembly.GetExecutingAssembly().GetReferencedAssemblies();
+            AssemblyName[] alist = Assembly.GetExecutingAssembly().GetReferencedAssemblies();
             foreach (AssemblyName assembly in alist)
             {
                 if (!assembly.FullName.StartsWith(assemblyName))
@@ -27,20 +27,22 @@ namespace Common_Library.Reflectors
                 break;
             }
         }
-        
+
         public Type GetType(String typeName)
         {
             Type type = null;
             String[] names = typeName.Split('.');
 
             if (names.Length > 0)
+            {
                 type = _assembly.GetType(_nms + "." + names[0]);
+            }
 
             for (Int32 i = 1; i < names.Length; ++i)
             {
                 type = type?.GetNestedType(names[i], BindingFlags.NonPublic);
             }
-            
+
             return type;
         }
 

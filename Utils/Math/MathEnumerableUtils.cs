@@ -13,7 +13,7 @@ namespace Common_Library.Utils
         {
             return array.OfType<IConvertible>().ToDecimal();
         }
-        
+
         public static IEnumerable<Decimal> ToDecimal(this IEnumerable<IConvertible> enumerable)
         {
             return enumerable.Select(Convert.ToDecimal);

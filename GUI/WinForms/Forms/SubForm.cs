@@ -14,7 +14,7 @@ namespace Common_Library.GUI.WinForms.Forms
         private TabAlignment _alignment;
 
         public event Handlers.EmptyHandler AlignmentChanged;
-        
+
         public TabAlignment Alignment
         {
             get
@@ -75,19 +75,18 @@ namespace Common_Library.GUI.WinForms.Forms
             base.OnFormClosing(e);
             Visible = false;
         }
-        
-        
-        
+
+
         [DllImport("user32.dll")]
-        private static extern Int32 EnableMenuItem (IntPtr hMenu , Int32 uIDEnableItem, Int32 uEnable);
+        private static extern Int32 EnableMenuItem(IntPtr hMenu, Int32 uIDEnableItem, Int32 uEnable);
 
         [SuppressMessage("ReSharper", "InconsistentNaming")]
         protected override void WndProc(ref Message m)
         {
             const Int32 HTCAPTION = 0x00000002;
-            const Int32 MF_BYCOMMAND =0x00000000;
-            const Int32 MF_GRAYED =0x00000001;
-            const Int32 MF_DISABLED =0x00000002;
+            const Int32 MF_BYCOMMAND = 0x00000000;
+            const Int32 MF_GRAYED = 0x00000001;
+            const Int32 MF_DISABLED = 0x00000002;
             const Int32 SC_MOVE = 0xF010;
             const Int32 WM_NCLBUTTONDOWN = 0xA1;
             const Int32 WM_SYSCOMMAND = 0x112;
@@ -103,10 +102,10 @@ namespace Common_Library.GUI.WinForms.Forms
 
                     break;
                 }
-                
+
                 //cancels the drag this is IMP
                 case WM_NCLBUTTONDOWN when m.WParam.ToInt32() == HTCAPTION:
-                
+
                 // Cancels any clicks on move menu
                 case WM_SYSCOMMAND when (m.WParam.ToInt32() & 0xFFF0) == SC_MOVE:
                     return;

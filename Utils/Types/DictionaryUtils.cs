@@ -9,7 +9,8 @@ namespace Common_Library.Utils
 {
     public static class DictionaryUtils
     {
-        public static Boolean TryGetValue<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key, out TValue result, TValue defaultValue = default)
+        public static Boolean TryGetValue<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key, out TValue result,
+            TValue defaultValue = default)
         {
             try
             {
@@ -22,18 +23,20 @@ namespace Common_Library.Utils
                 return false;
             }
         }
-        
-        public static TValue TryGetValue<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key, TValue defaultValue = default)
+
+        public static TValue TryGetValue<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key,
+            TValue defaultValue = default)
         {
             return TryGetValue(dictionary, key, out TValue result) ? result : defaultValue;
         }
-        
+
         public static KeyValuePair<TKey, TValue> GetPair<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key)
         {
             return new KeyValuePair<TKey, TValue>(key, dictionary[key]);
         }
-        
-        public static Boolean TryGetPair<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key, out KeyValuePair<TKey, TValue> pair)
+
+        public static Boolean TryGetPair<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key,
+            out KeyValuePair<TKey, TValue> pair)
         {
             if (dictionary.ContainsKey(key))
             {
@@ -55,24 +58,24 @@ namespace Common_Library.Utils
             Dictionary<TValue, TKey> dictionary = new Dictionary<TValue, TKey>();
             foreach ((TKey key, TValue value) in source)
             {
-                if(!dictionary.ContainsKey(value))
+                if (!dictionary.ContainsKey(value))
                 {
                     dictionary.Add(value, key);
                 }
             }
-            
+
             return dictionary;
         }
-        
-        public static Dictionary<TKey, TValue> Clone<TKey, TValue> (this Dictionary<TKey, TValue> original) where TValue : ICloneable
+
+        public static Dictionary<TKey, TValue> Clone<TKey, TValue>(this Dictionary<TKey, TValue> original) where TValue : ICloneable
         {
             Dictionary<TKey, TValue> ret = new Dictionary<TKey, TValue>(original.Count, original.Comparer);
-            
+
             foreach ((TKey key, TValue value) in original)
             {
                 ret.Add(key, (TValue) value.Clone());
             }
-            
+
             return ret;
         }
     }

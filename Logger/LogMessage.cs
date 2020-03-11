@@ -26,7 +26,7 @@ namespace Common_Library.Logger
             {MessageType.FatalError, ConsoleColor.DarkMagenta},
             {MessageType.UnknownError, ConsoleColor.Gray}
         };
-        
+
         public CultureStringsBase Message { get; }
         private Object[] FormatList { get; }
         public MessageType MessageType { get; }
@@ -40,14 +40,16 @@ namespace Common_Library.Logger
         {
             return obj.ToString();
         }
-        
-        public LogMessage(String message, MessageType messageType = MessageType.Default, IEnumerable<Object> formatList = null, ConsoleColor? messageColor = null, Int32 priority = 0,
+
+        public LogMessage(String message, MessageType messageType = MessageType.Default, IEnumerable<Object> formatList = null,
+            ConsoleColor? messageColor = null, Int32 priority = 0,
             MessageAdditions messageAdditions = MessageAdditions.CurrentTime, Boolean newLine = true)
             : this(new CultureStringsBase(message), messageType, formatList, messageColor, priority, messageAdditions, newLine)
         {
         }
 
-        public LogMessage(CultureStringsBase message, MessageType messageType = MessageType.Default, IEnumerable<Object> formatList = null, ConsoleColor? messageColor = null, Int32 priority = 0,
+        public LogMessage(CultureStringsBase message, MessageType messageType = MessageType.Default, IEnumerable<Object> formatList = null,
+            ConsoleColor? messageColor = null, Int32 priority = 0,
             MessageAdditions messageAdditions = MessageAdditions.CurrentTime, Boolean newLine = true)
         {
             Message = message;
@@ -57,7 +59,7 @@ namespace Common_Library.Logger
             Priority = priority;
             MessageAdditions = messageAdditions;
             NewLine = newLine;
-            
+
             DateTime = DateTime.Now;
         }
 
@@ -65,12 +67,12 @@ namespace Common_Library.Logger
         {
             ToConsole(NewLine);
         }
-        
+
         public void ToConsole(Boolean newLine)
         {
             ToConsole(newLine, MessageColor);
         }
-        
+
         public void ToConsole(Boolean newLine, ConsoleColor color)
         {
             this.ToConsole(color, newLine);
@@ -84,7 +86,7 @@ namespace Common_Library.Logger
         public override String ToString()
         {
             CultureInfo cultureInfo = LocalizationBase.CurrentCulture;
-            
+
             String dateTime = MessageAdditions switch
             {
                 MessageAdditions.CurrentDate => DateTime.Date.ToString(cultureInfo),
@@ -92,7 +94,7 @@ namespace Common_Library.Logger
                 MessageAdditions.CurrentDateTime => DateTime.ToString(cultureInfo),
                 _ => String.Empty
             };
-            
+
             return $"{dateTime}{(dateTime.Any() ? " " : String.Empty)}{String.Format(Message, FormatList)}";
         }
     }

@@ -16,6 +16,7 @@ namespace Common_Library.Colorful
         /// A map from System.Drawing.Color to ConsoleColor.
         /// </summary>
         public ConcurrentDictionary<Color, ConsoleColor> Colors { get; private set; }
+
         /// <summary>
         /// A map from ConsoleColor to System.Drawing.Color.
         /// </summary>

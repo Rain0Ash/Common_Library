@@ -12,20 +12,20 @@ namespace Common_Library.Localization
     public class CultureComparer : OrderedComparer<String>
     {
         public CultureComparer(IEnumerable<CultureInfoFixed> cultureOrder)
-            : this((cultureOrder ?? new []{LocalizationBase.DefaultCulture}).Select(culture => culture.Code))
+            : this((cultureOrder ?? new[] {LocalizationBase.DefaultCulture}).Select(culture => culture.Code))
         {
         }
-        
+
         public CultureComparer(IEnumerable<Int32> lcidOrder)
             : this(lcidOrder?.SelectWhere(lcid => (LocalizationBase.CodeByLCID.TryGetValue(lcid, out String code), code)))
         {
-        } 
-        
+        }
+
         public CultureComparer(IEnumerable<String> languageOrder = null)
             : base((languageOrder ?? CultureStringsBase.DefaultLocalization).Select(code => code.ToLower()))
         {
         }
-        
+
         public Int32 GetLanguageOrderID(Int32 lcid)
         {
             return GetLanguageOrderID(LocalizationBase.CodeByLCID.TryGetValue(lcid, LocalizationBase.DefaultCulture.Code));

@@ -13,14 +13,14 @@ namespace Common_Library.Utils
             source[inx1] = source[inx2];
             source[inx2] = temp;
         }
-        
+
         public static void Swap<T>(ref T[,] source, Int32 inx1, Int32 y1, Int32 x2, Int32 y2)
         {
             T temp = source[inx1, y1];
             source[inx1, y1] = source[x2, y2];
             source[x2, y2] = temp;
         }
-        
+
         public static void Default(this Array array)
         {
             Array.Clear(array, 0, array.Length);

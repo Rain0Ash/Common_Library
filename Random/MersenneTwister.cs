@@ -22,7 +22,7 @@ namespace Common_Library.Random
             : this(new System.Random().Next()) /* a default initial seed is used   */
         {
         }
-        
+
         /// <summary>
         /// Creates a new pseudo-random number generator with a given seed.
         /// </summary>
@@ -374,7 +374,7 @@ namespace Common_Library.Random
             for (_mti = 1; _mti < N; _mti++)
             {
                 _mt[_mti] = (UInt32) (1812433253U * (_mt[_mti - 1] ^ (_mt[_mti - 1] >> 30)) + _mti);
-   
+
                 _mt[_mti] &= 0xffffffffU;
                 // for >32 bit machines
             }

@@ -11,7 +11,7 @@ namespace System.Collections.Generic.Interfaces
         public void Insert(Int32 index, TKey key, TValue value);
 
         public Boolean TryInsert(TKey key, TValue value);
-        
+
         public Boolean TryInsert(Int32 index, TKey key, TValue value);
 
         public void Swap(Int32 index1, Int32 index2);

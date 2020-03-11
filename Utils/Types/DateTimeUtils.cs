@@ -5,6 +5,5 @@ namespace Common_Library.Utils
 {
     public static class DateTimeUtils
     {
-        
     }
 }

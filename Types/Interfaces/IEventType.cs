@@ -6,7 +6,7 @@ namespace Common_Library.Types.Interfaces
     public interface IEventType
     {
         public event Handlers.EmptyHandler ItemsChanged;
-        
+
         public event Handlers.EmptyHandler OnClear;
     }
 }

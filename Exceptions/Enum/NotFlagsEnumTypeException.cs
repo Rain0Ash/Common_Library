@@ -12,7 +12,7 @@ namespace Common_Library.Exceptions.Enum
         {
         }
     }
-    
+
     public class NotFlagsEnumTypeException<T> : NotFlagsEnumTypeException
     {
         public NotFlagsEnumTypeException(String message = null)

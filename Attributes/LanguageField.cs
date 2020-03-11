@@ -9,6 +9,7 @@ namespace Common_Library.Attributes
     public class LanguageField : Attribute
     {
         public readonly Boolean Enabled;
+
         public LanguageField(Boolean enabled = true)
         {
             Enabled = enabled;

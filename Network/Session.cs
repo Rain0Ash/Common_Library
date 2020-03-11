@@ -25,12 +25,18 @@ namespace Common_Library.Network
 
         public IPEndPoint LocalEndPoint
         {
-            get { return (IPEndPoint) Socket.LocalEndPoint; }
+            get
+            {
+                return (IPEndPoint) Socket.LocalEndPoint;
+            }
         }
 
         public IPEndPoint RemoteEndPoint
         {
-            get { return (IPEndPoint) Socket.RemoteEndPoint; }
+            get
+            {
+                return (IPEndPoint) Socket.RemoteEndPoint;
+            }
         }
 
         public IPAddress Ip { get; }
@@ -38,7 +44,7 @@ namespace Common_Library.Network
         public Session(INetBase server, SocketAsyncEventArgs readEventArg, Socket socket)
         {
             Socket = socket;
-            Id = (UInt32)RemoteEndPoint.GetHashCode();
+            Id = (UInt32) RemoteEndPoint.GetHashCode();
             _server = server;
             ReadEventArg = readEventArg;
             _writeEventArg.Completed += WriteComplete;

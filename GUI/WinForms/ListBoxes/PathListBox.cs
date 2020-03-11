@@ -14,6 +14,7 @@ namespace Common_Library.GUI.WinForms.ListBoxes
         public event Handlers.EmptyHandler PathTypeChanged;
 
         private PathType _pathType = PathType.All;
+
         public PathType PathType
         {
             get
@@ -43,14 +44,14 @@ namespace Common_Library.GUI.WinForms.ListBoxes
             {
                 return path.IsValid();
             }
-            
+
             return PathUtils.IsValidPath(item.ToString(), PathType);
         }
-        
+
         protected override void OnDrawItem(DrawItemEventArgs e, Image image, (Brush, Brush) color)
         {
             base.OnDrawItem(e, image, color);
-            
+
             Int32 index = e.Index;
             if (!IndexInItems(index))
             {
@@ -63,7 +64,8 @@ namespace Common_Library.GUI.WinForms.ListBoxes
 
             if (item is PathObject path && path.Recursive)
             {
-                graphics.DrawString("R", e.Font, Brushes.Red, new Rectangle(bounds.Width - TextRenderer.MeasureText("R", e.Font).Width, bounds.Y, bounds.Width, bounds.Height));
+                graphics.DrawString("R", e.Font, Brushes.Red,
+                    new Rectangle(bounds.Width - TextRenderer.MeasureText("R", e.Font).Width, bounds.Y, bounds.Width, bounds.Height));
             }
         }
 
@@ -73,7 +75,7 @@ namespace Common_Library.GUI.WinForms.ListBoxes
             {
                 return;
             }
-            
+
             base.Draw(e, Items[e.Index] is PathObject path ? path.GetPathTypeIcon : null, null);
         }
     }

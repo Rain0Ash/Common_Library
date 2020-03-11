@@ -14,6 +14,7 @@ namespace Common_Library.Colorful
         /// The index of the beginning of the pattern match.
         /// </summary>
         public Int32 Beginning { get; }
+
         /// <summary>
         /// The index of the end of the pattern match.
         /// </summary>
@@ -43,11 +44,14 @@ namespace Common_Library.Colorful
             }
 
             return Beginning == other.Beginning
-                && End == other.End;
+                   && End == other.End;
         }
 
-        public override Boolean Equals(Object obj) => Equals(obj as MatchLocation);
-       
+        public override Boolean Equals(Object obj)
+        {
+            return Equals(obj as MatchLocation);
+        }
+
         public override Int32 GetHashCode()
         {
             Int32 hash = 163;
@@ -63,6 +67,9 @@ namespace Common_Library.Colorful
             return Beginning.CompareTo(other.Beginning);
         }
 
-        public override String ToString() => Beginning + ", " + End;
+        public override String ToString()
+        {
+            return Beginning + ", " + End;
+        }
     }
 }

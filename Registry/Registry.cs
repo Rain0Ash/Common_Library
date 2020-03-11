@@ -11,6 +11,7 @@ using Common_Library.Exceptions;
 using Common_Library.Utils;
 using Microsoft.Win32;
 using Path = Common_Library.LongPath.Path;
+
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedMember.Global
 // ReSharper disable UnusedMethodReturnValue.Local
@@ -30,7 +31,7 @@ namespace Common_Library.Registry
             LocalMachine,
             PerformanceData
         }
-        
+
         private static readonly Dictionary<BaseKeys, RegistryKey> Keys = new Dictionary<BaseKeys, RegistryKey>
         {
             {BaseKeys.Default, Microsoft.Win32.Registry.CurrentUser},
@@ -41,12 +42,12 @@ namespace Common_Library.Registry
             {BaseKeys.LocalMachine, Microsoft.Win32.Registry.LocalMachine},
             {BaseKeys.PerformanceData, Microsoft.Win32.Registry.PerformanceData}
         };
-        
+
         public Boolean IsSafe { get; set; } = true;
         public Boolean IsReadOnly { get; set; } = true;
         private RegistryKey _registryKey;
         private Boolean _allowRequest = true;
-        
+
         private String _initName;
 
         private Boolean CheckInitialize(Boolean autoInitialize = true, Boolean isThrow = false)
@@ -75,21 +76,22 @@ namespace Common_Library.Registry
         {
             return $"{Path.Combine(Keys[BaseKeys.Default].Name, @"Software", $"{_initName}")}";
         }
-        
+
         public Registry(String pathName, Boolean readOnly = true, Boolean safe = true, Boolean autoInitialize = true)
         {
             _initName = pathName;
             CheckInitialize(autoInitialize, true);
             SetRegistryKey($"Software\\{_initName}", BaseKeys.Default, readOnly, safe);
         }
-        
+
         public Registry(RegistryKey registryPath, Boolean safe = true, Boolean autoInitialize = true)
         {
             CheckInitialize(autoInitialize, true);
             SetRegistryKey(registryPath, safe);
         }
-        
-        public Registry(String registryPath = null, BaseKeys baseKey = BaseKeys.Default, Boolean readOnly = true, Boolean isSafe = true, Boolean autoInitialize = true)
+
+        public Registry(String registryPath = null, BaseKeys baseKey = BaseKeys.Default, Boolean readOnly = true, Boolean isSafe = true,
+            Boolean autoInitialize = true)
         {
             CheckInitialize(autoInitialize, true);
             SetRegistryKey(registryPath, baseKey, readOnly, isSafe);
@@ -110,8 +112,9 @@ namespace Common_Library.Registry
                 return false;
             }
         }
-        
-        public Boolean SetRegistryKey(String registryPath, BaseKeys baseKey = BaseKeys.Default, Boolean readOnly = true, Boolean isSafe = true)
+
+        public Boolean SetRegistryKey(String registryPath, BaseKeys baseKey = BaseKeys.Default, Boolean readOnly = true,
+            Boolean isSafe = true)
         {
             _registryKey?.Close();
             IsSafe = isSafe;
@@ -121,7 +124,7 @@ namespace Common_Library.Registry
                 Keys.TryGetValue(baseKey, out RegistryKey regKey);
                 RegistryKeyPermissionCheck regKeyPerm =
                     readOnly ? RegistryKeyPermissionCheck.ReadSubTree : RegistryKeyPermissionCheck.Default;
-                
+
                 _registryKey = readOnly
                     ? regKey?.OpenSubKey(registryPath, regKeyPerm)
                     : regKey?.CreateSubKey(registryPath, regKeyPerm);
@@ -143,7 +146,7 @@ namespace Common_Library.Registry
         {
             return GoTo(nextSubKey, out _);
         }
-        
+
         public Registry GoTo(String nextSubKey, out Boolean successful)
         {
             if (!_allowRequest)
@@ -151,7 +154,7 @@ namespace Common_Library.Registry
                 successful = false;
                 return this;
             }
-            
+
             try
             {
                 _registryKey = IsReadOnly
@@ -164,6 +167,7 @@ namespace Common_Library.Registry
                 successful = false;
                 _allowRequest = false;
             }
+
             return this;
         }
 
@@ -179,7 +183,7 @@ namespace Common_Library.Registry
                 successful = false;
                 return this;
             }
-            
+
             try
             {
                 String[] regKeyArray = _registryKey.Name.Split('\\', '/');
@@ -192,6 +196,7 @@ namespace Common_Library.Registry
 
                     regKeyArray = regKeyArray.Take(regKeyArray.Length - 1).ToArray();
                 }
+
                 _registryKey = _registryKey.OpenSubKey(String.Join("\\", regKeyArray),
                     RegistryKeyPermissionCheck.Default);
                 successful = true;
@@ -201,6 +206,7 @@ namespace Common_Library.Registry
                 successful = false;
                 _allowRequest = false;
             }
+
             return this;
         }
 
@@ -221,26 +227,31 @@ namespace Common_Library.Registry
             {
                 throw new SecurityException();
             }
+
             return false;
         }
 
-        public Registry SetValueRequest(String name, Object value, RegistryValueKind registryValueKind = RegistryValueKind.String, Boolean verifyBeforeOverwrite = true, Boolean isThrow = false)
+        public Registry SetValueRequest(String name, Object value, RegistryValueKind registryValueKind = RegistryValueKind.String,
+            Boolean verifyBeforeOverwrite = true, Boolean isThrow = false)
         {
             return SetValueRequest(name, value, out _, registryValueKind, verifyBeforeOverwrite, isThrow);
         }
-        
-        public Registry SetValueRequest(String name, Object value, out Boolean successful, RegistryValueKind registryValueKind = RegistryValueKind.String, Boolean verifyBeforeOverwrite = true, Boolean isThrow = false)
+
+        public Registry SetValueRequest(String name, Object value, out Boolean successful,
+            RegistryValueKind registryValueKind = RegistryValueKind.String, Boolean verifyBeforeOverwrite = true, Boolean isThrow = false)
         {
             if (!_allowRequest)
             {
                 successful = false;
                 return this;
             }
+
             _allowRequest = successful = SetValue(name, value, registryValueKind, verifyBeforeOverwrite, isThrow);
             return this;
         }
-        
-        public Boolean SetValue(String name, Object value, RegistryValueKind registryValueKind = RegistryValueKind.String, Boolean verifyBeforeOverwrite = true, Boolean isThrow = false)
+
+        public Boolean SetValue(String name, Object value, RegistryValueKind registryValueKind = RegistryValueKind.String,
+            Boolean verifyBeforeOverwrite = true, Boolean isThrow = false)
         {
             try
             {
@@ -255,7 +266,7 @@ namespace Common_Library.Registry
                     RemoveValue(name, isThrow);
                     return true;
                 }
-                
+
                 _registryKey?.SetValue(name, value, registryValueKind);
                 return true;
             }
@@ -278,11 +289,13 @@ namespace Common_Library.Registry
                 returnValue = defaultValue;
                 return this;
             }
+
             returnValue = GetValue(name, defaultValue, registryValueOptions, isThrow);
             return this;
         }
-        
-        public Object GetValue(String name, Object defaultValue = null, RegistryValueOptions registryValueOptions = RegistryValueOptions.None, Boolean isThrow = false)
+
+        public Object GetValue(String name, Object defaultValue = null,
+            RegistryValueOptions registryValueOptions = RegistryValueOptions.None, Boolean isThrow = false)
         {
             try
             {
@@ -295,16 +308,18 @@ namespace Common_Library.Registry
                     throw;
                 }
             }
+
             return null;
         }
 
-        public void SetValues(Dictionary<String, ValueTuple<Object, RegistryValueKind>> valuesDictionary, Boolean verifyBeforeOverwrite = true)
+        public void SetValues(Dictionary<String, ValueTuple<Object, RegistryValueKind>> valuesDictionary,
+            Boolean verifyBeforeOverwrite = true)
         {
             if (!CheckSafe())
             {
                 return;
             }
-            
+
             foreach (String key in valuesDictionary.Keys)
             {
                 if (valuesDictionary.TryGetValue(key, out ValueTuple<Object, RegistryValueKind> value) && value.Item1 != null)
@@ -318,7 +333,7 @@ namespace Common_Library.Registry
         {
             return RemoveValueRequest(name, out _, isThrow);
         }
-        
+
         public Registry RemoveValueRequest(String name, out Boolean successful, Boolean isThrow = false)
         {
             if (!_allowRequest)
@@ -326,6 +341,7 @@ namespace Common_Library.Registry
                 successful = false;
                 return this;
             }
+
             successful = RemoveValue(name, isThrow);
             return this;
         }
@@ -353,7 +369,7 @@ namespace Common_Library.Registry
         {
             return RemoveSubKeyRequest(name, out _, isRecursive, isThrow);
         }
-        
+
         public Registry RemoveSubKeyRequest(String name, out Boolean successful, Boolean isRecursive = false, Boolean isThrow = false)
         {
             if (!_allowRequest)
@@ -361,6 +377,7 @@ namespace Common_Library.Registry
                 successful = false;
                 return this;
             }
+
             successful = RemoveSubKey(name, isRecursive, isThrow);
             return this;
         }
@@ -388,9 +405,10 @@ namespace Common_Library.Registry
                     throw;
                 }
             }
+
             return false;
         }
-        
+
         public Boolean RemoveCurrentSubKeyAndDispose(Boolean isRecursive = false, Boolean isThrow = false)
         {
             try
@@ -407,14 +425,15 @@ namespace Common_Library.Registry
                     throw;
                 }
             }
+
             return false;
         }
-        
+
         public Boolean RemoveInitializedSubKeyAndDispose(Boolean isRecursive = false, Boolean isThrow = false)
         {
             throw new NotImplementedException();
         }
-        
+
         public Dictionary<String, Object> GetValues()
         {
             Dictionary<String, Object> valueDictionary = new Dictionary<String, Object>();
@@ -431,7 +450,7 @@ namespace Common_Library.Registry
 
             return valueDictionary;
         }
-        
+
         public Dictionary<String, Object> GetValues(Dictionary<String, ValueTuple<Object, RegistryValueOptions?>?> valuesDictionary)
         {
             Dictionary<String, Object> valueDictionary = new Dictionary<String, Object>();
@@ -443,6 +462,7 @@ namespace Common_Library.Registry
                     valueDictionary.Add(name, GetValue(name));
                     continue;
                 }
+
                 valueDictionary.Add(name, GetValue(name, value.Value.Item1, value.Value.Item2 ?? RegistryValueOptions.None));
             }
 
@@ -455,7 +475,7 @@ namespace Common_Library.Registry
             {
                 return;
             }
-            
+
             foreach (String name in names)
             {
                 RemoveValue(name);
@@ -464,7 +484,7 @@ namespace Common_Library.Registry
 
         public String GetPath()
         {
-            return String.Join("\\", _registryKey?.Name?.Split(PathUtils.Separators).Skip(1) ?? new String[]{});
+            return String.Join("\\", _registryKey?.Name?.Split(PathUtils.Separators).Skip(1) ?? new String[] { });
         }
 
         public override String ToString()
@@ -477,7 +497,7 @@ namespace Common_Library.Registry
             _registryKey?.Close();
             _registryKey?.Dispose();
         }
-        
+
         ~Registry()
         {
             Dispose();

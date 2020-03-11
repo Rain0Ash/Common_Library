@@ -16,24 +16,24 @@ namespace Common_Library.Utils
         public static void CreateDirectory(String path, out DirectoryInfo directoryInfo)
         {
             if (Directory.Exists(path))
-            { 
+            {
                 directoryInfo = new DirectoryInfo(path);
                 return;
             }
 
             directoryInfo = Directory.CreateDirectory(path);
         }
-        
+
         public static Boolean TryCreateDirectory(String path, PathAction remove = PathAction.Standart)
         {
             return TryCreateDirectory(path, remove, out _);
         }
-        
+
         public static Boolean TryCreateDirectory(String path, out DirectoryInfo directoryInfo)
         {
             return TryCreateDirectory(path, PathAction.Standart, out directoryInfo);
         }
-        
+
         public static Boolean TryCreateDirectory(String path, PathAction remove, out DirectoryInfo directoryInfo)
         {
             directoryInfo = null;
@@ -43,9 +43,9 @@ namespace Common_Library.Utils
                 {
                     return true;
                 }
-                
+
                 CreateDirectory(path, out directoryInfo);
-                
+
                 return Directory.Exists(path);
             }
             catch (Exception)

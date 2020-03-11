@@ -8,7 +8,7 @@ namespace Common_Library.Utils
     public static partial class PrimeUtils
     {
         public const Int32 LargestPrime = Int32.MaxValue;
-        
+
         static PrimeUtils()
         {
             Init();

@@ -39,14 +39,14 @@ namespace Common_Library.GUI.WinForms.TextBoxes
                 base.Text = String.IsNullOrEmpty(value) || !NetworkUtils.ValidateIPv4(value) ? DefaultHost : value;
             }
         }
-        
+
         public IPTextBox()
         {
             MaxLength = 15;
             PasswdChar = '\0';
             Leave += (sender, args) => Text = CheckValidFormat() ? Text : DefaultHost;
         }
-        
+
         public override Boolean CheckValidFormat()
         {
             return NetworkUtils.ValidateIPv4(Text);
@@ -61,7 +61,7 @@ namespace Common_Library.GUI.WinForms.TextBoxes
         {
             return CharUtils.IsControl(c) || Char.IsDigit(c) || c == '.' && Text.Count(chr => chr == '.') < 3;
         }
-        
+
         protected override void OnKeyPress(KeyPressEventArgs e)
         {
             if (IsAllowedChar(e.KeyChar))
@@ -69,7 +69,7 @@ namespace Common_Library.GUI.WinForms.TextBoxes
                 base.OnKeyPress(e);
                 return;
             }
-            
+
             e.Handled = true;
         }
     }

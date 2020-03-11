@@ -1,11 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <assembly name="Common_Library">
-  <member name="P:Common_Library.Config.Config.Item(System.String,System.String[])">
-    <attribute ctor="M:JetBrains.Annotations.CanBeNullAttribute.#ctor" />
-  </member>
-  <member name="P:Common_Library.Config.JSONConfig.Config">
-    <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
-  </member>
   <member name="M:Common_Library.Localization.CultureInfoFixed.#ctor(System.String)">
     <parameter name="name">
       <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />

@@ -21,6 +21,7 @@ namespace Common_Library.Colorful
         /// <param name="match">The "matching" portion of the input string.</param>
         /// <returns>A transformed version of the 'match' parameter.</returns>
         public delegate String MatchFound(String unstyledInput, MatchLocation matchLocation, String match);
+
         /// <summary>
         /// Defines a simpler string transformation.
         /// </summary>
@@ -56,10 +57,13 @@ namespace Common_Library.Colorful
             }
 
             return base.Equals(other)
-                && MatchFoundHandler == other.MatchFoundHandler;
+                   && MatchFoundHandler == other.MatchFoundHandler;
         }
 
-        public override Boolean Equals(Object obj) => Equals(obj as Styler);
+        public override Boolean Equals(Object obj)
+        {
+            return Equals(obj as Styler);
+        }
 
         public override Int32 GetHashCode()
         {

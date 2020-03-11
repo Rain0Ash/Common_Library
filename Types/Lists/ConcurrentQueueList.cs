@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace System.Collections.Generic
 {
-    public class ConcurrentQueueList <T> : EventQueueList<T>
+    public class ConcurrentQueueList<T> : EventQueueList<T>
     {
         public new void Add(T item)
         {
@@ -38,7 +38,7 @@ namespace System.Collections.Generic
                 base.Clear();
             }
         }
-        
+
         public new Boolean Contains(T item)
         {
             lock (this)

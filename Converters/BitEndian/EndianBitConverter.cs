@@ -10,8 +10,6 @@ namespace Common_Library.Converters.BitEndian
     /// </summary>
     public abstract class EndianBitConverter
     {
-        
-
         /// <summary>
         /// Indicates the byte order ("endianess") in which data is converted using this class.
         /// </summary>
@@ -28,9 +26,6 @@ namespace Common_Library.Converters.BitEndian
         /// </summary>
         public abstract Endianness Endianness { get; }
 
-        
-
-        
 
         /// <summary>
         /// Returns a little-endian bit converter instance. The same instance is
@@ -44,9 +39,6 @@ namespace Common_Library.Converters.BitEndian
         /// </summary>
         public static BigEndianBitConverter Big { get; } = new BigEndianBitConverter();
 
-        
-
-        
 
         /// <summary>
         /// Converts the specified double-precision floating point number to a 
@@ -78,7 +70,7 @@ namespace Common_Library.Converters.BitEndian
         /// <returns>A 32-bit signed integer whose value is equivalent to value.</returns>
         public static unsafe Int32 SingleToInt32Bits(Single value)
         {
-            return *(Int32*)&value;
+            return *(Int32*) &value;
         }
 
         /// <summary>
@@ -89,12 +81,9 @@ namespace Common_Library.Converters.BitEndian
         /// <returns>A single-precision floating point number whose value is equivalent to value.</returns>
         public static unsafe Single Int32BitsToSingle(Int32 value)
         {
-            return *(Single*)&value;
+            return *(Single*) &value;
         }
 
-        
-
-        
 
         /// <summary>
         /// Returns a Boolean value converted from one byte at a specified position in a byte array.
@@ -116,7 +105,7 @@ namespace Common_Library.Converters.BitEndian
         /// <returns>A character formed by two bytes beginning at startIndex.</returns>
         public Char ToChar(Byte[] value, Int32 startIndex)
         {
-            return unchecked((Char)CheckedFromBytes(value, startIndex, 2));
+            return unchecked((Char) CheckedFromBytes(value, startIndex, 2));
         }
 
         /// <summary>
@@ -151,7 +140,7 @@ namespace Common_Library.Converters.BitEndian
         /// <returns>A 16-bit signed integer formed by two bytes beginning at startIndex.</returns>
         public Int16 ToInt16(Byte[] value, Int32 startIndex)
         {
-            return unchecked((Int16)CheckedFromBytes(value, startIndex, 2));
+            return unchecked((Int16) CheckedFromBytes(value, startIndex, 2));
         }
 
         /// <summary>
@@ -162,7 +151,7 @@ namespace Common_Library.Converters.BitEndian
         /// <returns>A 32-bit signed integer formed by four bytes beginning at startIndex.</returns>
         public Int32 ToInt32(Byte[] value, Int32 startIndex)
         {
-            return unchecked((Int32)CheckedFromBytes(value, startIndex, 4));
+            return unchecked((Int32) CheckedFromBytes(value, startIndex, 4));
         }
 
         /// <summary>
@@ -184,7 +173,7 @@ namespace Common_Library.Converters.BitEndian
         /// <returns>A 16-bit unsigned integer formed by two bytes beginning at startIndex.</returns>
         public UInt16 ToUInt16(Byte[] value, Int32 startIndex)
         {
-            return unchecked((UInt16)CheckedFromBytes(value, startIndex, 2));
+            return unchecked((UInt16) CheckedFromBytes(value, startIndex, 2));
         }
 
         /// <summary>
@@ -195,7 +184,7 @@ namespace Common_Library.Converters.BitEndian
         /// <returns>A 32-bit unsigned integer formed by four bytes beginning at startIndex.</returns>
         public UInt32 ToUInt32(Byte[] value, Int32 startIndex)
         {
-            return unchecked((UInt32)CheckedFromBytes(value, startIndex, 4));
+            return unchecked((UInt32) CheckedFromBytes(value, startIndex, 4));
         }
 
         /// <summary>
@@ -206,7 +195,7 @@ namespace Common_Library.Converters.BitEndian
         /// <returns>A 64-bit unsigned integer formed by eight bytes beginning at startIndex.</returns>
         public UInt64 ToUInt64(Byte[] value, Int32 startIndex)
         {
-            return unchecked((UInt64)CheckedFromBytes(value, startIndex, 8));
+            return unchecked((UInt64) CheckedFromBytes(value, startIndex, 8));
         }
 
         /// <summary>
@@ -258,9 +247,6 @@ namespace Common_Library.Converters.BitEndian
         /// <returns>The converted number</returns>
         protected abstract Int64 FromBytes(Byte[] value, Int32 startIndex, Int32 bytesToConvert);
 
-        
-
-        
 
         /// <summary>
         /// Returns a String converted from the elements of a byte array.
@@ -307,9 +293,6 @@ namespace Common_Library.Converters.BitEndian
             return BitConverter.ToString(value, startIndex, length);
         }
 
-        
-
-        
 
         /// <summary>
         /// Returns a decimal value converted from sixteen bytes 
@@ -365,9 +348,6 @@ namespace Common_Library.Converters.BitEndian
             }
         }
 
-        
-
-        
 
         /// <summary>
         /// Returns an array with the given number of bytes formed
@@ -470,12 +450,9 @@ namespace Common_Library.Converters.BitEndian
         /// <returns>An array of bytes with length 8.</returns>
         public Byte[] GetBytes(UInt64 value)
         {
-            return GetBytes(unchecked((Int64)value));
+            return GetBytes(unchecked((Int64) value));
         }
 
-        
-
-        
 
         /// <summary>
         /// Copies the given number of bytes from the least-specific
@@ -632,9 +609,7 @@ namespace Common_Library.Converters.BitEndian
         /// <param name="index">The first index into the array to copy the bytes into</param>
         public void CopyBytes(UInt64 value, Byte[] buffer, Int32 index)
         {
-            CopyBytes(unchecked((Int64)value), 8, buffer, index);
+            CopyBytes(unchecked((Int64) value), 8, buffer, index);
         }
-
-        
     }
 }

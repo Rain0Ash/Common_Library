@@ -4,6 +4,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+
 // ReSharper disable AsyncConverter.AsyncMethodNamingHighlighting
 
 namespace Common_Library.Threading.Tasks
@@ -20,12 +21,13 @@ namespace Common_Library.Threading.Tasks
         /// <param name="token">Cancellation token</param>
         /// <exception cref="TimeoutException"></exception>
         /// <returns></returns>
-        public static async Task Wait(Func<Boolean> condition, Int32 frequency = 25, Int32 timeout = -1, Boolean until = false, CancellationToken token = default)
+        public static async Task Wait(Func<Boolean> condition, Int32 frequency = 25, Int32 timeout = -1, Boolean until = false,
+            CancellationToken token = default)
         {
             Task waitTask = Task.Run(async () =>
             {
                 while (until != condition())
-                { 
+                {
                     await Task.Delay(frequency, token).ConfigureAwait(true);
                 }
             }, token);
@@ -36,7 +38,7 @@ namespace Common_Library.Threading.Tasks
                 {
                     return;
                 }
-                
+
                 throw new TimeoutException();
             }
         }
@@ -45,7 +47,8 @@ namespace Common_Library.Threading.Tasks
         {
             TaskCompletionSource<Object> task = new TaskCompletionSource<Object>();
 
-            void Callback(Object state, Boolean timedOut) {
+            void Callback(Object state, Boolean timedOut)
+            {
                 if (timedOut)
                 {
                     task.TrySetCanceled();

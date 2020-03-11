@@ -17,10 +17,10 @@ namespace Common_Library.Types.Other
         {
             return path.ToString();
         }
-        
+
         public String Path { get; }
         public PathType PathType { get; set; }
-        
+
         public PathStatus PathStatus { get; set; }
 
         public event Handlers.EmptyHandler RecursiveChanged;
@@ -59,13 +59,14 @@ namespace Common_Library.Types.Other
                 {
                     return;
                 }
-                
+
                 _iconExistCheck = value;
                 IconExistCheckChanged?.Invoke();
             }
         }
 
         private Image _folderImage;
+
         public Image FolderImage
         {
             get
@@ -153,17 +154,17 @@ namespace Common_Library.Types.Other
         {
             return IsValid(PathType, PathStatus);
         }
-        
+
         public Boolean IsValid(PathType type)
         {
             return IsValid(type, PathStatus);
         }
-        
+
         public Boolean IsValid(PathStatus status)
         {
             return IsValid(PathType, status);
         }
-        
+
         public Boolean IsValid(PathType type, PathStatus status)
         {
             return PathUtils.IsValidPath(Path, type, status);
@@ -173,7 +174,7 @@ namespace Common_Library.Types.Other
         {
             return PathUtils.IsExistAsFolder(Path);
         }
-        
+
         public Boolean IsExistAsFile()
         {
             return PathUtils.IsExistAsFile(Path);
@@ -183,12 +184,12 @@ namespace Common_Library.Types.Other
         {
             return PathUtils.IsExist(Path, PathType);
         }
-        
+
         public Boolean IsExist(PathType type)
         {
             return PathUtils.IsExist(Path, type);
         }
-        
+
         public String GetAbsolutePath()
         {
             return PathUtils.GetFullPath(Path);
@@ -198,7 +199,7 @@ namespace Common_Library.Types.Other
         {
             return GetFolders(new Regex(".*"), Recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
         }
-        
+
         public String[] GetFolders(SearchOption searchOption)
         {
             return GetFolders(new Regex(".*"), searchOption);
@@ -208,7 +209,7 @@ namespace Common_Library.Types.Other
         {
             return GetFolders(new Regex(String.IsNullOrEmpty(searchPattern) ? ".*" : searchPattern), searchOption);
         }
-        
+
         public String[] GetFolders(Regex regex, SearchOption searchOption = SearchOption.TopDirectoryOnly)
         {
             regex ??= new Regex(".*");
@@ -222,22 +223,22 @@ namespace Common_Library.Types.Other
                 return new String[0];
             }
         }
-        
+
         public String[] GetFiles()
         {
             return GetFiles(new Regex(".*"), Recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
         }
-        
+
         public String[] GetFiles(SearchOption searchOption)
         {
             return GetFiles(new Regex(".*"), searchOption);
         }
-        
+
         public String[] GetFiles(String searchPattern, SearchOption searchOption = SearchOption.TopDirectoryOnly)
         {
             return GetFiles(new Regex(String.IsNullOrEmpty(searchPattern) ? ".*" : searchPattern), searchOption);
         }
-        
+
         public String[] GetFiles(Regex regex, SearchOption searchOption = SearchOption.TopDirectoryOnly)
         {
             regex ??= new Regex(".*");
@@ -257,7 +258,7 @@ namespace Common_Library.Types.Other
             SearchOption searchOption = Recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
             return GetFoldersAndFiles(searchOption, searchOption);
         }
-        
+
         public String[] GetFoldersAndFiles(SearchOption searchOption)
         {
             return GetFoldersAndFiles(searchOption, searchOption);
@@ -267,27 +268,29 @@ namespace Common_Library.Types.Other
         {
             return GetFolders(foldersSearchOption).Concat(GetFiles(filesSearchOption)).ToArray();
         }
-        
-        public String[] GetFoldersAndFiles(String foldersSearchPattern, String filesSearchPattern, SearchOption foldersSearchOption, SearchOption filesSearchOption)
+
+        public String[] GetFoldersAndFiles(String foldersSearchPattern, String filesSearchPattern, SearchOption foldersSearchOption,
+            SearchOption filesSearchOption)
         {
             return GetFolders(foldersSearchPattern, foldersSearchOption).Concat(GetFiles(filesSearchPattern, filesSearchOption)).ToArray();
         }
-        
-        public String[] GetFoldersAndFiles(Regex foldersSearchPattern, Regex filesSearchPattern, SearchOption foldersSearchOption, SearchOption filesSearchOption)
+
+        public String[] GetFoldersAndFiles(Regex foldersSearchPattern, Regex filesSearchPattern, SearchOption foldersSearchOption,
+            SearchOption filesSearchOption)
         {
             return GetFolders(foldersSearchPattern, foldersSearchOption).Concat(GetFiles(filesSearchPattern, filesSearchOption)).ToArray();
         }
-        
+
         public Byte[] ReadFileBytes(Boolean isThrow = false)
         {
             return FileUtils.ReadFileBytes(Path, isThrow);
         }
-        
+
         public String ReadFileText(Boolean isThrow = false)
         {
             return FileUtils.ReadFileText(Path, isThrow);
         }
-        
+
         public String[] ReadFileLines(Boolean isThrow = false)
         {
             return FileUtils.ReadFileLines(Path, isThrow);

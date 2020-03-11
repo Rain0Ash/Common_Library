@@ -24,7 +24,7 @@ namespace Common_Library.Utils
         NetworkPath = 12,
         All = 15
     }
-        
+
     public enum PathStatus : Byte
     {
         All,
@@ -38,7 +38,7 @@ namespace Common_Library.Utils
         Standart,
         Force
     }
-    
+
     public static class PathUtils
     {
         public static readonly Char[] Separators = {Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar};
@@ -54,7 +54,7 @@ namespace Common_Library.Utils
             {
                 pathReference = Directory.GetCurrentDirectory();
             }
-            
+
             try
             {
                 Uri pathUri = new Uri(path);
@@ -94,7 +94,8 @@ namespace Common_Library.Utils
 
         public static Boolean IsAbsolutePath(String path)
         {
-            return IsValidPath(path) && !IsNetworkPath(path) && Path.IsPathRooted(path) && !Path.GetPathRoot(path).Equals(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal);
+            return IsValidPath(path) && !IsNetworkPath(path) && Path.IsPathRooted(path) &&
+                   !Path.GetPathRoot(path).Equals(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal);
         }
 
         public static PathType GetPathType(String path)
@@ -108,7 +109,7 @@ namespace Common_Library.Utils
             {
                 return Separators.Any(chr => path.EndsWith(chr.ToString())) ? PathType.LocalFolder : PathType.LocalFile;
             }
-            
+
             return PathType.None;
         }
 
@@ -127,7 +128,8 @@ namespace Common_Library.Utils
                 PathType.NetworkFile => IsValidNetworkFilePath(path),
                 PathType.LocalFolder | PathType.NetworkFile => (IsValidFolderPath(path, false) || IsValidNetworkFilePath(path)),
                 PathType.File => IsValidFilePath(path),
-                PathType.LocalFolder | PathType.LocalFile | PathType.NetworkFile => (IsValidPath(path, false) || IsValidNetworkFilePath(path)),
+                PathType.LocalFolder | PathType.LocalFile | PathType.NetworkFile => (IsValidPath(path, false) ||
+                                                                                     IsValidNetworkFilePath(path)),
                 PathType.NetworkPath => IsValidNetworkPath(path),
                 PathType.Folder | PathType.NetworkFile => (IsValidFolderPath(path) || IsValidNetworkPath(path)),
                 PathType.File | PathType.NetworkFolder => (IsValidFilePath(path) || IsValidNetworkPath(path)),
@@ -161,12 +163,12 @@ namespace Common_Library.Utils
         {
             return IsValidPath(path, allowNetworkPath) && Separators.Any(chr => path.EndsWith(chr.ToString()));
         }
-        
+
         public static Boolean IsValidFilePath(String path, Boolean allowNetworkPath = true)
         {
             return IsValidPath(path, allowNetworkPath) && !Separators.Any(chr => path.EndsWith(chr.ToString()));
         }
-        
+
         public static Boolean IsNetworkPath(String path)
         {
             return path.StartsWith("\\");
@@ -176,29 +178,30 @@ namespace Common_Library.Utils
         {
             try
             {
-                return IsNetworkPath(path) && new Uri(path).IsUnc && Regex.IsMatch(path, @"^\\{2}[\w-]+(\\{1}(([\w-][\w-\s]*[\w-]+[$$]?)|([\w-][$$]?$)))+");
+                return IsNetworkPath(path) && new Uri(path).IsUnc &&
+                       Regex.IsMatch(path, @"^\\{2}[\w-]+(\\{1}(([\w-][\w-\s]*[\w-]+[$$]?)|([\w-][$$]?$)))+");
             }
             catch (Exception)
             {
                 return false;
             }
         }
-        
+
         public static Boolean IsValidNetworkFolderPath(String path)
         {
             return IsValidNetworkPath(path) && Separators.Any(chr => path.EndsWith(chr.ToString()));
         }
-        
+
         public static Boolean IsValidNetworkFilePath(String path)
         {
             return IsValidNetworkPath(path) && !Separators.Any(chr => path.EndsWith(chr.ToString()));
         }
-        
+
         public static Boolean IsExistAsFolder(String path)
         {
             return IsValidFolderPath(path) && Directory.Exists(path);
         }
-        
+
         public static Boolean IsExistAsFile(String path)
         {
             return IsValidFilePath(path) && File.Exists(path);
@@ -208,7 +211,7 @@ namespace Common_Library.Utils
         {
             return IsExistAsFolder(path) || IsExistAsFile(path);
         }
-        
+
         public static Boolean IsExist(String path, PathType type = PathType.All)
         {
             return IsValidPath(path, type) && CheckExist(path);
@@ -218,12 +221,12 @@ namespace Common_Library.Utils
         {
             return path.Trim(Separators);
         }
-        
+
         public static String TrimPathStart(String path)
         {
             return path.TrimStart(Separators);
         }
-        
+
         public static String TrimPathEnd(String path)
         {
             return path.TrimEnd(Separators);
@@ -231,7 +234,7 @@ namespace Common_Library.Utils
 
         public static Boolean IsValidWebPath(String path)
         {
-            return Uri.TryCreate(path, UriKind.Absolute, out Uri uriResult) 
+            return Uri.TryCreate(path, UriKind.Absolute, out Uri uriResult)
                    && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
         }
     }

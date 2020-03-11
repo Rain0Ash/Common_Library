@@ -6,11 +6,11 @@ namespace Common_Library.Types.Interfaces
     public interface IEventDictionary<out TKey, out TValue> : IEventType
     {
         public event Handlers.TypeKeyValueHandler<TKey, TValue> OnAdd;
-        
+
         public event Handlers.TypeKeyValueHandler<TKey, TValue> OnSet;
-        
+
         public event Handlers.TypeKeyValueHandler<TKey, TValue> OnRemove;
-        
+
         public event Handlers.TypeKeyValueHandler<TKey, TValue> OnChange;
     }
 }

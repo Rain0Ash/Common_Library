@@ -29,15 +29,15 @@ namespace Common_Library.GUI.WinForms.TextBoxes
                 PasswdCharChanged?.Invoke();
             }
         }
-        
+
         public HidenTextBox()
         {
             PasswordChar = PasswdChar;
 
             Enter += (sender, args) => PasswordChar = ResetChar;
-            
+
             Leave += (sender, args) => PasswordChar = PasswdChar;
-            
+
             PasswdCharChanged += () => PasswordChar = PasswdChar;
         }
     }
