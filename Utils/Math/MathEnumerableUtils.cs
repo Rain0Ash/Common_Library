@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Common_Library.Utils
+namespace Common_Library.Utils.Math
 {
     public static class MathEnumerableUtils
     {

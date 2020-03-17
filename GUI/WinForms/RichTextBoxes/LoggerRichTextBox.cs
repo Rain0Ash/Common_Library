@@ -8,7 +8,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Common_Library.Localization;
 using Common_Library.Logger;
-using Common_Library.Utils;
+using Common_Library.Utils.Math;
 using Common_Library.Utils.OS;
 
 namespace Common_Library.GUI.WinForms.RichTextBoxes

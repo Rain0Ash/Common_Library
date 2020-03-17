@@ -5,7 +5,7 @@ using System;
 using System.IO;
 using System.Threading;
 
-namespace Common_Library.Utils
+namespace Common_Library.Utils.IO
 {
     public static class FileUtils
     {

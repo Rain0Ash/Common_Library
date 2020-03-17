@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using AAEmu.Commons.Utils;
-using Common_Library.Utils;
+using Common_Library.Utils.Math;
 using MySql.Data.MySqlClient;
 
 namespace AAEmu.Login.Utils

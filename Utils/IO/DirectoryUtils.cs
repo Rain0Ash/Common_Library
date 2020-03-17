@@ -4,7 +4,7 @@
 using System;
 using Common_Library.LongPath;
 
-namespace Common_Library.Utils
+namespace Common_Library.Utils.IO
 {
     public static class DirectoryUtils
     {

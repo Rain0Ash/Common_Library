@@ -3,6 +3,8 @@
 
 // ReSharper disable MemberCanBePrivate.Global
 
+using Common_Library.Utils.Math;
+
 namespace System.Collections.Generic
 {
     public class EventQueueList<T> : EventList<T>
@@ -17,7 +19,7 @@ namespace System.Collections.Generic
             }
             set
             {
-                Int32 val = Math.Max(value, 0);
+                Int32 val = MathUtils.Range(value);
                 if (_maximumLength == val)
                 {
                     return;
@@ -72,7 +74,7 @@ namespace System.Collections.Generic
 
         public T Pop(Int32 index = 0)
         {
-            index = Math.Max(index, 0);
+            index = MathUtils.Range(index);
             if (index > Count - 1)
             {
                 index = Count - 1;

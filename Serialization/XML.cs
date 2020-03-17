@@ -5,7 +5,7 @@ using System;
 using System.IO;
 using System.Text;
 using System.Xml.Serialization;
-using Common_Library.Utils;
+using Common_Library.Utils.IO;
 
 namespace Common_Library.Serialization
 {

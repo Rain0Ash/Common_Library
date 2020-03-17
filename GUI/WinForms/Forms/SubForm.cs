@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace Common_Library.GUI.WinForms.Forms
 {
-    public class SubForm : FixedForm
+    public class SubForm : FlashForm
     {
         private TabAlignment _alignment;
 

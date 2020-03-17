@@ -4,6 +4,8 @@
 using System;
 using System.Windows.Forms;
 using Common_Library.Utils;
+using Common_Library.Utils.Math;
+using Common_Library.Utils.Network;
 
 namespace Common_Library.GUI.WinForms.TextBoxes
 {

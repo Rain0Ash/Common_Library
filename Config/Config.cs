@@ -3,10 +3,14 @@
 
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Linq;
-using Common_Library.Config.Registry;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Windows.Forms;
+using Common_Library.Config.REG;
 using Common_Library.Config.INI;
 using Common_Library.Config.XML;
 using Common_Library.Config.RAM;
@@ -14,6 +18,7 @@ using Common_Library.Config.JSON;
 using Common_Library.Crypto;
 using Common_Library.Types.Other;
 using Common_Library.Utils;
+using Common_Library.Utils.IO;
 using JetBrains.Annotations;
 
 // ReSharper disable ConditionIsAlwaysTrueOrFalse
@@ -30,24 +35,24 @@ namespace Common_Library.Config
         RAM,
         JSON
     }
-
+    
     public abstract class Config : IDisposable
     {
         protected const String DefaultName = "config";
 
-        private static readonly ConcurrentDictionary<Config, ConcurrentDictionary<String[], ConfigPropertyBase>> ConfigDictionary =
-            new ConcurrentDictionary<Config, ConcurrentDictionary<String[], ConfigPropertyBase>>();
+        private static readonly IndexDictionary<Config, IndexDictionary<String, ConfigPropertyBase>> ConfigDictionary =
+            new IndexDictionary<Config, IndexDictionary<String, ConfigPropertyBase>>();
 
-        public static Config Factory(String configPath = null, Boolean isReadOnly = true,
-            ConfigType configType = ConfigType.Registry)
+        public static Config Factory(String configPath = null, Boolean isReadOnly = true, ConfigType configType = ConfigType.Registry)
         {
             return configType switch
             {
+                ConfigType.Registry => new REGConfig(configPath, isReadOnly),
                 ConfigType.INI => new INIConfig(configPath, isReadOnly),
                 ConfigType.XML => new XMLConfig(configPath, isReadOnly),
                 ConfigType.RAM => new RAMConfig(configPath, isReadOnly),
                 ConfigType.JSON => new JSONConfig(configPath, isReadOnly),
-                _ => (Config) new REGConfig(configPath, isReadOnly)
+                _ => throw new NotImplementedException()
             };
         }
 
@@ -58,7 +63,7 @@ namespace Common_Library.Config
 
         public Boolean CryptByDefault { get; set; }
 
-        public Boolean CachingByDefault { get; set; } = true;
+        public Boolean CachingByDefault { get; set; } = false;
 
         protected Config(String configPath, Boolean isReadOnly)
             : this(new PathObject(configPath), isReadOnly)
@@ -71,9 +76,14 @@ namespace Common_Library.Config
             IsReadOnly = isReadOnly;
         }
 
+        protected virtual String ConvertToValue<T>(T value)
+        {
+            return Convert.ToString(value, CultureInfo.InvariantCulture);
+        }
+        
         public void SetValue(String key, Object value, params String[] sections)
         {
-            this[key, sections] = Convert.ToString(value, CultureInfo.InvariantCulture);
+            this[key, sections] = ConvertToValue(value);
         }
 
         public void SetValue(String key, Object value, Boolean encrypt, params String[] sections)
@@ -85,7 +95,7 @@ namespace Common_Library.Config
         {
             if (encrypt)
             {
-                SetValue(key, Cryptography.AES.Encrypt(Convert.ToString(value, CultureInfo.InvariantCulture), encryptKey), sections);
+                SetValue(key, Cryptography.AES.Encrypt(ConvertToValue(value), encryptKey), sections);
                 return;
             }
 
@@ -102,6 +112,11 @@ namespace Common_Library.Config
             SetValue(property.Key, value, property.Crypt, property.CryptKey, property.Sections);
         }
 
+        protected virtual T ConvertFromValue<T>(String value)
+        {
+            return value.Convert<T>();
+        }
+        
         public String GetValue(String key, params String[] sections)
         {
             return this[key, sections];
@@ -141,7 +156,7 @@ namespace Common_Library.Config
 
         public T GetValue<T>(String key, params String[] sections)
         {
-            return this[key, sections].Convert<T>();
+            return ConvertFromValue<T>(this[key, sections]);
         }
 
         public T GetValue<T>(String key, T defaultValue, params String[] sections)
@@ -324,21 +339,36 @@ namespace Common_Library.Config
             return GetProperty(key, defaultValue, crypt, cryptKey, CachingByDefault, sections);
         }
 
-        public ConfigProperty<T> GetProperty<T>(String key, T defaultValue, Boolean crypt, Byte[] cryptKey, Boolean caching,
-            params String[] sections)
+        public ConfigProperty<T> GetProperty<T>(String key, T defaultValue, Boolean crypt, Byte[] cryptKey, Boolean caching, params String[] sections)
         {
             return (ConfigProperty<T>) GetOrAddProperty(new ConfigProperty<T>(this, key, defaultValue, crypt, cryptKey, caching, sections));
         }
 
         private static ConfigPropertyBase GetOrAddProperty(ConfigPropertyBase property)
         {
-            return ConfigDictionary.GetOrAdd(property.Config, new ConcurrentDictionary<String[], ConfigPropertyBase>())
-                .GetOrAdd(property.Sections.Append(property.Key).ToArray(), property);
+            return ConfigDictionary.GetOrAdd(property.Config, new IndexDictionary<String, ConfigPropertyBase>())
+                .GetOrAdd(property.Path, property);
         }
 
-        public void ForEachProperty(Action<ConfigPropertyBase> action)
+        public IEnumerable<ConfigPropertyBase> GetProperties()
         {
-            if (ConfigDictionary.TryGetValue(this, out ConcurrentDictionary<String[], ConfigPropertyBase> dictionary))
+            return ConfigDictionary.TryGetValue(this, out IndexDictionary<String, ConfigPropertyBase> dictionary) ? dictionary.Values : null;
+        }
+
+        public static void RemoveProperty(ConfigPropertyBase property)
+        {
+            if (!ConfigDictionary.TryGetValue(property.Config, out IndexDictionary<String, ConfigPropertyBase> dictionary))
+            {
+                return;
+            }
+
+            dictionary.Remove(property.Path);
+            ClearProperty(property);
+        }
+
+        private void ForEachProperty(Action<ConfigPropertyBase> action)
+        {
+            if (ConfigDictionary.TryGetValue(this, out IndexDictionary<String, ConfigPropertyBase> dictionary))
             {
                 dictionary.Values.ToList().ForEach(action);
             }
@@ -361,7 +391,7 @@ namespace Common_Library.Config
 
         private static void ClearProperty(ConfigPropertyBase property)
         {
-            property.Dispose();
+            property.Dispose(true);
         }
 
         public void ReadProperties()

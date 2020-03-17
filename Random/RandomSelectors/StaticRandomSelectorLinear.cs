@@ -16,7 +16,7 @@ namespace Common_Library.Random
 
         // internal buffers
         private readonly T[] _items;
-        private readonly Single[] _cda;
+        private readonly Double[] _cda;
 
         /// <summary>
         /// Constructor, used by StaticRandomSelectorBuilder
@@ -25,7 +25,7 @@ namespace Common_Library.Random
         /// <param name="items">Items of type T</param>
         /// <param name="cda">Cummulative Distribution Array</param>
         /// <param name="seed">Seed for internal random generator</param>
-        public StaticRandomSelectorLinear(T[] items, Single[] cda, Int32 seed)
+        public StaticRandomSelectorLinear(T[] items, Double[] cda, Int32 seed)
         {
             _items = items;
             _cda = cda;
@@ -37,7 +37,7 @@ namespace Common_Library.Random
         /// Uses linear search for random selection.
         /// </summary>
         /// <returns>Returns item</returns>
-        public T SelectRandomItem(Single randomValue)
+        public T SelectRandomItem(Double randomValue)
         {
             return _items[_cda.SelectIndexBinarySearch(randomValue)];
         }
@@ -49,7 +49,7 @@ namespace Common_Library.Random
         /// <returns>Returns item</returns>
         public T SelectRandomItem()
         {
-            Single randomValue = (Single) _random.NextDouble();
+            Double randomValue = _random.NextDouble();
 
             return _items[_cda.SelectIndexBinarySearch(randomValue)];
         }

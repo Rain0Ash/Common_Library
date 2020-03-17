@@ -24,7 +24,7 @@ namespace Common_Library.Random
         /// Builds cummulative distribution out of non-normalized weights inplace.
         /// </summary>
         /// <param name="cdl">List of Non-normalized weights</param>
-        public static void BuildCumulativeDistribution(List<Single> cdl)
+        public static void BuildCumulativeDistribution(List<Double> cdl)
         {
             Int32 length = cdl.Count;
 
@@ -48,7 +48,7 @@ namespace Common_Library.Random
             for (Int32 i = 0; i < length; i++)
             {
                 sum += cdl[i] * k; //k, the normalization constant is applied here
-                cdl[i] = (Single) sum;
+                cdl[i] = sum;
             }
 
             cdl[length - 1] =
@@ -59,7 +59,7 @@ namespace Common_Library.Random
         /// Builds cummulative distribution out of non-normalized weights inplace.
         /// </summary>
         /// <param name="cda">Array of Non-normalized weights</param>
-        public static void BuildCumulativeDistribution(Single[] cda)
+        public static void BuildCumulativeDistribution(Double[] cda)
         {
             Int32 length = cda.Length;
 
@@ -83,7 +83,7 @@ namespace Common_Library.Random
             for (Int32 i = 0; i < length; i++)
             {
                 sum += cda[i] * k; //k, the normalization constant is applied here
-                cda[i] = (Single) sum;
+                cda[i] = sum;
             }
 
             cda[length - 1] =
@@ -97,7 +97,7 @@ namespace Common_Library.Random
         /// <param name="cda">Cummulative Distribution Array</param>
         /// <param name="randomValue">Uniform random value</param>
         /// <returns>Returns index of an value inside CDA</returns>
-        public static Int32 SelectIndexLinearSearch(this Single[] cda, Single randomValue)
+        public static Int32 SelectIndexLinearSearch(this Double[] cda, Double randomValue)
         {
             Int32 i = 0;
 
@@ -118,7 +118,7 @@ namespace Common_Library.Random
         /// <param name="cda">Cummulative Distribution Array</param>
         /// <param name="randomValue">Uniform random value</param>
         /// <returns>Returns index of an value inside CDA</returns>
-        public static Int32 SelectIndexBinarySearch(this Single[] cda, Single randomValue)
+        public static Int32 SelectIndexBinarySearch(this Double[] cda, Double randomValue)
         {
             Int32 lo = 0;
             Int32 hi = cda.Length - 1;
@@ -129,7 +129,7 @@ namespace Common_Library.Random
                 // calculate median
                 index = lo + ((hi - lo) >> 1);
 
-                if (Math.Abs(cda[index] - randomValue) < Single.Epsilon)
+                if (Math.Abs(cda[index] - randomValue) < Double.Epsilon)
                 {
                     return index;
                 }
@@ -157,7 +157,7 @@ namespace Common_Library.Random
         /// <param name="cdl">Cummulative Distribution List</param>
         /// <param name="randomValue">Uniform random value</param>
         /// <returns>Returns index of an value inside CDA</returns>
-        public static Int32 SelectIndexLinearSearch(this List<Single> cdl, Single randomValue)
+        public static Int32 SelectIndexLinearSearch(this List<Double> cdl, Double randomValue)
         {
             Int32 i = 0;
 
@@ -177,7 +177,7 @@ namespace Common_Library.Random
         /// <param name="cdl">Cummulative Distribution List</param>
         /// <param name="randomValue">Uniform random value</param>
         /// <returns>Returns index of an value inside CDL</returns>
-        public static Int32 SelectIndexBinarySearch(this List<Single> cdl, Single randomValue)
+        public static Int32 SelectIndexBinarySearch(this List<Double> cdl, Double randomValue)
         {
             Int32 lo = 0;
             Int32 hi = cdl.Count - 1;
@@ -188,7 +188,7 @@ namespace Common_Library.Random
                 // calculate median
                 index = lo + ((hi - lo) >> 1);
 
-                if (Math.Abs(cdl[index] - randomValue) < Single.Epsilon)
+                if (Math.Abs(cdl[index] - randomValue) < Double.Epsilon)
                 {
                     return index;
                 }
@@ -215,9 +215,9 @@ namespace Common_Library.Random
         /// </summary>
         /// <param name="length">Length of an array</param>
         /// <returns>Identity array</returns>
-        public static Single[] IdentityArray(Int32 length)
+        public static Double[] IdentityArray(Int32 length)
         {
-            Single[] array = new Single[length];
+            Double[] array = new Double[length];
 
             for (Int32 i = 0; i < array.Length; i++)
             {
@@ -232,13 +232,13 @@ namespace Common_Library.Random
         /// </summary>
         /// <param name="array">The array where all values will be randomized.</param>
         /// <param name="r">Random generator</param>
-        public static void RandomWeightsArray(ref Single[] array, System.Random r)
+        public static void RandomWeightsArray(ref Double[] array, System.Random r)
         {
             for (Int32 i = 0; i < array.Length; i++)
             {
-                array[i] = (Single) r.NextDouble();
+                array[i] = r.NextDouble();
 
-                if (Math.Abs(array[i]) < Single.Epsilon)
+                if (Math.Abs(array[i]) < Double.Epsilon)
                 {
                     i--;
                 }
@@ -251,15 +251,15 @@ namespace Common_Library.Random
         /// <param name="r">Random generator</param>
         /// <param name="length">Length of new array</param>
         /// <returns>Array with random uniform random variables</returns>
-        public static Single[] RandomWeightsArray(System.Random r, Int32 length)
+        public static Double[] RandomWeightsArray(System.Random r, Int32 length)
         {
-            Single[] array = new Single[length];
+            Double[] array = new Double[length];
 
             for (Int32 i = 0; i < length; i++)
             {
-                array[i] = (Single) r.NextDouble();
+                array[i] = r.NextDouble();
 
-                if (Math.Abs(array[i]) < Single.Epsilon)
+                if (Math.Abs(array[i]) < Double.Epsilon)
                 {
                     i--;
                 }
@@ -274,9 +274,9 @@ namespace Common_Library.Random
         /// </summary>
         /// <param name="length">Length of an list</param>
         /// <returns>Identity list</returns>
-        public static List<Single> IdentityList(Int32 length)
+        public static List<Double> IdentityList(Int32 length)
         {
-            List<Single> list = new List<Single>(length);
+            List<Double> list = new List<Double>(length);
 
             for (Int32 i = 0; i < length; i++)
             {
@@ -291,13 +291,13 @@ namespace Common_Library.Random
         /// </summary>
         /// <param name="list">The list where all values will be randomized.</param>
         /// <param name="r">Random generator</param>
-        public static void RandomWeightsList(ref List<Single> list, System.Random r)
+        public static void RandomWeightsList(ref List<Double> list, System.Random r)
         {
             for (Int32 i = 0; i < list.Count; i++)
             {
-                list[i] = (Single) r.NextDouble();
+                list[i] = r.NextDouble();
 
-                if (Math.Abs(list[i]) < Single.Epsilon)
+                if (Math.Abs(list[i]) < Double.Epsilon)
                 {
                     i--;
                 }

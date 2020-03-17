@@ -12,6 +12,6 @@ namespace Common_Library.Random
     public interface IRandomSelector<out T>
     {
         T SelectRandomItem();
-        T SelectRandomItem(Single randomValue);
+        T SelectRandomItem(Double randomValue);
     }
 }

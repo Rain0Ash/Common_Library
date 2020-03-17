@@ -3,7 +3,7 @@
 
 using System;
 using System.Windows.Forms;
-using Common_Library.Utils;
+using Common_Library.Utils.Math;
 
 namespace Common_Library.GUI.WinForms.Buttons
 {

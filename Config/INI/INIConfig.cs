@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Common_Library.LongPath;
 using Common_Library.Utils;
+using Common_Library.Utils.IO;
 
 namespace Common_Library.Config.INI
 {
@@ -20,12 +21,11 @@ namespace Common_Library.Config.INI
 
         protected override String Get(String key, params String[] sections)
         {
-            StringBuilder retVal = new StringBuilder(255);
+            StringBuilder builder = new StringBuilder(255);
 
-            GetPrivateProfileString(GenericUtils<String>.TryGetValue(sections, 0, DefaultSection), key, String.Empty, retVal, 255,
-                ConfigPath);
+            GetPrivateProfileString(GenericUtils<String>.TryGetValue(sections, 0, DefaultSection), key, String.Empty, builder, 255, ConfigPath);
 
-            String returnValue = retVal.ToString();
+            String returnValue = builder.ToString();
             return String.IsNullOrEmpty(returnValue) ? null : returnValue;
         }
 

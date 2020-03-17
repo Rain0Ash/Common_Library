@@ -4,7 +4,7 @@
 using System;
 using System.Reflection;
 
-namespace Common_Library.Config.Registry
+namespace Common_Library.Config.REG
 {
     public sealed class REGConfig : Config
     {
@@ -31,6 +31,12 @@ namespace Common_Library.Config.Registry
             : base(String.IsNullOrEmpty(pathName) ? Assembly.GetCallingAssembly().GetName().Name : pathName, readOnly)
         {
             _registry = new Common_Library.Registry.Registry(ConfigPath, readOnly);
+        }
+
+        public REGConfig(Registry.BaseKey baseKey, String path, Boolean readOnly = true)
+            : base(path, readOnly)
+        {
+            _registry = new Common_Library.Registry.Registry(path, baseKey, readOnly);
         }
 
         protected override String Get(String key, params String[] sections)

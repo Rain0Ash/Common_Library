@@ -4,7 +4,7 @@
 using System;
 using System.Globalization;
 using System.Linq;
-using Common_Library.Utils;
+using Common_Library.Utils.Math;
 
 // ReSharper disable MemberCanBePrivate.Global
 

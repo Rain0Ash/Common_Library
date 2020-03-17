@@ -17,9 +17,13 @@
     <PropertyGroup Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('$(TargetFramework)', '^netcoreapp\d'))">
         <DefineConstants>NETCORE</DefineConstants>
     </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <Optimize>true</Optimize>
+    </PropertyGroup>
 
     <ItemGroup>
       <Folder Include="Combinatorics" />
+      <Folder Include="GUI\WinForms\Common" />
       <Folder Include="Resources\" />
       <Folder Include="Types\Other" />
     </ItemGroup>
@@ -46,11 +50,18 @@
 
     <ItemGroup>
       <None Remove="Common_Library.ExternalAnnotations.xml" />
+      <None Update="Utils\Math\GenericMath.tt">
+        <Generator>TextTemplatingFileGenerator</Generator>
+        <LastGenOutput>GenericMath.cs</LastGenOutput>
+      </None>
     </ItemGroup>
 
     <ItemGroup>
       <Compile Update="Utils\Math\Primes.cs">
         <DependentUpon>PrimeUtils.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Utils\Math\GenericMath.cs">
+        <DependentUpon>GenericMath.tt</DependentUpon>
       </Compile>
     </ItemGroup>
 

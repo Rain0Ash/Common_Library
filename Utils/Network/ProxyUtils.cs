@@ -5,7 +5,7 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace Common_Library.Utils
+namespace Common_Library.Utils.Network
 {
     public static class ProxyUtils
     {

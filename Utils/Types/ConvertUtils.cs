@@ -5,6 +5,8 @@ using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Globalization;
+using System.Runtime.CompilerServices;
+using Common_Library.Utils.Math;
 
 namespace Common_Library.Utils
 {
@@ -22,13 +24,15 @@ namespace Common_Library.Utils
             return value;
         }
 
-        #region DecimalsConvert
+        #region DecimalConvert
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SByte ToSByte(this Decimal value)
         {
             return System.Convert.ToSByte(MathUtils.Range(value, SByte.MinValue, SByte.MaxValue));
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Byte ToByte(this Decimal value)
         {
             return value >= 0
@@ -36,11 +40,13 @@ namespace Common_Library.Utils
                 : Convert(ToSByte(value));
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Int16 ToInt16(this Decimal value)
         {
             return System.Convert.ToInt16(MathUtils.Range(value, Int16.MinValue, Int16.MaxValue));
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static UInt16 ToUInt16(this Decimal value)
         {
             return value >= 0
@@ -48,11 +54,13 @@ namespace Common_Library.Utils
                 : Convert(ToInt16(value));
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Int32 ToInt32(this Decimal value)
         {
             return System.Convert.ToInt32(MathUtils.Range(value, Int32.MinValue, Int32.MaxValue));
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static UInt32 ToUInt32(this Decimal value)
         {
             return value >= 0
@@ -60,11 +68,13 @@ namespace Common_Library.Utils
                 : Convert(ToInt32(value));
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Int64 ToInt64(this Decimal value)
         {
             return System.Convert.ToInt64(MathUtils.Range(value, Int64.MinValue, Int64.MaxValue));
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static UInt64 ToUInt64(this Decimal value)
         {
             return value >= 0
@@ -76,6 +86,7 @@ namespace Common_Library.Utils
 
         #region UTypeConvert
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Byte Convert(SByte value)
         {
             unchecked
@@ -89,6 +100,7 @@ namespace Common_Library.Utils
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static UInt16 Convert(Int16 value)
         {
             unchecked
@@ -102,6 +114,7 @@ namespace Common_Library.Utils
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static UInt32 Convert(Int32 value)
         {
             unchecked
@@ -115,6 +128,7 @@ namespace Common_Library.Utils
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static UInt64 Convert(Int64 value)
         {
             unchecked
@@ -126,6 +140,58 @@ namespace Common_Library.Utils
 
                 return (UInt64) (value + Int64.MaxValue);
             }
+        }
+
+        #endregion
+
+        #region EnumConvert
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static SByte ToSByte<T>(this T value) where T : Enum
+        {
+            return (SByte)(Object)value;
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Byte ToByte<T>(this T value) where T : Enum
+        {
+            return (Byte)(Object)value;
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Int16 ToInt16<T>(this T value) where T : Enum
+        {
+            return (Int16)(Object)value;
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static UInt16 ToUInt16<T>(this T value) where T : Enum
+        {
+            return (UInt16)(Object)value;
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Int32 ToInt32<T>(this T value) where T : Enum
+        {
+            return (Int32)(Object)value;
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static UInt32 ToUInt32<T>(this T value) where T : Enum
+        {
+            return (UInt32)(Object)value;
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Int64 ToInt64<T>(this T value) where T : Enum
+        {
+            return (Int64)(Object)value;
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static UInt64 ToUInt64<T>(this T value) where T : Enum
+        {
+            return (UInt64)(Object)value;
         }
 
         #endregion

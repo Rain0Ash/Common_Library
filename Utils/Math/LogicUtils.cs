@@ -4,7 +4,7 @@
 using System;
 using System.Linq;
 
-namespace Common_Library.Utils
+namespace Common_Library.Utils.Math
 {
     public static class LogicUtils
     {

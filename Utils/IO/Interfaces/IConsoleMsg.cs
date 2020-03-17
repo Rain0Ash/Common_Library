@@ -4,7 +4,7 @@
 using System;
 using System.Drawing;
 
-namespace Common_Library.Utils
+namespace Common_Library.Utils.IO
 {
     public interface IConsoleMsg
     {
@@ -23,17 +23,7 @@ namespace Common_Library.Utils
             GetConsoleText(provider).ToConsole(color, newLine, provider);
         }
 
-        void ToConsole(Color color, Boolean newLine = true, IFormatProvider provider = null)
-        {
-            GetConsoleText(provider).ToConsole(color, newLine, provider);
-        }
-
         void ToConsole(ConsoleColor color, ConsoleColor bColor, Boolean newLine = true, IFormatProvider provider = null)
-        {
-            GetConsoleText(provider).ToConsole(color, bColor, newLine, provider);
-        }
-
-        void ToConsole(Color color, Color bColor, Boolean newLine = true, IFormatProvider provider = null)
         {
             GetConsoleText(provider).ToConsole(color, bColor, newLine, provider);
         }

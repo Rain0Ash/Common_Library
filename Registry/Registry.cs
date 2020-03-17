@@ -8,39 +8,36 @@ using System.Reflection;
 using System.Security;
 using System.Text.RegularExpressions;
 using Common_Library.Exceptions;
-using Common_Library.Utils;
+using Common_Library.Utils.IO;
 using Microsoft.Win32;
 using Path = Common_Library.LongPath.Path;
 
-// ReSharper disable MemberCanBePrivate.Global
-// ReSharper disable UnusedMember.Global
-// ReSharper disable UnusedMethodReturnValue.Local
-// ReSharper disable UnusedMethodReturnValue.Global
-
 namespace Common_Library.Registry
 {
+    public enum BaseKey
+    {
+        Default,
+        Users,
+        ClassesRoot,
+        CurrentConfig,
+        CurrentUser,
+        LocalMachine,
+        PerformanceData
+    }
+    
     public sealed class Registry : IDisposable
     {
-        public enum BaseKeys
-        {
-            Default,
-            Users,
-            ClassesRoot,
-            CurrentConfig,
-            CurrentUser,
-            LocalMachine,
-            PerformanceData
-        }
+        
 
-        private static readonly Dictionary<BaseKeys, RegistryKey> Keys = new Dictionary<BaseKeys, RegistryKey>
+        private static readonly Dictionary<BaseKey, RegistryKey> Keys = new Dictionary<BaseKey, RegistryKey>
         {
-            {BaseKeys.Default, Microsoft.Win32.Registry.CurrentUser},
-            {BaseKeys.Users, Microsoft.Win32.Registry.Users},
-            {BaseKeys.ClassesRoot, Microsoft.Win32.Registry.ClassesRoot},
-            {BaseKeys.CurrentConfig, Microsoft.Win32.Registry.CurrentConfig},
-            {BaseKeys.CurrentUser, Microsoft.Win32.Registry.CurrentUser},
-            {BaseKeys.LocalMachine, Microsoft.Win32.Registry.LocalMachine},
-            {BaseKeys.PerformanceData, Microsoft.Win32.Registry.PerformanceData}
+            {BaseKey.Default, Microsoft.Win32.Registry.CurrentUser},
+            {BaseKey.Users, Microsoft.Win32.Registry.Users},
+            {BaseKey.ClassesRoot, Microsoft.Win32.Registry.ClassesRoot},
+            {BaseKey.CurrentConfig, Microsoft.Win32.Registry.CurrentConfig},
+            {BaseKey.CurrentUser, Microsoft.Win32.Registry.CurrentUser},
+            {BaseKey.LocalMachine, Microsoft.Win32.Registry.LocalMachine},
+            {BaseKey.PerformanceData, Microsoft.Win32.Registry.PerformanceData}
         };
 
         public Boolean IsSafe { get; set; } = true;
@@ -74,27 +71,26 @@ namespace Common_Library.Registry
 
         public String GetBasePath()
         {
-            return $"{Path.Combine(Keys[BaseKeys.Default].Name, @"Software", $"{_initName}")}";
+            return $"{Path.Combine(Keys[BaseKey.Default].Name, @"Software", $"{_initName}")}";
         }
 
         public Registry(String pathName, Boolean readOnly = true, Boolean safe = true, Boolean autoInitialize = true)
         {
             _initName = pathName;
             CheckInitialize(autoInitialize, true);
-            SetRegistryKey($"Software\\{_initName}", BaseKeys.Default, readOnly, safe);
+            SetRegistryKey($"Software\\{_initName}", BaseKey.Default, readOnly, safe);
         }
 
-        public Registry(RegistryKey registryPath, Boolean safe = true, Boolean autoInitialize = true)
+        public Registry(RegistryKey registryPath, Boolean readOnly = true, Boolean safe = true, Boolean autoInitialize = true)
         {
             CheckInitialize(autoInitialize, true);
-            SetRegistryKey(registryPath, safe);
+            SetRegistryKey(registryPath, readOnly, safe);
         }
 
-        public Registry(String registryPath = null, BaseKeys baseKey = BaseKeys.Default, Boolean readOnly = true, Boolean isSafe = true,
-            Boolean autoInitialize = true)
+        public Registry(String registryPath = null, BaseKey baseKey = BaseKey.Default, Boolean readOnly = true, Boolean safe = true, Boolean autoInitialize = true)
         {
             CheckInitialize(autoInitialize, true);
-            SetRegistryKey(registryPath, baseKey, readOnly, isSafe);
+            SetRegistryKey(registryPath, baseKey, readOnly, safe);
         }
 
         public Boolean SetRegistryKey(RegistryKey registryPath, Boolean readOnly = true, Boolean isSafe = true)
@@ -113,11 +109,10 @@ namespace Common_Library.Registry
             }
         }
 
-        public Boolean SetRegistryKey(String registryPath, BaseKeys baseKey = BaseKeys.Default, Boolean readOnly = true,
-            Boolean isSafe = true)
+        public Boolean SetRegistryKey(String registryPath, BaseKey baseKey = BaseKey.Default, Boolean readOnly = true, Boolean safe = true)
         {
             _registryKey?.Close();
-            IsSafe = isSafe;
+            IsSafe = safe;
             IsReadOnly = readOnly;
             try
             {

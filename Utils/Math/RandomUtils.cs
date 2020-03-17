@@ -4,7 +4,7 @@
 using System;
 using Common_Library.Random;
 
-namespace Common_Library.Utils
+namespace Common_Library.Utils.Math
 {
     public static class RandomUtils
     {

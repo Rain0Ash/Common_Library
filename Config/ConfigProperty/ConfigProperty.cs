@@ -2,13 +2,9 @@
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
 using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Windows.Forms;
-using Common_Library.Config.INI;
 using Common_Library.Utils;
+using JetBrains.Annotations;
 
 namespace Common_Library.Config
 {
@@ -21,8 +17,13 @@ namespace Common_Library.Config
         }
     }
 
-    public class ConfigProperty<T> : ConfigPropertyBase
+    public class ConfigProperty<T> : ConfigPropertyBase, IConfigProperty<T>
     {
+        public static implicit operator T(ConfigProperty<T> property)
+        {
+            return property.GetValue();
+        }
+        
         public static implicit operator String(ConfigProperty<T> property)
         {
             return property.ToString();
@@ -30,10 +31,9 @@ namespace Common_Library.Config
 
         public T DefaultValue { get; set; }
 
-        public T Cache { get; protected set; }
+        public T Value { get; protected set; }
 
-        internal ConfigProperty(Config config, String key, T defaultValue, Boolean crypt, Byte[] cryptKey, Boolean caching,
-            params String[] sections)
+        internal ConfigProperty(Config config, String key, T defaultValue, Boolean crypt, Byte[] cryptKey, Boolean caching, params String[] sections)
             : base(config, key, crypt, cryptKey, caching, sections)
         {
             DefaultValue = defaultValue;
@@ -43,7 +43,7 @@ namespace Common_Library.Config
 
         public void SetValue(T value)
         {
-            Cache = value;
+            Value = value;
 
             if (!Caching)
             {
@@ -58,37 +58,54 @@ namespace Common_Library.Config
                 Read();
             }
 
-            return Cache;
+            return Value;
+        }
+
+        public T GetValue(Func<T, Boolean> validate)
+        {
+            return validate == null || validate(GetValue()) ? Value : DefaultValue;
         }
 
         public T GetOrSetValue()
         {
-            return Config.GetOrSetValue(this);
+            if (!Caching)
+            {
+                Value = Config.GetOrSetValue(this);
+                return Value;
+            }
+
+            Read();
+            return Value;
         }
 
-        public Boolean KeyExist()
+        public void ResetValue()
         {
-            return Config.KeyExist(Key, Sections);
+            Value = DefaultValue;
         }
 
         public void RemoveValue()
         {
-            Config.RemoveValue(Key, Sections);
+            if (!Caching)
+            {
+                Config.RemoveValue(Key, Sections);
+            }
+
+            ResetValue();
         }
 
         public override void Save()
         {
-            Config.SetValue(this, Cache);
+            Config.SetValue(this, Value);
         }
 
         public override void Read()
         {
-            Cache = Config.GetValue(this);
+            Value = Config.GetValue(this);
         }
 
         public override void Reset()
         {
-            Cache = DefaultValue;
+            ResetValue();
             Save();
         }
 
@@ -98,11 +115,19 @@ namespace Common_Library.Config
         }
     }
 
-    public abstract class ConfigPropertyBase
+    public abstract class ConfigPropertyBase : IConfigPropertyBase
     {
         public static implicit operator String(ConfigPropertyBase property)
         {
             return property.ToString();
+        }
+
+        public String Path
+        {
+            get
+            {
+                return String.Join("\\", Sections.Append(Key));
+            }
         }
 
         public Config Config { get; }
@@ -111,6 +136,8 @@ namespace Common_Library.Config
         public Boolean Crypt { get; set; }
         public Byte[] CryptKey { get; set; }
         public Boolean Caching { get; set; }
+
+        private Boolean _disposed;
 
         protected ConfigPropertyBase(Config config, String key, Boolean crypt, Byte[] cryptKey, Boolean caching, params String[] sections)
         {
@@ -128,8 +155,28 @@ namespace Common_Library.Config
 
         public abstract void Reset();
 
+        public Boolean KeyExist()
+        {
+            return Config.KeyExist(Key, Sections);
+        }
+        
         public void Dispose()
         {
+            if (!_disposed)
+            {
+                Dispose(_disposed);
+            }
+        }
+
+        internal void Dispose(Boolean disposing)
+        {
+            if (!disposing)
+            {
+                Config.RemoveProperty(this);
+            }
+
+            _disposed = true;
+            Dispose();
         }
     }
 }

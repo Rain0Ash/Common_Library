@@ -15,13 +15,13 @@ namespace Common_Library.Random
     {
         private readonly System.Random _random;
         private readonly List<T> _itemBuffer;
-        private readonly List<Single> _weightBuffer;
+        private readonly List<Double> _weightBuffer;
 
-        public RandomSelectorBuilder(IReadOnlyDictionary<T, Single> items = null)
+        public RandomSelectorBuilder(IReadOnlyDictionary<T, Double> items = null)
         {
             _random = new System.Random();
             _itemBuffer = new List<T>();
-            _weightBuffer = new List<Single>();
+            _weightBuffer = new List<Double>();
 
             if (items?.Any() == true)
             {
@@ -35,10 +35,10 @@ namespace Common_Library.Random
         /// </summary>
         /// <param name="item">Item that will be returned on random selection</param>
         /// <param name="weight">Non-zero non-normalized weight</param>
-        public void Add(T item, Single weight)
+        public void Add(T item, Double weight)
         {
             // ignore zero weight items
-            if (Math.Abs(weight) < Single.Epsilon)
+            if (Math.Abs(weight) < Double.Epsilon)
             {
                 return;
             }
@@ -47,9 +47,9 @@ namespace Common_Library.Random
             _weightBuffer.Add(weight);
         }
 
-        public void Add(IReadOnlyDictionary<T, Single> items)
+        public void Add(IReadOnlyDictionary<T, Double> items)
         {
-            foreach ((T item, Single weight) in items)
+            foreach ((T item, Double weight) in items)
             {
                 Add(item, weight);
             }
@@ -63,7 +63,7 @@ namespace Common_Library.Random
         public IRandomSelector<T> Build(Int32 seed = -1)
         {
             T[] items = _itemBuffer.ToArray();
-            Single[] cda = _weightBuffer.ToArray();
+            Double[] cda = _weightBuffer.ToArray();
 
             _itemBuffer.Clear();
             _weightBuffer.Clear();
@@ -88,13 +88,13 @@ namespace Common_Library.Random
         private static readonly RandomSelectorBuilder<T> StaticBuilder = new RandomSelectorBuilder<T>();
 
         /// <summary>
-        /// non-instance based, single threaded only. For ease of use. 
+        /// non-instance based, Double threaded only. For ease of use. 
         /// Build from array of items/weights.
         /// </summary>
         /// <param name="itemsArray">Array of items</param>
         /// <param name="weightsArray">Array of non-zero non-normalized weights. Have to be same length as itemsArray.</param>
         /// <returns></returns>
-        public static IRandomSelector<T> Build(T[] itemsArray, Single[] weightsArray)
+        public static IRandomSelector<T> Build(T[] itemsArray, Double[] weightsArray)
         {
             StaticBuilder.Clear();
 
@@ -108,13 +108,13 @@ namespace Common_Library.Random
 
 
         /// <summary>
-        /// non-instance based, single threaded only. For ease of use. 
+        /// non-instance based, Double threaded only. For ease of use. 
         /// Build from array of items/weights.
         /// </summary>
         /// <param name="itemsList">List of weights</param>
         /// <param name="weightsList">List of non-zero non-normalized weights. Have to be same length as itemsList.</param>
         /// <returns></returns>
-        public static IRandomSelector<T> Build(List<T> itemsList, List<Single> weightsList)
+        public static IRandomSelector<T> Build(List<T> itemsList, List<Double> weightsList)
         {
             StaticBuilder.Clear();
 

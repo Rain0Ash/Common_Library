@@ -6,7 +6,7 @@ using Common_Library.Localization;
 
 namespace Common_Library.GUI.WinForms.Forms
 {
-    public abstract class LocalizationForm : FixedForm
+    public abstract class LocalizationForm : FlashForm
     {
         protected override void OnLoad(EventArgs e)
         {

@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Common_Library.Utils
+namespace Common_Library.Utils.Math
 {
     public static partial class PrimeUtils
     {

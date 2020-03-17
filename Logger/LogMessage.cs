@@ -7,7 +7,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using Common_Library.Localization;
-using Common_Library.Utils;
+using Common_Library.Utils.IO;
 
 namespace Common_Library.Logger
 {
@@ -17,7 +17,8 @@ namespace Common_Library.Logger
         {
             {MessageType.Default, ConsoleColor.White},
             {MessageType.Debug, ConsoleColor.Cyan},
-            {MessageType.Action, ConsoleColor.Blue},
+            {MessageType.Info, ConsoleColor.Blue},
+            {MessageType.Action, ConsoleColor.DarkBlue},
             {MessageType.Good, ConsoleColor.Green},
             {MessageType.Warning, ConsoleColor.DarkYellow},
             {MessageType.CriticalWarning, ConsoleColor.Red},

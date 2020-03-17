@@ -1,8 +1,8 @@
 ﻿// This is an independent project of an individual developer. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 
 namespace Common_Library.Random
 {
@@ -19,11 +19,11 @@ namespace Common_Library.Random
 
         // internal buffers
         private readonly List<T> _itemsList;
-        private readonly List<Single> _weightsList;
-        private readonly List<Single> _cdl; // Cummulative Distribution List
+        private readonly List<Double> _weightsList;
+        private readonly List<Double> _cdl; // Cummulative Distribution List
 
         // internal function that gets dynamically swapped inside Build
-        private Func<List<Single>, Single, Int32> _selectFunction;
+        private Func<List<Double>, Double, Int32> _selectFunction;
 
         /// <summary>
         /// Default constructor
@@ -35,8 +35,8 @@ namespace Common_Library.Random
             _random = seed == -1 ? new System.Random() : new System.Random(seed);
 
             _itemsList = new List<T>(expectedNumberOfItems);
-            _weightsList = new List<Single>(expectedNumberOfItems);
-            _cdl = new List<Single>(expectedNumberOfItems);
+            _weightsList = new List<Double>(expectedNumberOfItems);
+            _cdl = new List<Double>(expectedNumberOfItems);
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace Common_Library.Random
         /// <param name="weights">Un-normalized weights/chances of items, should be same length as items array</param>
         /// /// <param name="seed">Leave it -1 if you want seed to be randomly picked</param>
         /// <param name="expectedNumberOfItems">Set this if you know how much items the collection will hold, to minimize Garbage Collection</param>
-        public DynamicRandomSelector(IReadOnlyList<T> items, IReadOnlyList<Single> weights, Int32 seed = -1,
+        public DynamicRandomSelector(IReadOnlyList<T> items, IReadOnlyList<Double> weights, Int32 seed = -1,
             Int32 expectedNumberOfItems = 32)
             : this(seed, expectedNumberOfItems)
         {
@@ -75,10 +75,10 @@ namespace Common_Library.Random
         /// </summary>
         /// <param name="item">Item that will be returned on random selection</param>
         /// <param name="weight">Non-zero non-normalized weight</param>
-        public void Add(T item, Single weight)
+        public void Add(T item, Double weight)
         {
             // ignore zero weight items
-            if (Math.Abs(weight) < Single.Epsilon)
+            if (Math.Abs(weight) < Double.Epsilon)
             {
                 return;
             }
@@ -124,7 +124,7 @@ namespace Common_Library.Random
 
             // clear list and then transfer weights
             _cdl.Clear();
-            foreach (Single weight in _weightsList)
+            foreach (Double weight in _weightsList)
             {
                 _cdl.Add(weight);
             }
@@ -167,7 +167,7 @@ namespace Common_Library.Random
         /// </summary>
         /// <param name="randomValue">Random value from your uniform generator</param>
         /// <returns>Returns item</returns>
-        public T SelectRandomItem(Single randomValue)
+        public T SelectRandomItem(Double randomValue)
         {
             return _itemsList[_selectFunction(_cdl, randomValue)];
         }
@@ -179,7 +179,7 @@ namespace Common_Library.Random
         /// <returns>Returns item</returns>
         public T SelectRandomItem()
         {
-            Single randomValue = (Single) _random.NextDouble();
+            Double randomValue = _random.NextDouble();
             return _itemsList[_selectFunction(_cdl, randomValue)];
         }
     }

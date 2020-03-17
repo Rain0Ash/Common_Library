@@ -19,7 +19,7 @@ namespace Common_Library.Utils
         All = 127
     }
 
-    public class GUIUtils
+    public static class GUIUtils
     {
     }
 }

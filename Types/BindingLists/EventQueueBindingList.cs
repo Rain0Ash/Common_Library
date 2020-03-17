@@ -2,6 +2,7 @@
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
 using System.Linq;
+using Common_Library.Utils.Math;
 
 namespace System.Collections.Generic
 {
@@ -17,7 +18,7 @@ namespace System.Collections.Generic
             }
             set
             {
-                Int32 val = Math.Max(value, 0);
+                Int32 val = MathUtils.Range(value);
                 if (_maximumLength == val)
                 {
                     return;
@@ -58,7 +59,7 @@ namespace System.Collections.Generic
 
         public T Pop(Int32 index = 0)
         {
-            index = Math.Max(index, 0);
+            index = MathUtils.Range(index);
             if (index > Count - 1)
             {
                 index = Count - 1;

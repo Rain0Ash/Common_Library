@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Common_Library.Utils
+namespace Common_Library.Utils.Core
 {
     public static class ReflectionUtils
     {

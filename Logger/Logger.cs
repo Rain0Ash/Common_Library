@@ -13,6 +13,7 @@ namespace Common_Library.Logger
     {
         Default,
         Debug,
+        Info,
         Action,
         Good,
         Warning,

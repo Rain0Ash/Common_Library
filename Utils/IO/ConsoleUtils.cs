@@ -5,7 +5,7 @@ using System;
 using System.Drawing;
 using Common_Library.Types.Map;
 
-namespace Common_Library.Utils
+namespace Common_Library.Utils.IO
 {
     public static class ConsoleUtils
     {
@@ -68,18 +68,8 @@ namespace Common_Library.Utils
         {
             ToConsole(obj, color, true, info);
         }
-
-        public static void WriteLine(Object obj, Color color, IFormatProvider info = null)
-        {
-            ToConsole(obj, color, true, info);
-        }
-
+        
         public static void WriteLine(Object obj, ConsoleColor color, ConsoleColor bColor, IFormatProvider info = null)
-        {
-            ToConsole(obj, color, bColor, true, info);
-        }
-
-        public static void WriteLine(Object obj, Color color, Color bColor, IFormatProvider info = null)
         {
             ToConsole(obj, color, bColor, true, info);
         }
@@ -111,24 +101,6 @@ namespace Common_Library.Utils
             Console.ForegroundColor = consoleColor;
         }
 
-        public static void ToConsole(this Object obj, Color color, Boolean newLine = true, IFormatProvider info = null)
-        {
-            Color consoleColor = Colorful.Console.ForegroundColor;
-            Colorful.Console.ForegroundColor = color;
-
-            if (newLine)
-            {
-                Colorful.Console.WriteLine(obj.Convert(info));
-            }
-            else
-            {
-                Colorful.Console.Write(obj.Convert(info));
-            }
-
-            Colorful.Console.ResetColor();
-            Colorful.Console.ForegroundColor = consoleColor;
-        }
-
         public static void ToConsole(this Object obj, ConsoleColor color, ConsoleColor bColor, Boolean newLine = true,
             IFormatProvider info = null)
         {
@@ -138,16 +110,6 @@ namespace Common_Library.Utils
             ToConsole(obj, color, newLine, info);
 
             Console.BackgroundColor = backgroundColor;
-        }
-
-        public static void ToConsole(this Object obj, Color color, Color bColor, Boolean newLine = true, IFormatProvider info = null)
-        {
-            Color backgroundColor = Colorful.Console.BackgroundColor;
-            Colorful.Console.BackgroundColor = bColor;
-
-            ToConsole(obj, color, newLine);
-
-            Colorful.Console.BackgroundColor = backgroundColor;
         }
     }
 }

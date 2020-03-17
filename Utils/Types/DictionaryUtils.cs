@@ -24,10 +24,20 @@ namespace Common_Library.Utils
             }
         }
 
-        public static TValue TryGetValue<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key,
-            TValue defaultValue = default)
+        public static TValue TryGetValue<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key, TValue defaultValue = default)
         {
             return TryGetValue(dictionary, key, out TValue result) ? result : defaultValue;
+        }
+
+        public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue value)
+        {
+            if (dictionary.TryGetValue(key, out TValue val))
+            {
+                return val;
+            }
+            
+            dictionary.Add(key, value);
+            return value;
         }
 
         public static KeyValuePair<TKey, TValue> GetPair<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key)

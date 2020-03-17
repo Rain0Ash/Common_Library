@@ -8,7 +8,7 @@ using Common_Library.LongPath;
 using Path = Common_Library.LongPath.Path;
 using Directory = Common_Library.LongPath.Directory;
 
-namespace Common_Library.Utils
+namespace Common_Library.Utils.IO
 {
     [Flags]
     public enum PathType : Byte

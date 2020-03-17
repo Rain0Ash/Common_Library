@@ -14,7 +14,7 @@ namespace Common_Library.Random
     {
         private readonly System.Random _random;
         private readonly T[] _items;
-        private readonly Single[] _cda;
+        private readonly Double[] _cda;
 
         /// <summary>
         /// Constructor, used by StaticRandomSelectorBuilder
@@ -23,7 +23,7 @@ namespace Common_Library.Random
         /// <param name="items">Items of type T</param>
         /// <param name="cda">Cummulative Distribution Array</param>
         /// <param name="seed">Seed for internal random generator</param>
-        public StaticRandomSelectorBinary(T[] items, Single[] cda, Int32 seed)
+        public StaticRandomSelectorBinary(T[] items, Double[] cda, Int32 seed)
         {
             _items = items;
             _cda = cda;
@@ -37,7 +37,7 @@ namespace Common_Library.Random
         /// <returns>Returns item</returns>
         public T SelectRandomItem()
         {
-            Single randomValue = (Single) _random.NextDouble();
+            Double randomValue = _random.NextDouble();
 
             return _items[_cda.SelectIndexBinarySearch(randomValue)];
         }
@@ -48,7 +48,7 @@ namespace Common_Library.Random
         /// </summary>
         /// <param name="randomValue">Random value from your uniform generator</param>
         /// <returns>Returns item</returns>
-        public T SelectRandomItem(Single randomValue)
+        public T SelectRandomItem(Double randomValue)
         {
             return _items[_cda.SelectIndexBinarySearch(randomValue)];
         }
