@@ -239,6 +239,7 @@ namespace Common_Library.Utils
         {
             return obj switch
             {
+                null => false,
                 String str => ToBoolean(str),
                 ICollection collection => ToBoolean(collection),
                 _ => !obj.Equals(default(T))

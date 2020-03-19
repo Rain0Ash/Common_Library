@@ -2,17 +2,17 @@
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Common_Library.Utils;
-using JetBrains.Annotations;
 
 namespace Common_Library.Config
 {
     public class ConfigProperty : ConfigProperty<Object>
     {
-        internal ConfigProperty(Config config, String key, Object defaultValue, Boolean crypt, Byte[] cryptKey, Boolean caching,
-            params String[] sections)
-            : base(config, key, defaultValue, crypt, cryptKey, caching, sections)
+        internal ConfigProperty(Config config, String key, Object defaultValue, Func<Object, Boolean> validate,
+            Boolean crypt, Byte[] cryptKey, Boolean caching, params String[] sections)
+            : base(config, key, defaultValue, validate, crypt, cryptKey, caching, sections)
         {
         }
     }
@@ -24,25 +24,33 @@ namespace Common_Library.Config
             return property.GetValue();
         }
         
-        public static implicit operator String(ConfigProperty<T> property)
+        public static explicit operator String(ConfigProperty<T> property)
         {
             return property.ToString();
         }
 
         public T DefaultValue { get; set; }
 
-        public T Value { get; protected set; }
+        public T Value { get; private set; }
+        
+        public Func<T, Boolean> Validate { get; set; }
 
-        internal ConfigProperty(Config config, String key, T defaultValue, Boolean crypt, Byte[] cryptKey, Boolean caching, params String[] sections)
+        internal ConfigProperty(Config config, String key, T defaultValue, Func<T, Boolean> validate, Boolean crypt, Byte[] cryptKey, Boolean caching, params String[] sections)
             : base(config, key, crypt, cryptKey, caching, sections)
         {
             DefaultValue = defaultValue;
-
+            Validate = validate;
+            
             Read();
         }
 
         public void SetValue(T value)
         {
+            if (Validate?.Invoke(value) == false)
+            {
+                throw new ValidationException($"{nameof(value)} is invalid");
+            }
+            
             Value = value;
 
             if (!Caching)
@@ -58,12 +66,7 @@ namespace Common_Library.Config
                 Read();
             }
 
-            return Value;
-        }
-
-        public T GetValue(Func<T, Boolean> validate)
-        {
-            return validate == null || validate(GetValue()) ? Value : DefaultValue;
+            return Validate?.Invoke(Value) == false ? DefaultValue : Value;
         }
 
         public T GetOrSetValue()

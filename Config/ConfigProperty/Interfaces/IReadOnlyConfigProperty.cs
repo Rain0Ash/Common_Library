@@ -5,11 +5,11 @@ using System;
 
 namespace Common_Library.Config
 {
-    public interface IReadOnlyConfigProperty<out T> : IReadOnlyConfigPropertyBase
+    public interface IReadOnlyConfigProperty<T> : IReadOnlyConfigPropertyBase
     {
         public T DefaultValue { get; }
         public T Value { get; }
+        public Func<T, Boolean> Validate { get; }
         public T GetValue();
-        public T GetValue(Func<T, Boolean> validate);
     }
 }

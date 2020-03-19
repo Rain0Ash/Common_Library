@@ -58,8 +58,21 @@
       <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
     </parameter>
   </member>
+  <member name="M:Common_Library.Types.Other.PathObject.GetFiles(System.String,System.IO.SearchOption)">
+    <parameter name="searchPattern">
+      <attribute ctor="M:JetBrains.Annotations.RegexPatternAttribute.#ctor" />
+    </parameter>
+  </member>
   <member name="M:Common_Library.Types.Other.PathObject.GetFolders(System.String,System.IO.SearchOption)">
     <parameter name="searchPattern">
+      <attribute ctor="M:JetBrains.Annotations.RegexPatternAttribute.#ctor" />
+    </parameter>
+  </member>
+  <member name="M:Common_Library.Types.Other.PathObject.GetFoldersAndFiles(System.String,System.String,System.IO.SearchOption,System.IO.SearchOption)">
+    <parameter name="foldersSearchPattern">
+      <attribute ctor="M:JetBrains.Annotations.RegexPatternAttribute.#ctor" />
+    </parameter>
+    <parameter name="filesSearchPattern">
       <attribute ctor="M:JetBrains.Annotations.RegexPatternAttribute.#ctor" />
     </parameter>
   </member>

@@ -158,7 +158,7 @@ namespace Common_Library.Utils.IO
         {
             return GetFullPath(path) != null && (!IsNetworkPath(path) || allowNetworkPath && IsValidNetworkPath(path));
         }
-
+        
         public static Boolean IsValidFolderPath(String path, Boolean allowNetworkPath = true)
         {
             return IsValidPath(path, allowNetworkPath) && Separators.Any(chr => path.EndsWith(chr.ToString()));

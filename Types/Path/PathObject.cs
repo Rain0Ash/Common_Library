@@ -2,6 +2,7 @@
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -45,6 +46,7 @@ namespace Common_Library.Types.Other
         }
 
         public event Handlers.EmptyHandler IconExistCheckChanged;
+        
         private Boolean _iconExistCheck = true;
 
         public Boolean IconExistCheck
@@ -195,90 +197,90 @@ namespace Common_Library.Types.Other
             return PathUtils.GetFullPath(Path);
         }
 
-        public String[] GetFolders()
+        public IEnumerable<String> GetFolders()
         {
             return GetFolders(new Regex(".*"), Recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
         }
 
-        public String[] GetFolders(SearchOption searchOption)
+        public IEnumerable<String> GetFolders(SearchOption searchOption)
         {
             return GetFolders(new Regex(".*"), searchOption);
         }
 
-        public String[] GetFolders([RegexPattern] String searchPattern, SearchOption searchOption = SearchOption.TopDirectoryOnly)
+        public IEnumerable<String> GetFolders([RegexPattern] String searchPattern, SearchOption searchOption = SearchOption.TopDirectoryOnly)
         {
             return GetFolders(new Regex(String.IsNullOrEmpty(searchPattern) ? ".*" : searchPattern), searchOption);
         }
 
-        public String[] GetFolders(Regex regex, SearchOption searchOption = SearchOption.TopDirectoryOnly)
+        public IEnumerable<String> GetFolders(Regex regex, SearchOption searchOption = SearchOption.TopDirectoryOnly)
         {
             regex ??= new Regex(".*");
             try
             {
-                return LongPath.Directory.GetDirectories(Path, "*", searchOption)
-                    .Where(name => regex.IsMatch(name)).ToArray();
+                return DirectoryUtils.EnumerateDirectories(Path, "*", searchOption)
+                    .Where(name => regex.IsMatch(name));
             }
             catch (Exception)
             {
-                return new String[0];
+                return null;
             }
         }
 
-        public String[] GetFiles()
+        public IEnumerable<String> GetFiles()
         {
             return GetFiles(new Regex(".*"), Recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
         }
 
-        public String[] GetFiles(SearchOption searchOption)
+        public IEnumerable<String> GetFiles(SearchOption searchOption)
         {
             return GetFiles(new Regex(".*"), searchOption);
         }
 
-        public String[] GetFiles(String searchPattern, SearchOption searchOption = SearchOption.TopDirectoryOnly)
+        public IEnumerable<String> GetFiles([RegexPattern] String searchPattern, SearchOption searchOption = SearchOption.TopDirectoryOnly)
         {
             return GetFiles(new Regex(String.IsNullOrEmpty(searchPattern) ? ".*" : searchPattern), searchOption);
         }
 
-        public String[] GetFiles(Regex regex, SearchOption searchOption = SearchOption.TopDirectoryOnly)
+        public IEnumerable<String> GetFiles(Regex regex, SearchOption searchOption = SearchOption.TopDirectoryOnly)
         {
             regex ??= new Regex(".*");
             try
             {
-                return LongPath.Directory.GetFiles(Path, "*", searchOption)
-                    .Where(name => regex.IsMatch(name)).ToArray();
+                return DirectoryUtils.EnumerateFiles(Path, "*", searchOption)
+                    .Where(name => regex.IsMatch(name));
             }
             catch (Exception)
             {
-                return new String[0];
+                return null;
             }
         }
 
-        public String[] GetFoldersAndFiles()
+        public IEnumerable<String> GetFoldersAndFiles()
         {
             SearchOption searchOption = Recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
             return GetFoldersAndFiles(searchOption, searchOption);
         }
 
-        public String[] GetFoldersAndFiles(SearchOption searchOption)
+        public IEnumerable<String> GetFoldersAndFiles(SearchOption searchOption)
         {
             return GetFoldersAndFiles(searchOption, searchOption);
         }
 
-        public String[] GetFoldersAndFiles(SearchOption foldersSearchOption, SearchOption filesSearchOption)
+        public IEnumerable<String> GetFoldersAndFiles(SearchOption foldersSearchOption, SearchOption filesSearchOption)
         {
-            return GetFolders(foldersSearchOption).Concat(GetFiles(filesSearchOption)).ToArray();
+            return GetFolders(foldersSearchOption).Concat(GetFiles(filesSearchOption));
         }
 
-        public String[] GetFoldersAndFiles(String foldersSearchPattern, String filesSearchPattern, SearchOption foldersSearchOption,
+        public IEnumerable<String> GetFoldersAndFiles([RegexPattern] String foldersSearchPattern, [RegexPattern] String filesSearchPattern, SearchOption foldersSearchOption,
             SearchOption filesSearchOption)
         {
-            return GetFolders(foldersSearchPattern, foldersSearchOption).Concat(GetFiles(filesSearchPattern, filesSearchOption)).ToArray();
+            return GetFolders(foldersSearchPattern, foldersSearchOption).Concat(GetFiles(filesSearchPattern, filesSearchOption));
         }
 
-        public String[] GetFoldersAndFiles(Regex foldersSearchPattern, Regex filesSearchPattern, SearchOption foldersSearchOption,
+        public IEnumerable<String> GetFoldersAndFiles(Regex foldersSearchPattern, Regex filesSearchPattern, SearchOption foldersSearchOption,
             SearchOption filesSearchOption)
         {
-            return GetFolders(foldersSearchPattern, foldersSearchOption).Concat(GetFiles(filesSearchPattern, filesSearchOption)).ToArray();
+            return GetFolders(foldersSearchPattern, foldersSearchOption).Concat(GetFiles(filesSearchPattern, filesSearchOption));
         }
 
         public Byte[] ReadFileBytes(Boolean isThrow = false)
@@ -301,7 +303,7 @@ namespace Common_Library.Types.Other
             return Path;
         }
 
-        public override Boolean Equals(Object obj)
+        public override Boolean Equals(Object? obj)
         {
             return obj != null && obj.ToString().Equals(Path, StringComparison.InvariantCultureIgnoreCase);
         }

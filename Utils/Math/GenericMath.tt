@@ -14,51 +14,120 @@ namespace Common_Library.Utils.Math
 {   <#
     List<String> unmanagedTypes = new List<String>
     {
-        "Char", "SByte", "Byte", "Int16", "UInt16", "Int32", "UInt32", "Int64", "UInt64", "Single", "Double", "Decimal"
+        nameof(Char), nameof(SByte), nameof(Byte), nameof(Int16), nameof(UInt16), nameof(Int32), nameof(UInt32), nameof(Int64), nameof(UInt64), 
+        nameof(Single), nameof(Double), nameof(Decimal)
     };
     
     Dictionary<String, String> operandName = new Dictionary<String, String>
     {
-        {"Add", "+"},
-        {"Substract", "-"},
-        {"Multiply", "*"},
-        {"Divide", "/"},
-        {"Modular", "%"},
-        {"And", "&"},
-        {"Or", "|"},
-        {"Xor", "^"},
-        /*
-        {"Equals", "=="},
-        {"NotEquals", "!="},
-        {"More", ">"},
-        {"MoreEquals", ">="},
-        {"Less", "<"},
-        {"LessEquals", "<="},
-        */
+        {"+", "Add"},
+        {"-", "Substract" },
+        {"*", "Multiply" },
+        {"/", "Divide" },
+        {"%", "Modulo" },
+        {"&", "And" },
+        {"|", "Or" },
+        {"^", "Xor" },
+        {"~", "Invert" },
+        {"| |", "Abs" },
+        {"-| |", "Negative" },
+        {"==", "Equal" },
+        {"!=", "NotEqual" },
+        {">", "Greater" },
+        {">=", "GreaterEqual" },
+        {"<", "Less" },
+        {"<=", "LessEqual" }
     };
 
-    void Functions(String methodName, String @operator)
+    void Functions(String @operator)
     {
+        Boolean comparison = @operator == "==" || @operator == "!="  || 
+                             @operator == ">" || @operator == ">=" ||
+                               @operator == "<" || @operator == "<=";
+
+        Boolean unary = @operator == "~" || @operator == "| |" || @operator == "-| |";
+
         WriteLine("\t\t\t[MethodImpl(MethodImplOptions.AggressiveInlining)]");
-        WriteLine($"\t\t\tpublic static T {methodName}<T>(T left, T right) where T : unmanaged");
+
+        WriteLine($"\t\t\tpublic static {(comparison ? nameof(Boolean) : "T")} {operandName[@operator]}<T>({(unary ? "T value" : "T left, T right")}) where T : unmanaged, IComparable");
+        
         WriteLine("\t\t\t{");
         
-        foreach (String type in unmanagedTypes.Where(type => type != "Single" && type != "Double" && type != "Decimal" || @operator != "&" && @operator != "|" && @operator != "^"))
+        foreach (String type in unmanagedTypes.Where(type => type != nameof(Single) && type != nameof(Double) && type != nameof(Decimal) || @operator != "&" && @operator != "|" && @operator != "^"))
         {
+            Boolean unsigned = type == nameof(Char) || type == nameof(Byte) || type == nameof(UInt16) || type == nameof(UInt32) || type == nameof(UInt64);
+            Boolean small = type == nameof(Char) || type == nameof(Byte) || type == nameof(SByte) || type == nameof(Int16) || type == nameof(UInt16);
+            
+            if (unsigned && (@operator == "| |" || @operator == "-| |") || @operator == "~" && (type == nameof(Single) || type == nameof(Double) || type == nameof(Decimal)))
+            {
+                continue;
+            }
+            
             WriteLine($"\t\t\t\tif (typeof(T) == typeof({type}))");
             WriteLine("\t\t\t\t{");
-            
-            #if unsafe
+
+            #if !unsafe
             
             String expression = $"Unsafe.As<T, {type}>(ref left) {@operator} Unsafe.As<T, {type}>(ref right)";
                 
-            if (type == "Char" || type == "Byte" || type == "SByte" || type == "Int16" || type == "UInt16")
+            if (!comparison && small)
             {
                 expression = $"({type})({expression})";
             }
+            
+            
+            
+            if (comparison)
+            {
+                if ((type == nameof(Single) || type == nameof(Double)) && (@operator == "==" || @operator == "!="))
+                {
+                    expression = $"Unsafe.As<T, {type}>(ref left) - Unsafe.As<T, {type}>(ref right) {{0}} {type}.Epsilon";
                 
-            WriteLine($"\t\t\t\t\t{type} value = {expression};");
-            WriteLine($"\t\t\t\t\treturn Unsafe.As<{type}, T>(ref value);");
+                    expression = @operator switch
+                    {
+                        "==" => String.Format(expression, "<"),
+                        "!=" => String.Format(expression, ">"),
+                        _ => throw new NotSupportedException()
+                        };
+                }
+                WriteLine($"\t\t\t\t\treturn {expression};");
+            }
+            else if (unary)
+            {
+                switch (@operator)
+                {
+                    case "~":
+                        WriteLine($"\t\t\t\t\t{(small ? nameof(Int32) : $"{type}")} {(small ? "i" : "val")} = ~Unsafe.As<T, {type}>(ref value);");
+                        if (small)
+                        {
+                            WriteLine($"\t\t\t\t\t{type} val = Unsafe.As<{nameof(Int32)}, {type}>(ref i);");
+                        }
+                        
+                        WriteLine($"\t\t\t\t\treturn Unsafe.As<{type}, T>(ref val);");
+                        break;
+                    case "| |":
+                        WriteLine($"\t\t\t\t\t{type} val = System.Math.Abs(Unsafe.As<T, {type}>(ref value));");
+                        WriteLine($"\t\t\t\t\treturn Unsafe.As<{type}, T>(ref val);");
+                        break;
+                    case "-| |":
+                        WriteLine($"\t\t\t\t\t{(small ? nameof(Int32) : $"{type}")} {(small ? "i" : "val")} = -System.Math.Abs(Unsafe.As<T, {type}>(ref value));");
+                        if (small)
+                        {
+                            WriteLine($"\t\t\t\t\t{type} val = Unsafe.As<{nameof(Int32)}, {type}>(ref i);");
+                        }
+                        WriteLine($"\t\t\t\t\treturn Unsafe.As<{type}, T>(ref val);");
+                        break;
+                    default:
+                        throw new NotSupportedException();
+                }
+
+            }
+            else
+            {
+                WriteLine($"\t\t\t\t\t{type} value = {expression};");
+                WriteLine($"\t\t\t\t\treturn Unsafe.As<{type}, T>(ref value);");
+            }
+            
             
             #else
 
@@ -156,18 +225,19 @@ namespace Common_Library.Utils.Math
 
     public static partial class MathUtils
     {
-        [SuppressMessage("ReSharper", "InvertIf")]
-        public static class Unsafe
-        {
-<#foreach (KeyValuePair<String, String> methodName in operandName)
+<#
+Range();
+InRange();
+#>
+    }
+
+    [SuppressMessage("ReSharper", "InvertIf")]
+    public static class MathUnsafe
+    {
+<#foreach (String @operator in operandName.Keys)
 {
-    Functions(methodName.Key, methodName.Value);
+    Functions(@operator);
 } 
 #>
-        }
-<#
-WriteLine(String.Empty);
-Range();
-InRange();#>
     }
 }

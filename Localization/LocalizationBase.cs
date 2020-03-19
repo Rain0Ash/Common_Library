@@ -45,7 +45,7 @@ namespace Common_Library.Localization
             CodeByLCIDMap =
                 new Map<Int32, String>(CultureLCIDDictionary.ToDictionary(pair => pair.Value.LCID, pair => pair.Value.Code.ToLower()));
 
-            DefaultComparer = new CultureComparer(array);
+            DefaultComparer = new CultureComparer(CultureLCIDDictionary.Select(pair => pair.Value));
 
             SystemCulture = CultureLCIDDictionary.TryGetValue(CultureInfo.CurrentUICulture.LCID, DefaultCulture);
 

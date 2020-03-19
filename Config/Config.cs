@@ -2,13 +2,10 @@
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Linq;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 using Common_Library.Config.REG;
 using Common_Library.Config.INI;
@@ -18,8 +15,6 @@ using Common_Library.Config.JSON;
 using Common_Library.Crypto;
 using Common_Library.Types.Other;
 using Common_Library.Utils;
-using Common_Library.Utils.IO;
-using JetBrains.Annotations;
 
 // ReSharper disable ConditionIsAlwaysTrueOrFalse
 // ReSharper disable HeuristicUnreachableCode
@@ -300,23 +295,28 @@ namespace Common_Library.Config
 
         public ConfigProperty GetProperty(String key, Object defaultValue, params String[] sections)
         {
-            return GetProperty(key, defaultValue, CryptByDefault, sections);
+            return GetProperty(key, defaultValue, null, sections);
         }
-
-        public ConfigProperty GetProperty(String key, Object defaultValue, Boolean crypt, params String[] sections)
+        
+        public ConfigProperty GetProperty(String key, Object defaultValue, Func<Object, Boolean> validate, params String[] sections)
         {
-            return GetProperty(key, defaultValue, crypt, null, sections);
+            return GetProperty(key, defaultValue, validate, CryptByDefault, sections);
         }
 
-        public ConfigProperty GetProperty(String key, Object defaultValue, Boolean crypt, Byte[] cryptKey, params String[] sections)
+        public ConfigProperty GetProperty(String key, Object defaultValue, Func<Object, Boolean> validate, Boolean crypt, params String[] sections)
         {
-            return GetProperty(key, defaultValue, crypt, cryptKey, CachingByDefault, sections);
+            return GetProperty(key, defaultValue, validate, crypt, null, sections);
         }
 
-        public ConfigProperty GetProperty(String key, Object defaultValue, Boolean crypt, Byte[] cryptKey, Boolean caching,
+        public ConfigProperty GetProperty(String key, Object defaultValue, Func<Object, Boolean> validate, Boolean crypt, Byte[] cryptKey, params String[] sections)
+        {
+            return GetProperty(key, defaultValue, validate, crypt, cryptKey, CachingByDefault, sections);
+        }
+        
+        public ConfigProperty GetProperty(String key, Object defaultValue, Func<Object, Boolean> validate, Boolean crypt, Byte[] cryptKey, Boolean caching,
             params String[] sections)
         {
-            return (ConfigProperty) GetOrAddProperty(new ConfigProperty(this, key, defaultValue, crypt, cryptKey, caching, sections));
+            return (ConfigProperty) GetOrAddProperty(new ConfigProperty(this, key, defaultValue, validate, crypt, cryptKey, caching, sections));
         }
 
         public ConfigProperty<T> GetProperty<T>(String key, params String[] sections)
@@ -326,22 +326,27 @@ namespace Common_Library.Config
 
         public ConfigProperty<T> GetProperty<T>(String key, T defaultValue, params String[] sections)
         {
-            return GetProperty(key, defaultValue, CryptByDefault, sections);
+            return GetProperty(key, defaultValue, null, sections);
+        }
+        
+        public ConfigProperty<T> GetProperty<T>(String key, T defaultValue, Func<T, Boolean> validate, params String[] sections)
+        {
+            return GetProperty(key, defaultValue, validate, CryptByDefault, sections);
         }
 
-        public ConfigProperty<T> GetProperty<T>(String key, T defaultValue, Boolean crypt, params String[] sections)
+        public ConfigProperty<T> GetProperty<T>(String key, T defaultValue, Func<T, Boolean> validate, Boolean crypt, params String[] sections)
         {
-            return GetProperty(key, defaultValue, crypt, null, sections);
+            return GetProperty(key, defaultValue, validate, crypt, null, sections);
         }
 
-        public ConfigProperty<T> GetProperty<T>(String key, T defaultValue, Boolean crypt, Byte[] cryptKey, params String[] sections)
+        public ConfigProperty<T> GetProperty<T>(String key, T defaultValue, Func<T, Boolean> validate, Boolean crypt, Byte[] cryptKey, params String[] sections)
         {
-            return GetProperty(key, defaultValue, crypt, cryptKey, CachingByDefault, sections);
+            return GetProperty(key, defaultValue, validate, crypt, cryptKey, CachingByDefault, sections);
         }
 
-        public ConfigProperty<T> GetProperty<T>(String key, T defaultValue, Boolean crypt, Byte[] cryptKey, Boolean caching, params String[] sections)
+        public ConfigProperty<T> GetProperty<T>(String key, T defaultValue, Func<T, Boolean> validate, Boolean crypt, Byte[] cryptKey, Boolean caching, params String[] sections)
         {
-            return (ConfigProperty<T>) GetOrAddProperty(new ConfigProperty<T>(this, key, defaultValue, crypt, cryptKey, caching, sections));
+            return (ConfigProperty<T>) GetOrAddProperty(new ConfigProperty<T>(this, key, defaultValue, validate, crypt, cryptKey, caching, sections));
         }
 
         private static ConfigPropertyBase GetOrAddProperty(ConfigPropertyBase property)

@@ -14,5 +14,9 @@ namespace System.Collections.Generic.Interfaces
         public Boolean TryGetPairByIndex(Int32 index, out KeyValuePair<TKey, TValue> pair);
 
         public Int32 IndexOf(TKey key);
+
+        public IEnumerator<TKey> GetKeyEnumerator();
+        
+        public IEnumerator<TValue> GetValueEnumerator();
     }
 }

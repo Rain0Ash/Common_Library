@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Common_Library.Utils
@@ -31,10 +32,35 @@ namespace Common_Library.Utils
                 }
             }
         }
-
-        public static T AsDefault<T>(this T value, T alternate)
+        
+        public static IEnumerable<TOut> SelectWhere<T, TOut>(this IEnumerable<T> source, Func<T, Boolean> where, Func<T, TOut> select)
         {
-            return value.Equals(default(T)) ? alternate : value;
+            return source.Where(where).Select(select);
+        }
+
+        [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
+        public static IEnumerable<T> ForEach<T>(this IEnumerable<T> source, Action<T> action)
+        {
+            foreach (T item in source)
+            {
+                action(item);
+            }
+
+            return source;
+        }
+        
+        [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
+        public static IEnumerable<T> ForEachWhere<T>(this IEnumerable<T> source, Func<T, Boolean> where, Action<T> action)
+        {
+            foreach (T item in source)
+            {
+                if (where(item))
+                {
+                    action(item);
+                }
+            }
+
+            return source;
         }
 
         public static T FirstOr<T>(this IEnumerable<T> source, T alternate)

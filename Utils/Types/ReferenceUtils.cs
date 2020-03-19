@@ -1,9 +1,11 @@
 // This is an independent project of an individual developer. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
-namespace Common_Library.Utils.MSOffice.Excel
+using System;
+
+namespace Common_Library.Utils
 {
-    public static class ExcelUtils
+    public static class ReferenceUtils
     {
         
     }
