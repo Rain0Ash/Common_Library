@@ -52,6 +52,10 @@
         <Generator>TextTemplatingFileGenerator</Generator>
         <LastGenOutput>GenericMath.cs</LastGenOutput>
       </None>
+      <None Update="Types\Other\Point.tt">
+        <Generator>TextTemplatingFileGenerator</Generator>
+        <LastGenOutput>Point.cs</LastGenOutput>
+      </None>
     </ItemGroup>
 
     <ItemGroup>
@@ -66,6 +70,9 @@
       </Compile>
       <Compile Update="Config\Property.cs">
         <DependentUpon>Config.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Types\Other\Point.cs">
+        <DependentUpon>Point.tt</DependentUpon>
       </Compile>
     </ItemGroup>
 

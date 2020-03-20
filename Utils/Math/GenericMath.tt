@@ -14,75 +14,86 @@ namespace Common_Library.Utils.Math
 {   <#
     List<String> unmanagedTypes = new List<String>
     {
-        nameof(Char), nameof(SByte), nameof(Byte), nameof(Int16), nameof(UInt16), nameof(Int32), nameof(UInt32), nameof(Int64), nameof(UInt64), 
-        nameof(Single), nameof(Double), nameof(Decimal)
+        nameof(Char),
+        nameof(SByte),
+        nameof(Byte),
+        nameof(Int16),
+        nameof(UInt16),
+        nameof(Int32),
+        nameof(UInt32),
+        nameof(Int64),
+        nameof(UInt64),
+        nameof(Single),
+        nameof(Double),
+        nameof(Decimal)
     };
-    
+
     Dictionary<String, String> operandName = new Dictionary<String, String>
     {
         {"+", "Add"},
-        {"-", "Substract" },
-        {"*", "Multiply" },
-        {"/", "Divide" },
-        {"%", "Modulo" },
-        {"&", "And" },
-        {"|", "Or" },
-        {"^", "Xor" },
-        {"~", "Invert" },
-        {"| |", "Abs" },
-        {"-| |", "Negative" },
-        {"==", "Equal" },
-        {"!=", "NotEqual" },
-        {">", "Greater" },
-        {">=", "GreaterEqual" },
-        {"<", "Less" },
-        {"<=", "LessEqual" }
+        {"-", "Substract"},
+        {"*", "Multiply"},
+        {"/", "Divide"},
+        {"%", "Modulo"},
+        {"&", "And"},
+        {"|", "Or"},
+        {"^", "Xor"},
+        {"~", "Invert"},
+        {"| |", "Abs"},
+        {"-| |", "Negative"},
+        {"==", "Equal"},
+        {"!=", "NotEqual"},
+        {">", "Greater"},
+        {">=", "GreaterEqual"},
+        {"<", "Less"},
+        {"<=", "LessEqual"}
     };
 
     void Functions(String @operator)
     {
-        Boolean comparison = @operator == "==" || @operator == "!="  || 
+        Boolean comparison = @operator == "==" || @operator == "!=" ||
                              @operator == ">" || @operator == ">=" ||
-                               @operator == "<" || @operator == "<=";
+                             @operator == "<" || @operator == "<=";
 
         Boolean unary = @operator == "~" || @operator == "| |" || @operator == "-| |";
 
         WriteLine("\t\t\t[MethodImpl(MethodImplOptions.AggressiveInlining)]");
 
         WriteLine($"\t\t\tpublic static {(comparison ? nameof(Boolean) : "T")} {operandName[@operator]}<T>({(unary ? "T value" : "T left, T right")}) where T : unmanaged, IComparable");
-        
+
         WriteLine("\t\t\t{");
-        
-        foreach (String type in unmanagedTypes.Where(type => type != nameof(Single) && type != nameof(Double) && type != nameof(Decimal) || @operator != "&" && @operator != "|" && @operator != "^"))
+
+        foreach (
+            String type in
+                unmanagedTypes.Where(type => type != nameof(Single) && type != nameof(Double) && type != nameof(Decimal) || @operator != "&" && @operator != "|" && @operator != "^"))
         {
             Boolean unsigned = type == nameof(Char) || type == nameof(Byte) || type == nameof(UInt16) || type == nameof(UInt32) || type == nameof(UInt64);
             Boolean small = type == nameof(Char) || type == nameof(Byte) || type == nameof(SByte) || type == nameof(Int16) || type == nameof(UInt16);
-            
+
             if (unsigned && (@operator == "| |" || @operator == "-| |") || @operator == "~" && (type == nameof(Single) || type == nameof(Double) || type == nameof(Decimal)))
             {
                 continue;
             }
-            
+
             WriteLine($"\t\t\t\tif (typeof(T) == typeof({type}))");
             WriteLine("\t\t\t\t{");
 
             #if !unsafe
-            
+
             String expression = $"Unsafe.As<T, {type}>(ref left) {@operator} Unsafe.As<T, {type}>(ref right)";
-                
+
             if (!comparison && small)
             {
                 expression = $"({type})({expression})";
             }
-            
-            
-            
+
+
             if (comparison)
             {
                 if ((type == nameof(Single) || type == nameof(Double)) && (@operator == "==" || @operator == "!="))
                 {
                     expression = $"Unsafe.As<T, {type}>(ref left) - Unsafe.As<T, {type}>(ref right) {{0}} {type}.Epsilon";
-                
+
                     expression = @operator switch
                     {
                         "==" => String.Format(expression, "<"),
@@ -102,7 +113,7 @@ namespace Common_Library.Utils.Math
                         {
                             WriteLine($"\t\t\t\t\t{type} val = Unsafe.As<{nameof(Int32)}, {type}>(ref i);");
                         }
-                        
+
                         WriteLine($"\t\t\t\t\treturn Unsafe.As<{type}, T>(ref val);");
                         break;
                     case "| |":
@@ -120,16 +131,15 @@ namespace Common_Library.Utils.Math
                     default:
                         throw new NotSupportedException();
                 }
-
             }
             else
             {
                 WriteLine($"\t\t\t\t\t{type} value = {expression};");
                 WriteLine($"\t\t\t\t\treturn Unsafe.As<{type}, T>(ref value);");
             }
-            
-            
-            #else
+
+
+#else
 
             String expression;
 
@@ -154,12 +164,12 @@ namespace Common_Library.Utils.Math
             
             WriteLine($"\t\t\t\t\t{expression};");
 
-            #endif
-            
+#endif
+
             WriteLine("\t\t\t\t}");
             WriteLine(String.Empty);
         }
-        
+
         WriteLine($"\t\t\t\tthrow new NotSupportedException($\"Operator {@operator} is not supported for {{typeof(T)}} type\");");
         WriteLine("\t\t\t}");
         WriteLine(String.Empty);
@@ -169,18 +179,19 @@ namespace Common_Library.Utils.Math
     {
         const Boolean defaultLooped = false;
         String looped = defaultLooped.ToString().ToLower();
-        
+
         foreach (String type in unmanagedTypes)
         {
-            String func = $"public static {{0}} {nameof(Range)}({{1}}{type} value, {type} minimum = {(type == "Char" ? $"{type}.MinValue" : "0")}, {type} maximum = {type}.MaxValue, Boolean looped = {looped})";
-            
+            String func =
+                $"public static {{0}} {nameof(Range)}({{1}}{type} value, {type} minimum = {(type == "Char" ? $"{type}.MinValue" : "0")}, {type} maximum = {type}.MaxValue, Boolean looped = {looped})";
+
             WriteLine("\t\t[MethodImpl(MethodImplOptions.AggressiveInlining)]");
             WriteLine($"\t\t{String.Format(func, "void", "ref ")}");
             WriteLine("\t\t{");
             WriteLine($"\t\t\t value = {nameof(Range)}(value, minimum, maximum, looped);");
             WriteLine("\t\t}");
             WriteLine(String.Empty);
-            
+
             WriteLine("\t\t[MethodImpl(MethodImplOptions.AggressiveInlining)]");
             WriteLine($"\t\t{String.Format(func, type, String.Empty)}");
             WriteLine("\t\t{");
@@ -199,13 +210,14 @@ namespace Common_Library.Utils.Math
             WriteLine(String.Empty);
         }
     }
-    
+
     void InRange()
     {
         foreach (String type in unmanagedTypes)
         {
             WriteLine("\t\t[MethodImpl(MethodImplOptions.AggressiveInlining)]");
-            WriteLine($"\t\tpublic static Boolean {nameof(InRange)}({type} value, Position comparison = Position.LeftRight, {type} minimum = {(type == "Char" ? $"{type}.MinValue" : "0")}, {type} maximum = {type}.MaxValue)");
+            WriteLine(
+                $"\t\tpublic static Boolean {nameof(InRange)}({type} value, Position comparison = Position.LeftRight, {type} minimum = {(type == "Char" ? $"{type}.MinValue" : "0")}, {type} maximum = {type}.MaxValue)");
             WriteLine("\t\t{");
             WriteLine("\t\t\treturn comparison switch");
             WriteLine("\t\t\t{");
@@ -215,7 +227,7 @@ namespace Common_Library.Utils.Math
             WriteLine("\t\t\t\tPosition.LeftRight => value >= minimum && value <= maximum,");
             WriteLine("\t\t\t\t_ => throw new NotSupportedException(comparison.ToString())");
             WriteLine("\t\t\t};");
-            
+
             WriteLine("\t\t}");
             WriteLine(String.Empty);
         }
@@ -226,18 +238,19 @@ namespace Common_Library.Utils.Math
     public static partial class MathUtils
     {
 <#
-Range();
-InRange();
+    Range();
+    InRange();
 #>
     }
 
     [SuppressMessage("ReSharper", "InvertIf")]
     public static class MathUnsafe
     {
-<#foreach (String @operator in operandName.Keys)
-{
-    Functions(@operator);
-} 
+<#
+    foreach (String @operator in operandName.Keys)
+    {
+        Functions(@operator);
+    }
 #>
     }
 }
