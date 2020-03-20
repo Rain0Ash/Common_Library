@@ -4,6 +4,7 @@
 using System;
 using System.IO;
 using System.Security.Cryptography;
+using Common_Library.Utils;
 
 namespace Common_Library.Crypto
 {
@@ -11,6 +12,11 @@ namespace Common_Library.Crypto
     {
         public static class AES
         {
+            public static String Encrypt(String plainText, String key)
+            {
+                return Encrypt(plainText, key.ToBytes());
+            }
+            
             public static String Encrypt(String plainText, Byte[] key = null)
             {
                 if (plainText == null)
@@ -53,10 +59,10 @@ namespace Common_Library.Crypto
                     return null;
                 }
             }
-
-            public static String Encrypt(String plainText, String key)
+            
+            public static String Decrypt(String plainText, String key)
             {
-                return Encrypt(plainText, StringToBytes(key));
+                return Decrypt(plainText, key.ToBytes());
             }
 
             public static String Decrypt(String cipherText, Byte[] key = null)
@@ -94,11 +100,6 @@ namespace Common_Library.Crypto
                 {
                     return null;
                 }
-            }
-
-            public static String Decrypt(String plainText, String key)
-            {
-                return Decrypt(plainText, StringToBytes(key));
             }
         }
     }

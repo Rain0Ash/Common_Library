@@ -7,16 +7,22 @@ using Common_Library.Workstation;
 
 namespace Common_Library.Crypto
 {
+    [Flags]
+    public enum CryptAction
+    {
+        None,
+        Decrypt,
+        Encrypt,
+        Crypt
+    }
+    
     public static partial class Cryptography
     {
-        public static Byte[] StringToBytes(String str)
-        {
-            return str != null ? Encoding.UTF8.GetBytes(str) : null;
-        }
-
+        public static readonly Byte[] DefaultHash = CurrentUserCryptoSIDHash();
+        
         public static Byte[] CurrentUserCryptoSIDHash()
         {
-            return Hash.MD5(Encoding.UTF8.GetBytes(WorkStation.CurrentUserSID()));
+            return Hash.MD5(Encoding.UTF8.GetBytes(WorkStation.CurrentUserSID));
         }
     }
 }

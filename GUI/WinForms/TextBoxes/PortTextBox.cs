@@ -33,7 +33,7 @@ namespace Common_Library.GUI.WinForms.TextBoxes
             }
             set
             {
-                base.Text = String.IsNullOrEmpty(value) || !NetworkUtils.CheckPort(value) ? DefaultPort.ToString() : value;
+                base.Text = String.IsNullOrEmpty(value) || !NetworkUtils.ValidatePort(value) ? DefaultPort.ToString() : value;
             }
         }
 
@@ -47,7 +47,7 @@ namespace Common_Library.GUI.WinForms.TextBoxes
 
         public override Boolean CheckValidFormat()
         {
-            return NetworkUtils.CheckPort(Text);
+            return NetworkUtils.ValidatePort(Text);
         }
 
         protected override void OnKeyPress(KeyPressEventArgs e)

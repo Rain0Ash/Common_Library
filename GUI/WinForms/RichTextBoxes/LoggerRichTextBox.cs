@@ -138,6 +138,12 @@ namespace Common_Library.GUI.WinForms.RichTextBoxes
             ScrollToCaret();
         }
 
+        protected override void OnVisibleChanged(EventArgs e)
+        {
+            base.OnVisibleChanged(e);
+            UpdateLog();
+        }
+
         protected override void Dispose(Boolean disposing)
         {
             Clear();

@@ -2,57 +2,68 @@
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
 using System;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using Common_Library.Crypto;
 using Common_Library.Utils;
 
 namespace Common_Library.Config
 {
-    public class ConfigProperty : ConfigProperty<Object>
-    {
-        internal ConfigProperty(Config config, String key, Object defaultValue, Func<Object, Boolean> validate,
-            Boolean crypt, Byte[] cryptKey, Boolean caching, params String[] sections)
-            : base(config, key, defaultValue, validate, crypt, cryptKey, caching, sections)
-        {
-        }
-    }
-
     public class ConfigProperty<T> : ConfigPropertyBase, IConfigProperty<T>
     {
         public static implicit operator T(ConfigProperty<T> property)
         {
             return property.GetValue();
         }
-        
+
         public static explicit operator String(ConfigProperty<T> property)
         {
             return property.ToString();
         }
-
-        public T DefaultValue { get; set; }
-
-        public T Value { get; private set; }
         
-        public Func<T, Boolean> Validate { get; set; }
+        public T DefaultValue { get; private set; }
 
-        internal ConfigProperty(Config config, String key, T defaultValue, Func<T, Boolean> validate, Boolean crypt, Byte[] cryptKey, Boolean caching, params String[] sections)
+        public event Handlers.EmptyHandler Changed; 
+        
+        private T _value;
+        public T Value
+        {
+            get
+            {
+                return IsValid ? _value : DefaultValue;
+            }
+            private set
+            {
+                if (_value?.Equals(value) == true)
+                {
+                    return;
+                }
+
+                _value = value;
+
+                IsValid = Validate?.Invoke(_value) != false;
+
+                Changed?.Invoke();
+            }
+        }
+
+        public Boolean IsValid { get; private set; }
+
+        public Func<T, Boolean> Validate { get; }
+
+        internal ConfigProperty(Config config, String key, T defaultValue, Func<T, Boolean> validate, CryptAction crypt, Byte[] cryptKey, Boolean caching,
+            params String[] sections)
             : base(config, key, crypt, cryptKey, caching, sections)
         {
             DefaultValue = defaultValue;
             Validate = validate;
-            
+
             Read();
         }
 
         public void SetValue(T value)
         {
-            if (Validate?.Invoke(value) == false)
-            {
-                throw new ValidationException($"{nameof(value)} is invalid");
-            }
-            
             Value = value;
-
+            
             if (!Caching)
             {
                 Save();
@@ -66,7 +77,7 @@ namespace Common_Library.Config
                 Read();
             }
 
-            return Validate?.Invoke(Value) == false ? DefaultValue : Value;
+            return Value;
         }
 
         public T GetOrSetValue()
@@ -79,6 +90,16 @@ namespace Common_Library.Config
 
             Read();
             return Value;
+        }
+
+        public void ChangeDefaultValue(T value, Boolean changeValue = true)
+        {
+            if (changeValue && DefaultValue.Equals(Value))
+            {
+                Value = value;
+            }
+            
+            DefaultValue = value;
         }
 
         public void ResetValue()
@@ -120,11 +141,6 @@ namespace Common_Library.Config
 
     public abstract class ConfigPropertyBase : IConfigPropertyBase
     {
-        public static implicit operator String(ConfigPropertyBase property)
-        {
-            return property.ToString();
-        }
-
         public String Path
         {
             get
@@ -136,13 +152,13 @@ namespace Common_Library.Config
         public Config Config { get; }
         public String Key { get; }
         public String[] Sections { get; }
-        public Boolean Crypt { get; set; }
+        public CryptAction Crypt { get; set; }
         public Byte[] CryptKey { get; set; }
         public Boolean Caching { get; set; }
 
         private Boolean _disposed;
 
-        protected ConfigPropertyBase(Config config, String key, Boolean crypt, Byte[] cryptKey, Boolean caching, params String[] sections)
+        protected ConfigPropertyBase(Config config, String key, CryptAction crypt, Byte[] cryptKey, Boolean caching, params String[] sections)
         {
             Config = config;
             Key = key;
@@ -162,7 +178,7 @@ namespace Common_Library.Config
         {
             return Config.KeyExist(Key, Sections);
         }
-        
+
         public void Dispose()
         {
             if (!_disposed)
@@ -171,7 +187,7 @@ namespace Common_Library.Config
             }
         }
 
-        internal void Dispose(Boolean disposing)
+        public void Dispose(Boolean disposing)
         {
             if (!disposing)
             {

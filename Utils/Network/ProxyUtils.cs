@@ -16,7 +16,7 @@ namespace Common_Library.Utils.Network
                 throw new ArgumentException("Address is not valid");
             }
 
-            if (!NetworkUtils.CheckPort(port))
+            if (!NetworkUtils.ValidatePort(port))
             {
                 throw new ArgumentException("Port is not valid");
             }

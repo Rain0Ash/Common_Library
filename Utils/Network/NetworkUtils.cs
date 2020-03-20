@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
+using Common_Library.Utils.Math;
 
 namespace Common_Library.Utils.Network
 {
@@ -28,23 +29,13 @@ namespace Common_Library.Utils.Network
             IPAddress result = IPAddress.Parse(ip);
             return result.GetAddressBytes().Reverse().ToArray();
         }
-
-        public static Boolean CheckPort(Int32 port)
+        
+        public static Boolean ValidatePort(Int32 port)
         {
-            return ValidatePort(port) > 0;
+            return MathUtils.InRange(port, MathUtils.Position.LeftRight, 1, UInt16.MaxValue);
         }
 
-        public static Boolean CheckPort(String port)
-        {
-            return Int32.TryParse(port, out Int32 prt) && CheckPort(prt);
-        }
-
-        public static Int32 ValidatePort(Int32 port)
-        {
-            return port > 0 && port < 65536 ? port : 0;
-        }
-
-        public static Int32 ValidatePort(String port)
+        public static Boolean ValidatePort(String port)
         {
             Int32.TryParse(port, out Int32 prt);
             return ValidatePort(prt);

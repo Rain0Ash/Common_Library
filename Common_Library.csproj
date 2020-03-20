@@ -64,6 +64,9 @@
       <Compile Update="Utils\Math\ExpressionUtils.cs">
         <DependentUpon>ExpressionMath.cs</DependentUpon>
       </Compile>
+      <Compile Update="Config\Property.cs">
+        <DependentUpon>Config.cs</DependentUpon>
+      </Compile>
     </ItemGroup>
 
 </Project>

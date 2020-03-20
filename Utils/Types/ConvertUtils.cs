@@ -6,6 +6,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Globalization;
 using System.Runtime.CompilerServices;
+using System.Text;
 using Common_Library.Utils.Math;
 
 namespace Common_Library.Utils
@@ -196,6 +197,16 @@ namespace Common_Library.Utils
 
         #endregion
 
+        public static Byte[] ToBytes(this String input)
+        {
+            return ToBytes(input, Encoding.UTF8);
+        }
+        
+        public static Byte[] ToBytes(this String input, Encoding encoding)
+        {
+            return input == null ? null : encoding.GetBytes(input);
+        }
+        
         public static String Convert(this Object obj, IFormatProvider info = null)
         {
             return System.Convert.ToString(obj, info ?? CultureInfo.InvariantCulture);

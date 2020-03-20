@@ -7,10 +7,39 @@ using Common_Library.Utils;
 
 namespace Common_Library.Crypto
 {
+    public enum HashType
+    {
+        CRC8 = 1,
+        CRC16 = 2,
+        CRC32 = 4,
+        CRC64 = 8,
+        MD5 = 16,
+        SHA1 = 20,
+        SHA224 = 28,
+        SHA256 = 32,
+        SHA384 = 48,
+        SHA512 = 64,
+    }
+    
     public static partial class Cryptography
     {
         public static class Hash
         {
+            public static Byte[] Hashing(Byte[] data, HashType type)
+            {
+                // ReSharper disable once SwitchExpressionHandlesSomeKnownEnumValuesWithExceptionInDefault
+                return type switch
+                {
+                    HashType.CRC8 => new []{Crc8(data)},
+                    HashType.MD5 => MD5(data),
+                    HashType.SHA1 => Sha1(data),
+                    HashType.SHA256 => Sha256(data),
+                    HashType.SHA384 => Sha384(data),
+                    HashType.SHA512 => Sha512(data),
+                    _ => throw new NotImplementedException()
+                };
+            }
+            
             public static Byte[] Sha1(Byte[] data)
             {
                 using SHA1 sha1 = new SHA1Managed();

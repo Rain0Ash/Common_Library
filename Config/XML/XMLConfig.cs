@@ -11,7 +11,7 @@ namespace Common_Library.Config.XML
 {
     public class XMLConfig : Config
     {
-        private XmlDocument _document;
+        private readonly XmlDocument _document;
         
         public XMLConfig(String configPath = null, Boolean isReadOnly = true)
             : base(PathUtils.IsValidFilePath(configPath) ? configPath : new FileInfo($"{DefaultName}.xml").FullName, isReadOnly)

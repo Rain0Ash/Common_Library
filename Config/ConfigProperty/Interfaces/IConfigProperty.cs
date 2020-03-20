@@ -7,10 +7,9 @@ namespace Common_Library.Config
 {
     public interface IConfigProperty<T> : IReadOnlyConfigProperty<T>, IConfigPropertyBase
     {
-        public new T DefaultValue { get; set; }
-        public new Func<T, Boolean> Validate { get; set; }
         public void SetValue(T value);
         public T GetOrSetValue();
+        public void ChangeDefaultValue(T newValue, Boolean changeValue = true);
         public void ResetValue();
         public void RemoveValue();
     }

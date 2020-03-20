@@ -2,6 +2,7 @@
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
 using System;
+using Common_Library.Crypto;
 
 namespace Common_Library.Config
 {
@@ -11,7 +12,7 @@ namespace Common_Library.Config
         public Config Config { get; }
         public String Key { get; }
         public String[] Sections { get; }
-        public Boolean Crypt { get; }
+        public CryptAction Crypt { get; }
         public Byte[] CryptKey { get; }
         public Boolean Caching { get; }
         
