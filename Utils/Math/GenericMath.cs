@@ -429,1139 +429,1222 @@ namespace Common_Library.Utils.Math
 			};
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static Char Abs(this Char value)
+		{
+			return value;
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static SByte Abs(this SByte value)
+		{
+			if (value >= 0)
+			{
+				return value;
+			}
+
+			Int32 val = -value;
+			return Unsafe.As<Int32, SByte>(ref val);
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static Byte Abs(this Byte value)
+		{
+			return value;
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static Int16 Abs(this Int16 value)
+		{
+			if (value >= 0)
+			{
+				return value;
+			}
+
+			Int32 val = -value;
+			return Unsafe.As<Int32, Int16>(ref val);
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static UInt16 Abs(this UInt16 value)
+		{
+			return value;
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static Int32 Abs(this Int32 value)
+		{
+			return value >= 0 ? value : -value;
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static UInt32 Abs(this UInt32 value)
+		{
+			return value;
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static Int64 Abs(this Int64 value)
+		{
+			return value >= 0 ? value : -value;
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static UInt64 Abs(this UInt64 value)
+		{
+			return value;
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static Single Abs(this Single value)
+		{
+			return value >= 0 ? value : -value;
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static Double Abs(this Double value)
+		{
+			return value >= 0 ? value : -value;
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static Decimal Abs(this Decimal value)
+		{
+			return value >= 0 ? value : -value;
+		}
     }
 
     [SuppressMessage("ReSharper", "InvertIf")]
     public static class MathUnsafe
     {
-			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			public static T Add<T>(T left, T right) where T : unmanaged, IComparable
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static T Add<T>(T left, T right) where T : unmanaged, IComparable
+		{
+			if (typeof(T) == typeof(Char))
 			{
-				if (typeof(T) == typeof(Char))
-				{
-					Char value = (Char)(Unsafe.As<T, Char>(ref left) + Unsafe.As<T, Char>(ref right));
-					return Unsafe.As<Char, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(SByte))
-				{
-					SByte value = (SByte)(Unsafe.As<T, SByte>(ref left) + Unsafe.As<T, SByte>(ref right));
-					return Unsafe.As<SByte, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Byte))
-				{
-					Byte value = (Byte)(Unsafe.As<T, Byte>(ref left) + Unsafe.As<T, Byte>(ref right));
-					return Unsafe.As<Byte, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Int16))
-				{
-					Int16 value = (Int16)(Unsafe.As<T, Int16>(ref left) + Unsafe.As<T, Int16>(ref right));
-					return Unsafe.As<Int16, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(UInt16))
-				{
-					UInt16 value = (UInt16)(Unsafe.As<T, UInt16>(ref left) + Unsafe.As<T, UInt16>(ref right));
-					return Unsafe.As<UInt16, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Int32))
-				{
-					Int32 value = Unsafe.As<T, Int32>(ref left) + Unsafe.As<T, Int32>(ref right);
-					return Unsafe.As<Int32, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(UInt32))
-				{
-					UInt32 value = Unsafe.As<T, UInt32>(ref left) + Unsafe.As<T, UInt32>(ref right);
-					return Unsafe.As<UInt32, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Int64))
-				{
-					Int64 value = Unsafe.As<T, Int64>(ref left) + Unsafe.As<T, Int64>(ref right);
-					return Unsafe.As<Int64, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(UInt64))
-				{
-					UInt64 value = Unsafe.As<T, UInt64>(ref left) + Unsafe.As<T, UInt64>(ref right);
-					return Unsafe.As<UInt64, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Single))
-				{
-					Single value = Unsafe.As<T, Single>(ref left) + Unsafe.As<T, Single>(ref right);
-					return Unsafe.As<Single, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Double))
-				{
-					Double value = Unsafe.As<T, Double>(ref left) + Unsafe.As<T, Double>(ref right);
-					return Unsafe.As<Double, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Decimal))
-				{
-					Decimal value = Unsafe.As<T, Decimal>(ref left) + Unsafe.As<T, Decimal>(ref right);
-					return Unsafe.As<Decimal, T>(ref value);
-				}
-
-				throw new NotSupportedException($"Operator + is not supported for {typeof(T)} type");
+				Char value = (Char)(Unsafe.As<T, Char>(ref left) + Unsafe.As<T, Char>(ref right));
+				return Unsafe.As<Char, T>(ref value);
 			}
 
-			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			public static T Substract<T>(T left, T right) where T : unmanaged, IComparable
+			if (typeof(T) == typeof(SByte))
 			{
-				if (typeof(T) == typeof(Char))
-				{
-					Char value = (Char)(Unsafe.As<T, Char>(ref left) - Unsafe.As<T, Char>(ref right));
-					return Unsafe.As<Char, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(SByte))
-				{
-					SByte value = (SByte)(Unsafe.As<T, SByte>(ref left) - Unsafe.As<T, SByte>(ref right));
-					return Unsafe.As<SByte, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Byte))
-				{
-					Byte value = (Byte)(Unsafe.As<T, Byte>(ref left) - Unsafe.As<T, Byte>(ref right));
-					return Unsafe.As<Byte, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Int16))
-				{
-					Int16 value = (Int16)(Unsafe.As<T, Int16>(ref left) - Unsafe.As<T, Int16>(ref right));
-					return Unsafe.As<Int16, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(UInt16))
-				{
-					UInt16 value = (UInt16)(Unsafe.As<T, UInt16>(ref left) - Unsafe.As<T, UInt16>(ref right));
-					return Unsafe.As<UInt16, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Int32))
-				{
-					Int32 value = Unsafe.As<T, Int32>(ref left) - Unsafe.As<T, Int32>(ref right);
-					return Unsafe.As<Int32, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(UInt32))
-				{
-					UInt32 value = Unsafe.As<T, UInt32>(ref left) - Unsafe.As<T, UInt32>(ref right);
-					return Unsafe.As<UInt32, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Int64))
-				{
-					Int64 value = Unsafe.As<T, Int64>(ref left) - Unsafe.As<T, Int64>(ref right);
-					return Unsafe.As<Int64, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(UInt64))
-				{
-					UInt64 value = Unsafe.As<T, UInt64>(ref left) - Unsafe.As<T, UInt64>(ref right);
-					return Unsafe.As<UInt64, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Single))
-				{
-					Single value = Unsafe.As<T, Single>(ref left) - Unsafe.As<T, Single>(ref right);
-					return Unsafe.As<Single, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Double))
-				{
-					Double value = Unsafe.As<T, Double>(ref left) - Unsafe.As<T, Double>(ref right);
-					return Unsafe.As<Double, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Decimal))
-				{
-					Decimal value = Unsafe.As<T, Decimal>(ref left) - Unsafe.As<T, Decimal>(ref right);
-					return Unsafe.As<Decimal, T>(ref value);
-				}
-
-				throw new NotSupportedException($"Operator - is not supported for {typeof(T)} type");
+				SByte value = (SByte)(Unsafe.As<T, SByte>(ref left) + Unsafe.As<T, SByte>(ref right));
+				return Unsafe.As<SByte, T>(ref value);
 			}
 
-			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			public static T Multiply<T>(T left, T right) where T : unmanaged, IComparable
+			if (typeof(T) == typeof(Byte))
 			{
-				if (typeof(T) == typeof(Char))
-				{
-					Char value = (Char)(Unsafe.As<T, Char>(ref left) * Unsafe.As<T, Char>(ref right));
-					return Unsafe.As<Char, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(SByte))
-				{
-					SByte value = (SByte)(Unsafe.As<T, SByte>(ref left) * Unsafe.As<T, SByte>(ref right));
-					return Unsafe.As<SByte, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Byte))
-				{
-					Byte value = (Byte)(Unsafe.As<T, Byte>(ref left) * Unsafe.As<T, Byte>(ref right));
-					return Unsafe.As<Byte, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Int16))
-				{
-					Int16 value = (Int16)(Unsafe.As<T, Int16>(ref left) * Unsafe.As<T, Int16>(ref right));
-					return Unsafe.As<Int16, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(UInt16))
-				{
-					UInt16 value = (UInt16)(Unsafe.As<T, UInt16>(ref left) * Unsafe.As<T, UInt16>(ref right));
-					return Unsafe.As<UInt16, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Int32))
-				{
-					Int32 value = Unsafe.As<T, Int32>(ref left) * Unsafe.As<T, Int32>(ref right);
-					return Unsafe.As<Int32, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(UInt32))
-				{
-					UInt32 value = Unsafe.As<T, UInt32>(ref left) * Unsafe.As<T, UInt32>(ref right);
-					return Unsafe.As<UInt32, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Int64))
-				{
-					Int64 value = Unsafe.As<T, Int64>(ref left) * Unsafe.As<T, Int64>(ref right);
-					return Unsafe.As<Int64, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(UInt64))
-				{
-					UInt64 value = Unsafe.As<T, UInt64>(ref left) * Unsafe.As<T, UInt64>(ref right);
-					return Unsafe.As<UInt64, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Single))
-				{
-					Single value = Unsafe.As<T, Single>(ref left) * Unsafe.As<T, Single>(ref right);
-					return Unsafe.As<Single, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Double))
-				{
-					Double value = Unsafe.As<T, Double>(ref left) * Unsafe.As<T, Double>(ref right);
-					return Unsafe.As<Double, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Decimal))
-				{
-					Decimal value = Unsafe.As<T, Decimal>(ref left) * Unsafe.As<T, Decimal>(ref right);
-					return Unsafe.As<Decimal, T>(ref value);
-				}
-
-				throw new NotSupportedException($"Operator * is not supported for {typeof(T)} type");
+				Byte value = (Byte)(Unsafe.As<T, Byte>(ref left) + Unsafe.As<T, Byte>(ref right));
+				return Unsafe.As<Byte, T>(ref value);
 			}
 
-			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			public static T Divide<T>(T left, T right) where T : unmanaged, IComparable
+			if (typeof(T) == typeof(Int16))
 			{
-				if (typeof(T) == typeof(Char))
-				{
-					Char value = (Char)(Unsafe.As<T, Char>(ref left) / Unsafe.As<T, Char>(ref right));
-					return Unsafe.As<Char, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(SByte))
-				{
-					SByte value = (SByte)(Unsafe.As<T, SByte>(ref left) / Unsafe.As<T, SByte>(ref right));
-					return Unsafe.As<SByte, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Byte))
-				{
-					Byte value = (Byte)(Unsafe.As<T, Byte>(ref left) / Unsafe.As<T, Byte>(ref right));
-					return Unsafe.As<Byte, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Int16))
-				{
-					Int16 value = (Int16)(Unsafe.As<T, Int16>(ref left) / Unsafe.As<T, Int16>(ref right));
-					return Unsafe.As<Int16, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(UInt16))
-				{
-					UInt16 value = (UInt16)(Unsafe.As<T, UInt16>(ref left) / Unsafe.As<T, UInt16>(ref right));
-					return Unsafe.As<UInt16, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Int32))
-				{
-					Int32 value = Unsafe.As<T, Int32>(ref left) / Unsafe.As<T, Int32>(ref right);
-					return Unsafe.As<Int32, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(UInt32))
-				{
-					UInt32 value = Unsafe.As<T, UInt32>(ref left) / Unsafe.As<T, UInt32>(ref right);
-					return Unsafe.As<UInt32, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Int64))
-				{
-					Int64 value = Unsafe.As<T, Int64>(ref left) / Unsafe.As<T, Int64>(ref right);
-					return Unsafe.As<Int64, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(UInt64))
-				{
-					UInt64 value = Unsafe.As<T, UInt64>(ref left) / Unsafe.As<T, UInt64>(ref right);
-					return Unsafe.As<UInt64, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Single))
-				{
-					Single value = Unsafe.As<T, Single>(ref left) / Unsafe.As<T, Single>(ref right);
-					return Unsafe.As<Single, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Double))
-				{
-					Double value = Unsafe.As<T, Double>(ref left) / Unsafe.As<T, Double>(ref right);
-					return Unsafe.As<Double, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Decimal))
-				{
-					Decimal value = Unsafe.As<T, Decimal>(ref left) / Unsafe.As<T, Decimal>(ref right);
-					return Unsafe.As<Decimal, T>(ref value);
-				}
-
-				throw new NotSupportedException($"Operator / is not supported for {typeof(T)} type");
+				Int16 value = (Int16)(Unsafe.As<T, Int16>(ref left) + Unsafe.As<T, Int16>(ref right));
+				return Unsafe.As<Int16, T>(ref value);
 			}
 
-			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			public static T Modulo<T>(T left, T right) where T : unmanaged, IComparable
+			if (typeof(T) == typeof(UInt16))
 			{
-				if (typeof(T) == typeof(Char))
-				{
-					Char value = (Char)(Unsafe.As<T, Char>(ref left) % Unsafe.As<T, Char>(ref right));
-					return Unsafe.As<Char, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(SByte))
-				{
-					SByte value = (SByte)(Unsafe.As<T, SByte>(ref left) % Unsafe.As<T, SByte>(ref right));
-					return Unsafe.As<SByte, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Byte))
-				{
-					Byte value = (Byte)(Unsafe.As<T, Byte>(ref left) % Unsafe.As<T, Byte>(ref right));
-					return Unsafe.As<Byte, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Int16))
-				{
-					Int16 value = (Int16)(Unsafe.As<T, Int16>(ref left) % Unsafe.As<T, Int16>(ref right));
-					return Unsafe.As<Int16, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(UInt16))
-				{
-					UInt16 value = (UInt16)(Unsafe.As<T, UInt16>(ref left) % Unsafe.As<T, UInt16>(ref right));
-					return Unsafe.As<UInt16, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Int32))
-				{
-					Int32 value = Unsafe.As<T, Int32>(ref left) % Unsafe.As<T, Int32>(ref right);
-					return Unsafe.As<Int32, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(UInt32))
-				{
-					UInt32 value = Unsafe.As<T, UInt32>(ref left) % Unsafe.As<T, UInt32>(ref right);
-					return Unsafe.As<UInt32, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Int64))
-				{
-					Int64 value = Unsafe.As<T, Int64>(ref left) % Unsafe.As<T, Int64>(ref right);
-					return Unsafe.As<Int64, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(UInt64))
-				{
-					UInt64 value = Unsafe.As<T, UInt64>(ref left) % Unsafe.As<T, UInt64>(ref right);
-					return Unsafe.As<UInt64, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Single))
-				{
-					Single value = Unsafe.As<T, Single>(ref left) % Unsafe.As<T, Single>(ref right);
-					return Unsafe.As<Single, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Double))
-				{
-					Double value = Unsafe.As<T, Double>(ref left) % Unsafe.As<T, Double>(ref right);
-					return Unsafe.As<Double, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Decimal))
-				{
-					Decimal value = Unsafe.As<T, Decimal>(ref left) % Unsafe.As<T, Decimal>(ref right);
-					return Unsafe.As<Decimal, T>(ref value);
-				}
-
-				throw new NotSupportedException($"Operator % is not supported for {typeof(T)} type");
+				UInt16 value = (UInt16)(Unsafe.As<T, UInt16>(ref left) + Unsafe.As<T, UInt16>(ref right));
+				return Unsafe.As<UInt16, T>(ref value);
 			}
 
-			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			public static T And<T>(T left, T right) where T : unmanaged, IComparable
+			if (typeof(T) == typeof(Int32))
 			{
-				if (typeof(T) == typeof(Char))
-				{
-					Char value = (Char)(Unsafe.As<T, Char>(ref left) & Unsafe.As<T, Char>(ref right));
-					return Unsafe.As<Char, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(SByte))
-				{
-					SByte value = (SByte)(Unsafe.As<T, SByte>(ref left) & Unsafe.As<T, SByte>(ref right));
-					return Unsafe.As<SByte, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Byte))
-				{
-					Byte value = (Byte)(Unsafe.As<T, Byte>(ref left) & Unsafe.As<T, Byte>(ref right));
-					return Unsafe.As<Byte, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Int16))
-				{
-					Int16 value = (Int16)(Unsafe.As<T, Int16>(ref left) & Unsafe.As<T, Int16>(ref right));
-					return Unsafe.As<Int16, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(UInt16))
-				{
-					UInt16 value = (UInt16)(Unsafe.As<T, UInt16>(ref left) & Unsafe.As<T, UInt16>(ref right));
-					return Unsafe.As<UInt16, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Int32))
-				{
-					Int32 value = Unsafe.As<T, Int32>(ref left) & Unsafe.As<T, Int32>(ref right);
-					return Unsafe.As<Int32, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(UInt32))
-				{
-					UInt32 value = Unsafe.As<T, UInt32>(ref left) & Unsafe.As<T, UInt32>(ref right);
-					return Unsafe.As<UInt32, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Int64))
-				{
-					Int64 value = Unsafe.As<T, Int64>(ref left) & Unsafe.As<T, Int64>(ref right);
-					return Unsafe.As<Int64, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(UInt64))
-				{
-					UInt64 value = Unsafe.As<T, UInt64>(ref left) & Unsafe.As<T, UInt64>(ref right);
-					return Unsafe.As<UInt64, T>(ref value);
-				}
-
-				throw new NotSupportedException($"Operator & is not supported for {typeof(T)} type");
+				Int32 value = Unsafe.As<T, Int32>(ref left) + Unsafe.As<T, Int32>(ref right);
+				return Unsafe.As<Int32, T>(ref value);
 			}
 
-			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			public static T Or<T>(T left, T right) where T : unmanaged, IComparable
+			if (typeof(T) == typeof(UInt32))
 			{
-				if (typeof(T) == typeof(Char))
-				{
-					Char value = (Char)(Unsafe.As<T, Char>(ref left) | Unsafe.As<T, Char>(ref right));
-					return Unsafe.As<Char, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(SByte))
-				{
-					SByte value = (SByte)(Unsafe.As<T, SByte>(ref left) | Unsafe.As<T, SByte>(ref right));
-					return Unsafe.As<SByte, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Byte))
-				{
-					Byte value = (Byte)(Unsafe.As<T, Byte>(ref left) | Unsafe.As<T, Byte>(ref right));
-					return Unsafe.As<Byte, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Int16))
-				{
-					Int16 value = (Int16)(Unsafe.As<T, Int16>(ref left) | Unsafe.As<T, Int16>(ref right));
-					return Unsafe.As<Int16, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(UInt16))
-				{
-					UInt16 value = (UInt16)(Unsafe.As<T, UInt16>(ref left) | Unsafe.As<T, UInt16>(ref right));
-					return Unsafe.As<UInt16, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Int32))
-				{
-					Int32 value = Unsafe.As<T, Int32>(ref left) | Unsafe.As<T, Int32>(ref right);
-					return Unsafe.As<Int32, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(UInt32))
-				{
-					UInt32 value = Unsafe.As<T, UInt32>(ref left) | Unsafe.As<T, UInt32>(ref right);
-					return Unsafe.As<UInt32, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Int64))
-				{
-					Int64 value = Unsafe.As<T, Int64>(ref left) | Unsafe.As<T, Int64>(ref right);
-					return Unsafe.As<Int64, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(UInt64))
-				{
-					UInt64 value = Unsafe.As<T, UInt64>(ref left) | Unsafe.As<T, UInt64>(ref right);
-					return Unsafe.As<UInt64, T>(ref value);
-				}
-
-				throw new NotSupportedException($"Operator | is not supported for {typeof(T)} type");
+				UInt32 value = Unsafe.As<T, UInt32>(ref left) + Unsafe.As<T, UInt32>(ref right);
+				return Unsafe.As<UInt32, T>(ref value);
 			}
 
-			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			public static T Xor<T>(T left, T right) where T : unmanaged, IComparable
+			if (typeof(T) == typeof(Int64))
 			{
-				if (typeof(T) == typeof(Char))
-				{
-					Char value = (Char)(Unsafe.As<T, Char>(ref left) ^ Unsafe.As<T, Char>(ref right));
-					return Unsafe.As<Char, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(SByte))
-				{
-					SByte value = (SByte)(Unsafe.As<T, SByte>(ref left) ^ Unsafe.As<T, SByte>(ref right));
-					return Unsafe.As<SByte, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Byte))
-				{
-					Byte value = (Byte)(Unsafe.As<T, Byte>(ref left) ^ Unsafe.As<T, Byte>(ref right));
-					return Unsafe.As<Byte, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Int16))
-				{
-					Int16 value = (Int16)(Unsafe.As<T, Int16>(ref left) ^ Unsafe.As<T, Int16>(ref right));
-					return Unsafe.As<Int16, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(UInt16))
-				{
-					UInt16 value = (UInt16)(Unsafe.As<T, UInt16>(ref left) ^ Unsafe.As<T, UInt16>(ref right));
-					return Unsafe.As<UInt16, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Int32))
-				{
-					Int32 value = Unsafe.As<T, Int32>(ref left) ^ Unsafe.As<T, Int32>(ref right);
-					return Unsafe.As<Int32, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(UInt32))
-				{
-					UInt32 value = Unsafe.As<T, UInt32>(ref left) ^ Unsafe.As<T, UInt32>(ref right);
-					return Unsafe.As<UInt32, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(Int64))
-				{
-					Int64 value = Unsafe.As<T, Int64>(ref left) ^ Unsafe.As<T, Int64>(ref right);
-					return Unsafe.As<Int64, T>(ref value);
-				}
-
-				if (typeof(T) == typeof(UInt64))
-				{
-					UInt64 value = Unsafe.As<T, UInt64>(ref left) ^ Unsafe.As<T, UInt64>(ref right);
-					return Unsafe.As<UInt64, T>(ref value);
-				}
-
-				throw new NotSupportedException($"Operator ^ is not supported for {typeof(T)} type");
+				Int64 value = Unsafe.As<T, Int64>(ref left) + Unsafe.As<T, Int64>(ref right);
+				return Unsafe.As<Int64, T>(ref value);
 			}
 
-			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			public static T Invert<T>(T value) where T : unmanaged, IComparable
+			if (typeof(T) == typeof(UInt64))
 			{
-				if (typeof(T) == typeof(Char))
-				{
-					Int32 i = ~Unsafe.As<T, Char>(ref value);
-					Char val = Unsafe.As<Int32, Char>(ref i);
-					return Unsafe.As<Char, T>(ref val);
-				}
-
-				if (typeof(T) == typeof(SByte))
-				{
-					Int32 i = ~Unsafe.As<T, SByte>(ref value);
-					SByte val = Unsafe.As<Int32, SByte>(ref i);
-					return Unsafe.As<SByte, T>(ref val);
-				}
-
-				if (typeof(T) == typeof(Byte))
-				{
-					Int32 i = ~Unsafe.As<T, Byte>(ref value);
-					Byte val = Unsafe.As<Int32, Byte>(ref i);
-					return Unsafe.As<Byte, T>(ref val);
-				}
-
-				if (typeof(T) == typeof(Int16))
-				{
-					Int32 i = ~Unsafe.As<T, Int16>(ref value);
-					Int16 val = Unsafe.As<Int32, Int16>(ref i);
-					return Unsafe.As<Int16, T>(ref val);
-				}
-
-				if (typeof(T) == typeof(UInt16))
-				{
-					Int32 i = ~Unsafe.As<T, UInt16>(ref value);
-					UInt16 val = Unsafe.As<Int32, UInt16>(ref i);
-					return Unsafe.As<UInt16, T>(ref val);
-				}
-
-				if (typeof(T) == typeof(Int32))
-				{
-					Int32 val = ~Unsafe.As<T, Int32>(ref value);
-					return Unsafe.As<Int32, T>(ref val);
-				}
-
-				if (typeof(T) == typeof(UInt32))
-				{
-					UInt32 val = ~Unsafe.As<T, UInt32>(ref value);
-					return Unsafe.As<UInt32, T>(ref val);
-				}
-
-				if (typeof(T) == typeof(Int64))
-				{
-					Int64 val = ~Unsafe.As<T, Int64>(ref value);
-					return Unsafe.As<Int64, T>(ref val);
-				}
-
-				if (typeof(T) == typeof(UInt64))
-				{
-					UInt64 val = ~Unsafe.As<T, UInt64>(ref value);
-					return Unsafe.As<UInt64, T>(ref val);
-				}
-
-				throw new NotSupportedException($"Operator ~ is not supported for {typeof(T)} type");
+				UInt64 value = Unsafe.As<T, UInt64>(ref left) + Unsafe.As<T, UInt64>(ref right);
+				return Unsafe.As<UInt64, T>(ref value);
 			}
 
-			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			public static T Abs<T>(T value) where T : unmanaged, IComparable
+			if (typeof(T) == typeof(Single))
 			{
-				if (typeof(T) == typeof(SByte))
-				{
-					SByte val = System.Math.Abs(Unsafe.As<T, SByte>(ref value));
-					return Unsafe.As<SByte, T>(ref val);
-				}
-
-				if (typeof(T) == typeof(Int16))
-				{
-					Int16 val = System.Math.Abs(Unsafe.As<T, Int16>(ref value));
-					return Unsafe.As<Int16, T>(ref val);
-				}
-
-				if (typeof(T) == typeof(Int32))
-				{
-					Int32 val = System.Math.Abs(Unsafe.As<T, Int32>(ref value));
-					return Unsafe.As<Int32, T>(ref val);
-				}
-
-				if (typeof(T) == typeof(Int64))
-				{
-					Int64 val = System.Math.Abs(Unsafe.As<T, Int64>(ref value));
-					return Unsafe.As<Int64, T>(ref val);
-				}
-
-				if (typeof(T) == typeof(Single))
-				{
-					Single val = System.Math.Abs(Unsafe.As<T, Single>(ref value));
-					return Unsafe.As<Single, T>(ref val);
-				}
-
-				if (typeof(T) == typeof(Double))
-				{
-					Double val = System.Math.Abs(Unsafe.As<T, Double>(ref value));
-					return Unsafe.As<Double, T>(ref val);
-				}
-
-				if (typeof(T) == typeof(Decimal))
-				{
-					Decimal val = System.Math.Abs(Unsafe.As<T, Decimal>(ref value));
-					return Unsafe.As<Decimal, T>(ref val);
-				}
-
-				throw new NotSupportedException($"Operator | | is not supported for {typeof(T)} type");
+				Single value = Unsafe.As<T, Single>(ref left) + Unsafe.As<T, Single>(ref right);
+				return Unsafe.As<Single, T>(ref value);
 			}
 
-			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			public static T Negative<T>(T value) where T : unmanaged, IComparable
+			if (typeof(T) == typeof(Double))
 			{
-				if (typeof(T) == typeof(SByte))
-				{
-					Int32 i = -System.Math.Abs(Unsafe.As<T, SByte>(ref value));
-					SByte val = Unsafe.As<Int32, SByte>(ref i);
-					return Unsafe.As<SByte, T>(ref val);
-				}
-
-				if (typeof(T) == typeof(Int16))
-				{
-					Int32 i = -System.Math.Abs(Unsafe.As<T, Int16>(ref value));
-					Int16 val = Unsafe.As<Int32, Int16>(ref i);
-					return Unsafe.As<Int16, T>(ref val);
-				}
-
-				if (typeof(T) == typeof(Int32))
-				{
-					Int32 val = -System.Math.Abs(Unsafe.As<T, Int32>(ref value));
-					return Unsafe.As<Int32, T>(ref val);
-				}
-
-				if (typeof(T) == typeof(Int64))
-				{
-					Int64 val = -System.Math.Abs(Unsafe.As<T, Int64>(ref value));
-					return Unsafe.As<Int64, T>(ref val);
-				}
-
-				if (typeof(T) == typeof(Single))
-				{
-					Single val = -System.Math.Abs(Unsafe.As<T, Single>(ref value));
-					return Unsafe.As<Single, T>(ref val);
-				}
-
-				if (typeof(T) == typeof(Double))
-				{
-					Double val = -System.Math.Abs(Unsafe.As<T, Double>(ref value));
-					return Unsafe.As<Double, T>(ref val);
-				}
-
-				if (typeof(T) == typeof(Decimal))
-				{
-					Decimal val = -System.Math.Abs(Unsafe.As<T, Decimal>(ref value));
-					return Unsafe.As<Decimal, T>(ref val);
-				}
-
-				throw new NotSupportedException($"Operator -| | is not supported for {typeof(T)} type");
+				Double value = Unsafe.As<T, Double>(ref left) + Unsafe.As<T, Double>(ref right);
+				return Unsafe.As<Double, T>(ref value);
 			}
 
-			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			public static Boolean Equal<T>(T left, T right) where T : unmanaged, IComparable
+			if (typeof(T) == typeof(Decimal))
 			{
-				if (typeof(T) == typeof(Char))
-				{
-					return Unsafe.As<T, Char>(ref left) == Unsafe.As<T, Char>(ref right);
-				}
-
-				if (typeof(T) == typeof(SByte))
-				{
-					return Unsafe.As<T, SByte>(ref left) == Unsafe.As<T, SByte>(ref right);
-				}
-
-				if (typeof(T) == typeof(Byte))
-				{
-					return Unsafe.As<T, Byte>(ref left) == Unsafe.As<T, Byte>(ref right);
-				}
-
-				if (typeof(T) == typeof(Int16))
-				{
-					return Unsafe.As<T, Int16>(ref left) == Unsafe.As<T, Int16>(ref right);
-				}
-
-				if (typeof(T) == typeof(UInt16))
-				{
-					return Unsafe.As<T, UInt16>(ref left) == Unsafe.As<T, UInt16>(ref right);
-				}
-
-				if (typeof(T) == typeof(Int32))
-				{
-					return Unsafe.As<T, Int32>(ref left) == Unsafe.As<T, Int32>(ref right);
-				}
-
-				if (typeof(T) == typeof(UInt32))
-				{
-					return Unsafe.As<T, UInt32>(ref left) == Unsafe.As<T, UInt32>(ref right);
-				}
-
-				if (typeof(T) == typeof(Int64))
-				{
-					return Unsafe.As<T, Int64>(ref left) == Unsafe.As<T, Int64>(ref right);
-				}
-
-				if (typeof(T) == typeof(UInt64))
-				{
-					return Unsafe.As<T, UInt64>(ref left) == Unsafe.As<T, UInt64>(ref right);
-				}
-
-				if (typeof(T) == typeof(Single))
-				{
-					return Unsafe.As<T, Single>(ref left) - Unsafe.As<T, Single>(ref right) < Single.Epsilon;
-				}
-
-				if (typeof(T) == typeof(Double))
-				{
-					return Unsafe.As<T, Double>(ref left) - Unsafe.As<T, Double>(ref right) < Double.Epsilon;
-				}
-
-				if (typeof(T) == typeof(Decimal))
-				{
-					return Unsafe.As<T, Decimal>(ref left) == Unsafe.As<T, Decimal>(ref right);
-				}
-
-				throw new NotSupportedException($"Operator == is not supported for {typeof(T)} type");
+				Decimal value = Unsafe.As<T, Decimal>(ref left) + Unsafe.As<T, Decimal>(ref right);
+				return Unsafe.As<Decimal, T>(ref value);
 			}
 
-			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			public static Boolean NotEqual<T>(T left, T right) where T : unmanaged, IComparable
+			throw new NotSupportedException($"Operator + is not supported for {typeof(T)} type");
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static T Substract<T>(T left, T right) where T : unmanaged, IComparable
+		{
+			if (typeof(T) == typeof(Char))
 			{
-				if (typeof(T) == typeof(Char))
-				{
-					return Unsafe.As<T, Char>(ref left) != Unsafe.As<T, Char>(ref right);
-				}
-
-				if (typeof(T) == typeof(SByte))
-				{
-					return Unsafe.As<T, SByte>(ref left) != Unsafe.As<T, SByte>(ref right);
-				}
-
-				if (typeof(T) == typeof(Byte))
-				{
-					return Unsafe.As<T, Byte>(ref left) != Unsafe.As<T, Byte>(ref right);
-				}
-
-				if (typeof(T) == typeof(Int16))
-				{
-					return Unsafe.As<T, Int16>(ref left) != Unsafe.As<T, Int16>(ref right);
-				}
-
-				if (typeof(T) == typeof(UInt16))
-				{
-					return Unsafe.As<T, UInt16>(ref left) != Unsafe.As<T, UInt16>(ref right);
-				}
-
-				if (typeof(T) == typeof(Int32))
-				{
-					return Unsafe.As<T, Int32>(ref left) != Unsafe.As<T, Int32>(ref right);
-				}
-
-				if (typeof(T) == typeof(UInt32))
-				{
-					return Unsafe.As<T, UInt32>(ref left) != Unsafe.As<T, UInt32>(ref right);
-				}
-
-				if (typeof(T) == typeof(Int64))
-				{
-					return Unsafe.As<T, Int64>(ref left) != Unsafe.As<T, Int64>(ref right);
-				}
-
-				if (typeof(T) == typeof(UInt64))
-				{
-					return Unsafe.As<T, UInt64>(ref left) != Unsafe.As<T, UInt64>(ref right);
-				}
-
-				if (typeof(T) == typeof(Single))
-				{
-					return Unsafe.As<T, Single>(ref left) - Unsafe.As<T, Single>(ref right) > Single.Epsilon;
-				}
-
-				if (typeof(T) == typeof(Double))
-				{
-					return Unsafe.As<T, Double>(ref left) - Unsafe.As<T, Double>(ref right) > Double.Epsilon;
-				}
-
-				if (typeof(T) == typeof(Decimal))
-				{
-					return Unsafe.As<T, Decimal>(ref left) != Unsafe.As<T, Decimal>(ref right);
-				}
-
-				throw new NotSupportedException($"Operator != is not supported for {typeof(T)} type");
+				Char value = (Char)(Unsafe.As<T, Char>(ref left) - Unsafe.As<T, Char>(ref right));
+				return Unsafe.As<Char, T>(ref value);
 			}
 
-			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			public static Boolean Greater<T>(T left, T right) where T : unmanaged, IComparable
+			if (typeof(T) == typeof(SByte))
 			{
-				if (typeof(T) == typeof(Char))
-				{
-					return Unsafe.As<T, Char>(ref left) > Unsafe.As<T, Char>(ref right);
-				}
-
-				if (typeof(T) == typeof(SByte))
-				{
-					return Unsafe.As<T, SByte>(ref left) > Unsafe.As<T, SByte>(ref right);
-				}
-
-				if (typeof(T) == typeof(Byte))
-				{
-					return Unsafe.As<T, Byte>(ref left) > Unsafe.As<T, Byte>(ref right);
-				}
-
-				if (typeof(T) == typeof(Int16))
-				{
-					return Unsafe.As<T, Int16>(ref left) > Unsafe.As<T, Int16>(ref right);
-				}
-
-				if (typeof(T) == typeof(UInt16))
-				{
-					return Unsafe.As<T, UInt16>(ref left) > Unsafe.As<T, UInt16>(ref right);
-				}
-
-				if (typeof(T) == typeof(Int32))
-				{
-					return Unsafe.As<T, Int32>(ref left) > Unsafe.As<T, Int32>(ref right);
-				}
-
-				if (typeof(T) == typeof(UInt32))
-				{
-					return Unsafe.As<T, UInt32>(ref left) > Unsafe.As<T, UInt32>(ref right);
-				}
-
-				if (typeof(T) == typeof(Int64))
-				{
-					return Unsafe.As<T, Int64>(ref left) > Unsafe.As<T, Int64>(ref right);
-				}
-
-				if (typeof(T) == typeof(UInt64))
-				{
-					return Unsafe.As<T, UInt64>(ref left) > Unsafe.As<T, UInt64>(ref right);
-				}
-
-				if (typeof(T) == typeof(Single))
-				{
-					return Unsafe.As<T, Single>(ref left) > Unsafe.As<T, Single>(ref right);
-				}
-
-				if (typeof(T) == typeof(Double))
-				{
-					return Unsafe.As<T, Double>(ref left) > Unsafe.As<T, Double>(ref right);
-				}
-
-				if (typeof(T) == typeof(Decimal))
-				{
-					return Unsafe.As<T, Decimal>(ref left) > Unsafe.As<T, Decimal>(ref right);
-				}
-
-				throw new NotSupportedException($"Operator > is not supported for {typeof(T)} type");
+				SByte value = (SByte)(Unsafe.As<T, SByte>(ref left) - Unsafe.As<T, SByte>(ref right));
+				return Unsafe.As<SByte, T>(ref value);
 			}
 
-			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			public static Boolean GreaterEqual<T>(T left, T right) where T : unmanaged, IComparable
+			if (typeof(T) == typeof(Byte))
 			{
-				if (typeof(T) == typeof(Char))
-				{
-					return Unsafe.As<T, Char>(ref left) >= Unsafe.As<T, Char>(ref right);
-				}
-
-				if (typeof(T) == typeof(SByte))
-				{
-					return Unsafe.As<T, SByte>(ref left) >= Unsafe.As<T, SByte>(ref right);
-				}
-
-				if (typeof(T) == typeof(Byte))
-				{
-					return Unsafe.As<T, Byte>(ref left) >= Unsafe.As<T, Byte>(ref right);
-				}
-
-				if (typeof(T) == typeof(Int16))
-				{
-					return Unsafe.As<T, Int16>(ref left) >= Unsafe.As<T, Int16>(ref right);
-				}
-
-				if (typeof(T) == typeof(UInt16))
-				{
-					return Unsafe.As<T, UInt16>(ref left) >= Unsafe.As<T, UInt16>(ref right);
-				}
-
-				if (typeof(T) == typeof(Int32))
-				{
-					return Unsafe.As<T, Int32>(ref left) >= Unsafe.As<T, Int32>(ref right);
-				}
-
-				if (typeof(T) == typeof(UInt32))
-				{
-					return Unsafe.As<T, UInt32>(ref left) >= Unsafe.As<T, UInt32>(ref right);
-				}
-
-				if (typeof(T) == typeof(Int64))
-				{
-					return Unsafe.As<T, Int64>(ref left) >= Unsafe.As<T, Int64>(ref right);
-				}
-
-				if (typeof(T) == typeof(UInt64))
-				{
-					return Unsafe.As<T, UInt64>(ref left) >= Unsafe.As<T, UInt64>(ref right);
-				}
-
-				if (typeof(T) == typeof(Single))
-				{
-					return Unsafe.As<T, Single>(ref left) >= Unsafe.As<T, Single>(ref right);
-				}
-
-				if (typeof(T) == typeof(Double))
-				{
-					return Unsafe.As<T, Double>(ref left) >= Unsafe.As<T, Double>(ref right);
-				}
-
-				if (typeof(T) == typeof(Decimal))
-				{
-					return Unsafe.As<T, Decimal>(ref left) >= Unsafe.As<T, Decimal>(ref right);
-				}
-
-				throw new NotSupportedException($"Operator >= is not supported for {typeof(T)} type");
+				Byte value = (Byte)(Unsafe.As<T, Byte>(ref left) - Unsafe.As<T, Byte>(ref right));
+				return Unsafe.As<Byte, T>(ref value);
 			}
 
-			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			public static Boolean Less<T>(T left, T right) where T : unmanaged, IComparable
+			if (typeof(T) == typeof(Int16))
 			{
-				if (typeof(T) == typeof(Char))
-				{
-					return Unsafe.As<T, Char>(ref left) < Unsafe.As<T, Char>(ref right);
-				}
-
-				if (typeof(T) == typeof(SByte))
-				{
-					return Unsafe.As<T, SByte>(ref left) < Unsafe.As<T, SByte>(ref right);
-				}
-
-				if (typeof(T) == typeof(Byte))
-				{
-					return Unsafe.As<T, Byte>(ref left) < Unsafe.As<T, Byte>(ref right);
-				}
-
-				if (typeof(T) == typeof(Int16))
-				{
-					return Unsafe.As<T, Int16>(ref left) < Unsafe.As<T, Int16>(ref right);
-				}
-
-				if (typeof(T) == typeof(UInt16))
-				{
-					return Unsafe.As<T, UInt16>(ref left) < Unsafe.As<T, UInt16>(ref right);
-				}
-
-				if (typeof(T) == typeof(Int32))
-				{
-					return Unsafe.As<T, Int32>(ref left) < Unsafe.As<T, Int32>(ref right);
-				}
-
-				if (typeof(T) == typeof(UInt32))
-				{
-					return Unsafe.As<T, UInt32>(ref left) < Unsafe.As<T, UInt32>(ref right);
-				}
-
-				if (typeof(T) == typeof(Int64))
-				{
-					return Unsafe.As<T, Int64>(ref left) < Unsafe.As<T, Int64>(ref right);
-				}
-
-				if (typeof(T) == typeof(UInt64))
-				{
-					return Unsafe.As<T, UInt64>(ref left) < Unsafe.As<T, UInt64>(ref right);
-				}
-
-				if (typeof(T) == typeof(Single))
-				{
-					return Unsafe.As<T, Single>(ref left) < Unsafe.As<T, Single>(ref right);
-				}
-
-				if (typeof(T) == typeof(Double))
-				{
-					return Unsafe.As<T, Double>(ref left) < Unsafe.As<T, Double>(ref right);
-				}
-
-				if (typeof(T) == typeof(Decimal))
-				{
-					return Unsafe.As<T, Decimal>(ref left) < Unsafe.As<T, Decimal>(ref right);
-				}
-
-				throw new NotSupportedException($"Operator < is not supported for {typeof(T)} type");
+				Int16 value = (Int16)(Unsafe.As<T, Int16>(ref left) - Unsafe.As<T, Int16>(ref right));
+				return Unsafe.As<Int16, T>(ref value);
 			}
 
-			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			public static Boolean LessEqual<T>(T left, T right) where T : unmanaged, IComparable
+			if (typeof(T) == typeof(UInt16))
 			{
-				if (typeof(T) == typeof(Char))
-				{
-					return Unsafe.As<T, Char>(ref left) <= Unsafe.As<T, Char>(ref right);
-				}
-
-				if (typeof(T) == typeof(SByte))
-				{
-					return Unsafe.As<T, SByte>(ref left) <= Unsafe.As<T, SByte>(ref right);
-				}
-
-				if (typeof(T) == typeof(Byte))
-				{
-					return Unsafe.As<T, Byte>(ref left) <= Unsafe.As<T, Byte>(ref right);
-				}
-
-				if (typeof(T) == typeof(Int16))
-				{
-					return Unsafe.As<T, Int16>(ref left) <= Unsafe.As<T, Int16>(ref right);
-				}
-
-				if (typeof(T) == typeof(UInt16))
-				{
-					return Unsafe.As<T, UInt16>(ref left) <= Unsafe.As<T, UInt16>(ref right);
-				}
-
-				if (typeof(T) == typeof(Int32))
-				{
-					return Unsafe.As<T, Int32>(ref left) <= Unsafe.As<T, Int32>(ref right);
-				}
-
-				if (typeof(T) == typeof(UInt32))
-				{
-					return Unsafe.As<T, UInt32>(ref left) <= Unsafe.As<T, UInt32>(ref right);
-				}
-
-				if (typeof(T) == typeof(Int64))
-				{
-					return Unsafe.As<T, Int64>(ref left) <= Unsafe.As<T, Int64>(ref right);
-				}
-
-				if (typeof(T) == typeof(UInt64))
-				{
-					return Unsafe.As<T, UInt64>(ref left) <= Unsafe.As<T, UInt64>(ref right);
-				}
-
-				if (typeof(T) == typeof(Single))
-				{
-					return Unsafe.As<T, Single>(ref left) <= Unsafe.As<T, Single>(ref right);
-				}
-
-				if (typeof(T) == typeof(Double))
-				{
-					return Unsafe.As<T, Double>(ref left) <= Unsafe.As<T, Double>(ref right);
-				}
-
-				if (typeof(T) == typeof(Decimal))
-				{
-					return Unsafe.As<T, Decimal>(ref left) <= Unsafe.As<T, Decimal>(ref right);
-				}
-
-				throw new NotSupportedException($"Operator <= is not supported for {typeof(T)} type");
+				UInt16 value = (UInt16)(Unsafe.As<T, UInt16>(ref left) - Unsafe.As<T, UInt16>(ref right));
+				return Unsafe.As<UInt16, T>(ref value);
 			}
+
+			if (typeof(T) == typeof(Int32))
+			{
+				Int32 value = Unsafe.As<T, Int32>(ref left) - Unsafe.As<T, Int32>(ref right);
+				return Unsafe.As<Int32, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(UInt32))
+			{
+				UInt32 value = Unsafe.As<T, UInt32>(ref left) - Unsafe.As<T, UInt32>(ref right);
+				return Unsafe.As<UInt32, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(Int64))
+			{
+				Int64 value = Unsafe.As<T, Int64>(ref left) - Unsafe.As<T, Int64>(ref right);
+				return Unsafe.As<Int64, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(UInt64))
+			{
+				UInt64 value = Unsafe.As<T, UInt64>(ref left) - Unsafe.As<T, UInt64>(ref right);
+				return Unsafe.As<UInt64, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(Single))
+			{
+				Single value = Unsafe.As<T, Single>(ref left) - Unsafe.As<T, Single>(ref right);
+				return Unsafe.As<Single, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(Double))
+			{
+				Double value = Unsafe.As<T, Double>(ref left) - Unsafe.As<T, Double>(ref right);
+				return Unsafe.As<Double, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(Decimal))
+			{
+				Decimal value = Unsafe.As<T, Decimal>(ref left) - Unsafe.As<T, Decimal>(ref right);
+				return Unsafe.As<Decimal, T>(ref value);
+			}
+
+			throw new NotSupportedException($"Operator - is not supported for {typeof(T)} type");
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static T Multiply<T>(T left, T right) where T : unmanaged, IComparable
+		{
+			if (typeof(T) == typeof(Char))
+			{
+				Char value = (Char)(Unsafe.As<T, Char>(ref left) * Unsafe.As<T, Char>(ref right));
+				return Unsafe.As<Char, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(SByte))
+			{
+				SByte value = (SByte)(Unsafe.As<T, SByte>(ref left) * Unsafe.As<T, SByte>(ref right));
+				return Unsafe.As<SByte, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(Byte))
+			{
+				Byte value = (Byte)(Unsafe.As<T, Byte>(ref left) * Unsafe.As<T, Byte>(ref right));
+				return Unsafe.As<Byte, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(Int16))
+			{
+				Int16 value = (Int16)(Unsafe.As<T, Int16>(ref left) * Unsafe.As<T, Int16>(ref right));
+				return Unsafe.As<Int16, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(UInt16))
+			{
+				UInt16 value = (UInt16)(Unsafe.As<T, UInt16>(ref left) * Unsafe.As<T, UInt16>(ref right));
+				return Unsafe.As<UInt16, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(Int32))
+			{
+				Int32 value = Unsafe.As<T, Int32>(ref left) * Unsafe.As<T, Int32>(ref right);
+				return Unsafe.As<Int32, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(UInt32))
+			{
+				UInt32 value = Unsafe.As<T, UInt32>(ref left) * Unsafe.As<T, UInt32>(ref right);
+				return Unsafe.As<UInt32, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(Int64))
+			{
+				Int64 value = Unsafe.As<T, Int64>(ref left) * Unsafe.As<T, Int64>(ref right);
+				return Unsafe.As<Int64, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(UInt64))
+			{
+				UInt64 value = Unsafe.As<T, UInt64>(ref left) * Unsafe.As<T, UInt64>(ref right);
+				return Unsafe.As<UInt64, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(Single))
+			{
+				Single value = Unsafe.As<T, Single>(ref left) * Unsafe.As<T, Single>(ref right);
+				return Unsafe.As<Single, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(Double))
+			{
+				Double value = Unsafe.As<T, Double>(ref left) * Unsafe.As<T, Double>(ref right);
+				return Unsafe.As<Double, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(Decimal))
+			{
+				Decimal value = Unsafe.As<T, Decimal>(ref left) * Unsafe.As<T, Decimal>(ref right);
+				return Unsafe.As<Decimal, T>(ref value);
+			}
+
+			throw new NotSupportedException($"Operator * is not supported for {typeof(T)} type");
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static T Divide<T>(T left, T right) where T : unmanaged, IComparable
+		{
+			if (typeof(T) == typeof(Char))
+			{
+				Char value = (Char)(Unsafe.As<T, Char>(ref left) / Unsafe.As<T, Char>(ref right));
+				return Unsafe.As<Char, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(SByte))
+			{
+				SByte value = (SByte)(Unsafe.As<T, SByte>(ref left) / Unsafe.As<T, SByte>(ref right));
+				return Unsafe.As<SByte, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(Byte))
+			{
+				Byte value = (Byte)(Unsafe.As<T, Byte>(ref left) / Unsafe.As<T, Byte>(ref right));
+				return Unsafe.As<Byte, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(Int16))
+			{
+				Int16 value = (Int16)(Unsafe.As<T, Int16>(ref left) / Unsafe.As<T, Int16>(ref right));
+				return Unsafe.As<Int16, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(UInt16))
+			{
+				UInt16 value = (UInt16)(Unsafe.As<T, UInt16>(ref left) / Unsafe.As<T, UInt16>(ref right));
+				return Unsafe.As<UInt16, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(Int32))
+			{
+				Int32 value = Unsafe.As<T, Int32>(ref left) / Unsafe.As<T, Int32>(ref right);
+				return Unsafe.As<Int32, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(UInt32))
+			{
+				UInt32 value = Unsafe.As<T, UInt32>(ref left) / Unsafe.As<T, UInt32>(ref right);
+				return Unsafe.As<UInt32, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(Int64))
+			{
+				Int64 value = Unsafe.As<T, Int64>(ref left) / Unsafe.As<T, Int64>(ref right);
+				return Unsafe.As<Int64, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(UInt64))
+			{
+				UInt64 value = Unsafe.As<T, UInt64>(ref left) / Unsafe.As<T, UInt64>(ref right);
+				return Unsafe.As<UInt64, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(Single))
+			{
+				Single value = Unsafe.As<T, Single>(ref left) / Unsafe.As<T, Single>(ref right);
+				return Unsafe.As<Single, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(Double))
+			{
+				Double value = Unsafe.As<T, Double>(ref left) / Unsafe.As<T, Double>(ref right);
+				return Unsafe.As<Double, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(Decimal))
+			{
+				Decimal value = Unsafe.As<T, Decimal>(ref left) / Unsafe.As<T, Decimal>(ref right);
+				return Unsafe.As<Decimal, T>(ref value);
+			}
+
+			throw new NotSupportedException($"Operator / is not supported for {typeof(T)} type");
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static T Modulo<T>(T left, T right) where T : unmanaged, IComparable
+		{
+			if (typeof(T) == typeof(Char))
+			{
+				Char value = (Char)(Unsafe.As<T, Char>(ref left) % Unsafe.As<T, Char>(ref right));
+				return Unsafe.As<Char, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(SByte))
+			{
+				SByte value = (SByte)(Unsafe.As<T, SByte>(ref left) % Unsafe.As<T, SByte>(ref right));
+				return Unsafe.As<SByte, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(Byte))
+			{
+				Byte value = (Byte)(Unsafe.As<T, Byte>(ref left) % Unsafe.As<T, Byte>(ref right));
+				return Unsafe.As<Byte, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(Int16))
+			{
+				Int16 value = (Int16)(Unsafe.As<T, Int16>(ref left) % Unsafe.As<T, Int16>(ref right));
+				return Unsafe.As<Int16, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(UInt16))
+			{
+				UInt16 value = (UInt16)(Unsafe.As<T, UInt16>(ref left) % Unsafe.As<T, UInt16>(ref right));
+				return Unsafe.As<UInt16, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(Int32))
+			{
+				Int32 value = Unsafe.As<T, Int32>(ref left) % Unsafe.As<T, Int32>(ref right);
+				return Unsafe.As<Int32, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(UInt32))
+			{
+				UInt32 value = Unsafe.As<T, UInt32>(ref left) % Unsafe.As<T, UInt32>(ref right);
+				return Unsafe.As<UInt32, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(Int64))
+			{
+				Int64 value = Unsafe.As<T, Int64>(ref left) % Unsafe.As<T, Int64>(ref right);
+				return Unsafe.As<Int64, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(UInt64))
+			{
+				UInt64 value = Unsafe.As<T, UInt64>(ref left) % Unsafe.As<T, UInt64>(ref right);
+				return Unsafe.As<UInt64, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(Single))
+			{
+				Single value = Unsafe.As<T, Single>(ref left) % Unsafe.As<T, Single>(ref right);
+				return Unsafe.As<Single, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(Double))
+			{
+				Double value = Unsafe.As<T, Double>(ref left) % Unsafe.As<T, Double>(ref right);
+				return Unsafe.As<Double, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(Decimal))
+			{
+				Decimal value = Unsafe.As<T, Decimal>(ref left) % Unsafe.As<T, Decimal>(ref right);
+				return Unsafe.As<Decimal, T>(ref value);
+			}
+
+			throw new NotSupportedException($"Operator % is not supported for {typeof(T)} type");
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static T And<T>(T left, T right) where T : unmanaged, IComparable
+		{
+			if (typeof(T) == typeof(Char))
+			{
+				Char value = (Char)(Unsafe.As<T, Char>(ref left) & Unsafe.As<T, Char>(ref right));
+				return Unsafe.As<Char, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(SByte))
+			{
+				SByte value = (SByte)(Unsafe.As<T, SByte>(ref left) & Unsafe.As<T, SByte>(ref right));
+				return Unsafe.As<SByte, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(Byte))
+			{
+				Byte value = (Byte)(Unsafe.As<T, Byte>(ref left) & Unsafe.As<T, Byte>(ref right));
+				return Unsafe.As<Byte, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(Int16))
+			{
+				Int16 value = (Int16)(Unsafe.As<T, Int16>(ref left) & Unsafe.As<T, Int16>(ref right));
+				return Unsafe.As<Int16, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(UInt16))
+			{
+				UInt16 value = (UInt16)(Unsafe.As<T, UInt16>(ref left) & Unsafe.As<T, UInt16>(ref right));
+				return Unsafe.As<UInt16, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(Int32))
+			{
+				Int32 value = Unsafe.As<T, Int32>(ref left) & Unsafe.As<T, Int32>(ref right);
+				return Unsafe.As<Int32, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(UInt32))
+			{
+				UInt32 value = Unsafe.As<T, UInt32>(ref left) & Unsafe.As<T, UInt32>(ref right);
+				return Unsafe.As<UInt32, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(Int64))
+			{
+				Int64 value = Unsafe.As<T, Int64>(ref left) & Unsafe.As<T, Int64>(ref right);
+				return Unsafe.As<Int64, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(UInt64))
+			{
+				UInt64 value = Unsafe.As<T, UInt64>(ref left) & Unsafe.As<T, UInt64>(ref right);
+				return Unsafe.As<UInt64, T>(ref value);
+			}
+
+			throw new NotSupportedException($"Operator & is not supported for {typeof(T)} type");
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static T Or<T>(T left, T right) where T : unmanaged, IComparable
+		{
+			if (typeof(T) == typeof(Char))
+			{
+				Char value = (Char)(Unsafe.As<T, Char>(ref left) | Unsafe.As<T, Char>(ref right));
+				return Unsafe.As<Char, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(SByte))
+			{
+				SByte value = (SByte)(Unsafe.As<T, SByte>(ref left) | Unsafe.As<T, SByte>(ref right));
+				return Unsafe.As<SByte, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(Byte))
+			{
+				Byte value = (Byte)(Unsafe.As<T, Byte>(ref left) | Unsafe.As<T, Byte>(ref right));
+				return Unsafe.As<Byte, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(Int16))
+			{
+				Int16 value = (Int16)(Unsafe.As<T, Int16>(ref left) | Unsafe.As<T, Int16>(ref right));
+				return Unsafe.As<Int16, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(UInt16))
+			{
+				UInt16 value = (UInt16)(Unsafe.As<T, UInt16>(ref left) | Unsafe.As<T, UInt16>(ref right));
+				return Unsafe.As<UInt16, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(Int32))
+			{
+				Int32 value = Unsafe.As<T, Int32>(ref left) | Unsafe.As<T, Int32>(ref right);
+				return Unsafe.As<Int32, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(UInt32))
+			{
+				UInt32 value = Unsafe.As<T, UInt32>(ref left) | Unsafe.As<T, UInt32>(ref right);
+				return Unsafe.As<UInt32, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(Int64))
+			{
+				Int64 value = Unsafe.As<T, Int64>(ref left) | Unsafe.As<T, Int64>(ref right);
+				return Unsafe.As<Int64, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(UInt64))
+			{
+				UInt64 value = Unsafe.As<T, UInt64>(ref left) | Unsafe.As<T, UInt64>(ref right);
+				return Unsafe.As<UInt64, T>(ref value);
+			}
+
+			throw new NotSupportedException($"Operator | is not supported for {typeof(T)} type");
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static T Xor<T>(T left, T right) where T : unmanaged, IComparable
+		{
+			if (typeof(T) == typeof(Char))
+			{
+				Char value = (Char)(Unsafe.As<T, Char>(ref left) ^ Unsafe.As<T, Char>(ref right));
+				return Unsafe.As<Char, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(SByte))
+			{
+				SByte value = (SByte)(Unsafe.As<T, SByte>(ref left) ^ Unsafe.As<T, SByte>(ref right));
+				return Unsafe.As<SByte, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(Byte))
+			{
+				Byte value = (Byte)(Unsafe.As<T, Byte>(ref left) ^ Unsafe.As<T, Byte>(ref right));
+				return Unsafe.As<Byte, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(Int16))
+			{
+				Int16 value = (Int16)(Unsafe.As<T, Int16>(ref left) ^ Unsafe.As<T, Int16>(ref right));
+				return Unsafe.As<Int16, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(UInt16))
+			{
+				UInt16 value = (UInt16)(Unsafe.As<T, UInt16>(ref left) ^ Unsafe.As<T, UInt16>(ref right));
+				return Unsafe.As<UInt16, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(Int32))
+			{
+				Int32 value = Unsafe.As<T, Int32>(ref left) ^ Unsafe.As<T, Int32>(ref right);
+				return Unsafe.As<Int32, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(UInt32))
+			{
+				UInt32 value = Unsafe.As<T, UInt32>(ref left) ^ Unsafe.As<T, UInt32>(ref right);
+				return Unsafe.As<UInt32, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(Int64))
+			{
+				Int64 value = Unsafe.As<T, Int64>(ref left) ^ Unsafe.As<T, Int64>(ref right);
+				return Unsafe.As<Int64, T>(ref value);
+			}
+
+			if (typeof(T) == typeof(UInt64))
+			{
+				UInt64 value = Unsafe.As<T, UInt64>(ref left) ^ Unsafe.As<T, UInt64>(ref right);
+				return Unsafe.As<UInt64, T>(ref value);
+			}
+
+			throw new NotSupportedException($"Operator ^ is not supported for {typeof(T)} type");
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static T Invert<T>(T value) where T : unmanaged, IComparable
+		{
+			if (typeof(T) == typeof(Char))
+			{
+				Int32 i = ~Unsafe.As<T, Char>(ref value);
+				Char val = Unsafe.As<Int32, Char>(ref i);
+				return Unsafe.As<Char, T>(ref val);
+			}
+
+			if (typeof(T) == typeof(SByte))
+			{
+				Int32 i = ~Unsafe.As<T, SByte>(ref value);
+				SByte val = Unsafe.As<Int32, SByte>(ref i);
+				return Unsafe.As<SByte, T>(ref val);
+			}
+
+			if (typeof(T) == typeof(Byte))
+			{
+				Int32 i = ~Unsafe.As<T, Byte>(ref value);
+				Byte val = Unsafe.As<Int32, Byte>(ref i);
+				return Unsafe.As<Byte, T>(ref val);
+			}
+
+			if (typeof(T) == typeof(Int16))
+			{
+				Int32 i = ~Unsafe.As<T, Int16>(ref value);
+				Int16 val = Unsafe.As<Int32, Int16>(ref i);
+				return Unsafe.As<Int16, T>(ref val);
+			}
+
+			if (typeof(T) == typeof(UInt16))
+			{
+				Int32 i = ~Unsafe.As<T, UInt16>(ref value);
+				UInt16 val = Unsafe.As<Int32, UInt16>(ref i);
+				return Unsafe.As<UInt16, T>(ref val);
+			}
+
+			if (typeof(T) == typeof(Int32))
+			{
+				Int32 val = ~Unsafe.As<T, Int32>(ref value);
+				return Unsafe.As<Int32, T>(ref val);
+			}
+
+			if (typeof(T) == typeof(UInt32))
+			{
+				UInt32 val = ~Unsafe.As<T, UInt32>(ref value);
+				return Unsafe.As<UInt32, T>(ref val);
+			}
+
+			if (typeof(T) == typeof(Int64))
+			{
+				Int64 val = ~Unsafe.As<T, Int64>(ref value);
+				return Unsafe.As<Int64, T>(ref val);
+			}
+
+			if (typeof(T) == typeof(UInt64))
+			{
+				UInt64 val = ~Unsafe.As<T, UInt64>(ref value);
+				return Unsafe.As<UInt64, T>(ref val);
+			}
+
+			throw new NotSupportedException($"Operator ~ is not supported for {typeof(T)} type");
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static T Abs<T>(T value) where T : unmanaged, IComparable
+		{
+			if (typeof(T) == typeof(SByte))
+			{
+				SByte val = System.Math.Abs(Unsafe.As<T, SByte>(ref value));
+				return Unsafe.As<SByte, T>(ref val);
+			}
+
+			if (typeof(T) == typeof(Int16))
+			{
+				Int16 val = System.Math.Abs(Unsafe.As<T, Int16>(ref value));
+				return Unsafe.As<Int16, T>(ref val);
+			}
+
+			if (typeof(T) == typeof(Int32))
+			{
+				Int32 val = System.Math.Abs(Unsafe.As<T, Int32>(ref value));
+				return Unsafe.As<Int32, T>(ref val);
+			}
+
+			if (typeof(T) == typeof(Int64))
+			{
+				Int64 val = System.Math.Abs(Unsafe.As<T, Int64>(ref value));
+				return Unsafe.As<Int64, T>(ref val);
+			}
+
+			if (typeof(T) == typeof(Single))
+			{
+				Single val = System.Math.Abs(Unsafe.As<T, Single>(ref value));
+				return Unsafe.As<Single, T>(ref val);
+			}
+
+			if (typeof(T) == typeof(Double))
+			{
+				Double val = System.Math.Abs(Unsafe.As<T, Double>(ref value));
+				return Unsafe.As<Double, T>(ref val);
+			}
+
+			if (typeof(T) == typeof(Decimal))
+			{
+				Decimal val = System.Math.Abs(Unsafe.As<T, Decimal>(ref value));
+				return Unsafe.As<Decimal, T>(ref val);
+			}
+
+			throw new NotSupportedException($"Operator | | is not supported for {typeof(T)} type");
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static T Negative<T>(T value) where T : unmanaged, IComparable
+		{
+			if (typeof(T) == typeof(SByte))
+			{
+				Int32 i = -System.Math.Abs(Unsafe.As<T, SByte>(ref value));
+				SByte val = Unsafe.As<Int32, SByte>(ref i);
+				return Unsafe.As<SByte, T>(ref val);
+			}
+
+			if (typeof(T) == typeof(Int16))
+			{
+				Int32 i = -System.Math.Abs(Unsafe.As<T, Int16>(ref value));
+				Int16 val = Unsafe.As<Int32, Int16>(ref i);
+				return Unsafe.As<Int16, T>(ref val);
+			}
+
+			if (typeof(T) == typeof(Int32))
+			{
+				Int32 val = -System.Math.Abs(Unsafe.As<T, Int32>(ref value));
+				return Unsafe.As<Int32, T>(ref val);
+			}
+
+			if (typeof(T) == typeof(Int64))
+			{
+				Int64 val = -System.Math.Abs(Unsafe.As<T, Int64>(ref value));
+				return Unsafe.As<Int64, T>(ref val);
+			}
+
+			if (typeof(T) == typeof(Single))
+			{
+				Single val = -System.Math.Abs(Unsafe.As<T, Single>(ref value));
+				return Unsafe.As<Single, T>(ref val);
+			}
+
+			if (typeof(T) == typeof(Double))
+			{
+				Double val = -System.Math.Abs(Unsafe.As<T, Double>(ref value));
+				return Unsafe.As<Double, T>(ref val);
+			}
+
+			if (typeof(T) == typeof(Decimal))
+			{
+				Decimal val = -System.Math.Abs(Unsafe.As<T, Decimal>(ref value));
+				return Unsafe.As<Decimal, T>(ref val);
+			}
+
+			throw new NotSupportedException($"Operator -| | is not supported for {typeof(T)} type");
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static Boolean Equal<T>(T left, T right) where T : unmanaged, IComparable
+		{
+			if (typeof(T) == typeof(Char))
+			{
+				return Unsafe.As<T, Char>(ref left) == Unsafe.As<T, Char>(ref right);
+			}
+
+			if (typeof(T) == typeof(SByte))
+			{
+				return Unsafe.As<T, SByte>(ref left) == Unsafe.As<T, SByte>(ref right);
+			}
+
+			if (typeof(T) == typeof(Byte))
+			{
+				return Unsafe.As<T, Byte>(ref left) == Unsafe.As<T, Byte>(ref right);
+			}
+
+			if (typeof(T) == typeof(Int16))
+			{
+				return Unsafe.As<T, Int16>(ref left) == Unsafe.As<T, Int16>(ref right);
+			}
+
+			if (typeof(T) == typeof(UInt16))
+			{
+				return Unsafe.As<T, UInt16>(ref left) == Unsafe.As<T, UInt16>(ref right);
+			}
+
+			if (typeof(T) == typeof(Int32))
+			{
+				return Unsafe.As<T, Int32>(ref left) == Unsafe.As<T, Int32>(ref right);
+			}
+
+			if (typeof(T) == typeof(UInt32))
+			{
+				return Unsafe.As<T, UInt32>(ref left) == Unsafe.As<T, UInt32>(ref right);
+			}
+
+			if (typeof(T) == typeof(Int64))
+			{
+				return Unsafe.As<T, Int64>(ref left) == Unsafe.As<T, Int64>(ref right);
+			}
+
+			if (typeof(T) == typeof(UInt64))
+			{
+				return Unsafe.As<T, UInt64>(ref left) == Unsafe.As<T, UInt64>(ref right);
+			}
+
+			if (typeof(T) == typeof(Single))
+			{
+				return Unsafe.As<T, Single>(ref left) - Unsafe.As<T, Single>(ref right) < Single.Epsilon;
+			}
+
+			if (typeof(T) == typeof(Double))
+			{
+				return Unsafe.As<T, Double>(ref left) - Unsafe.As<T, Double>(ref right) < Double.Epsilon;
+			}
+
+			if (typeof(T) == typeof(Decimal))
+			{
+				return Unsafe.As<T, Decimal>(ref left) == Unsafe.As<T, Decimal>(ref right);
+			}
+
+			throw new NotSupportedException($"Operator == is not supported for {typeof(T)} type");
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static Boolean NotEqual<T>(T left, T right) where T : unmanaged, IComparable
+		{
+			if (typeof(T) == typeof(Char))
+			{
+				return Unsafe.As<T, Char>(ref left) != Unsafe.As<T, Char>(ref right);
+			}
+
+			if (typeof(T) == typeof(SByte))
+			{
+				return Unsafe.As<T, SByte>(ref left) != Unsafe.As<T, SByte>(ref right);
+			}
+
+			if (typeof(T) == typeof(Byte))
+			{
+				return Unsafe.As<T, Byte>(ref left) != Unsafe.As<T, Byte>(ref right);
+			}
+
+			if (typeof(T) == typeof(Int16))
+			{
+				return Unsafe.As<T, Int16>(ref left) != Unsafe.As<T, Int16>(ref right);
+			}
+
+			if (typeof(T) == typeof(UInt16))
+			{
+				return Unsafe.As<T, UInt16>(ref left) != Unsafe.As<T, UInt16>(ref right);
+			}
+
+			if (typeof(T) == typeof(Int32))
+			{
+				return Unsafe.As<T, Int32>(ref left) != Unsafe.As<T, Int32>(ref right);
+			}
+
+			if (typeof(T) == typeof(UInt32))
+			{
+				return Unsafe.As<T, UInt32>(ref left) != Unsafe.As<T, UInt32>(ref right);
+			}
+
+			if (typeof(T) == typeof(Int64))
+			{
+				return Unsafe.As<T, Int64>(ref left) != Unsafe.As<T, Int64>(ref right);
+			}
+
+			if (typeof(T) == typeof(UInt64))
+			{
+				return Unsafe.As<T, UInt64>(ref left) != Unsafe.As<T, UInt64>(ref right);
+			}
+
+			if (typeof(T) == typeof(Single))
+			{
+				return Unsafe.As<T, Single>(ref left) - Unsafe.As<T, Single>(ref right) > Single.Epsilon;
+			}
+
+			if (typeof(T) == typeof(Double))
+			{
+				return Unsafe.As<T, Double>(ref left) - Unsafe.As<T, Double>(ref right) > Double.Epsilon;
+			}
+
+			if (typeof(T) == typeof(Decimal))
+			{
+				return Unsafe.As<T, Decimal>(ref left) != Unsafe.As<T, Decimal>(ref right);
+			}
+
+			throw new NotSupportedException($"Operator != is not supported for {typeof(T)} type");
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static Boolean Greater<T>(T left, T right) where T : unmanaged, IComparable
+		{
+			if (typeof(T) == typeof(Char))
+			{
+				return Unsafe.As<T, Char>(ref left) > Unsafe.As<T, Char>(ref right);
+			}
+
+			if (typeof(T) == typeof(SByte))
+			{
+				return Unsafe.As<T, SByte>(ref left) > Unsafe.As<T, SByte>(ref right);
+			}
+
+			if (typeof(T) == typeof(Byte))
+			{
+				return Unsafe.As<T, Byte>(ref left) > Unsafe.As<T, Byte>(ref right);
+			}
+
+			if (typeof(T) == typeof(Int16))
+			{
+				return Unsafe.As<T, Int16>(ref left) > Unsafe.As<T, Int16>(ref right);
+			}
+
+			if (typeof(T) == typeof(UInt16))
+			{
+				return Unsafe.As<T, UInt16>(ref left) > Unsafe.As<T, UInt16>(ref right);
+			}
+
+			if (typeof(T) == typeof(Int32))
+			{
+				return Unsafe.As<T, Int32>(ref left) > Unsafe.As<T, Int32>(ref right);
+			}
+
+			if (typeof(T) == typeof(UInt32))
+			{
+				return Unsafe.As<T, UInt32>(ref left) > Unsafe.As<T, UInt32>(ref right);
+			}
+
+			if (typeof(T) == typeof(Int64))
+			{
+				return Unsafe.As<T, Int64>(ref left) > Unsafe.As<T, Int64>(ref right);
+			}
+
+			if (typeof(T) == typeof(UInt64))
+			{
+				return Unsafe.As<T, UInt64>(ref left) > Unsafe.As<T, UInt64>(ref right);
+			}
+
+			if (typeof(T) == typeof(Single))
+			{
+				return Unsafe.As<T, Single>(ref left) > Unsafe.As<T, Single>(ref right);
+			}
+
+			if (typeof(T) == typeof(Double))
+			{
+				return Unsafe.As<T, Double>(ref left) > Unsafe.As<T, Double>(ref right);
+			}
+
+			if (typeof(T) == typeof(Decimal))
+			{
+				return Unsafe.As<T, Decimal>(ref left) > Unsafe.As<T, Decimal>(ref right);
+			}
+
+			throw new NotSupportedException($"Operator > is not supported for {typeof(T)} type");
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static Boolean GreaterEqual<T>(T left, T right) where T : unmanaged, IComparable
+		{
+			if (typeof(T) == typeof(Char))
+			{
+				return Unsafe.As<T, Char>(ref left) >= Unsafe.As<T, Char>(ref right);
+			}
+
+			if (typeof(T) == typeof(SByte))
+			{
+				return Unsafe.As<T, SByte>(ref left) >= Unsafe.As<T, SByte>(ref right);
+			}
+
+			if (typeof(T) == typeof(Byte))
+			{
+				return Unsafe.As<T, Byte>(ref left) >= Unsafe.As<T, Byte>(ref right);
+			}
+
+			if (typeof(T) == typeof(Int16))
+			{
+				return Unsafe.As<T, Int16>(ref left) >= Unsafe.As<T, Int16>(ref right);
+			}
+
+			if (typeof(T) == typeof(UInt16))
+			{
+				return Unsafe.As<T, UInt16>(ref left) >= Unsafe.As<T, UInt16>(ref right);
+			}
+
+			if (typeof(T) == typeof(Int32))
+			{
+				return Unsafe.As<T, Int32>(ref left) >= Unsafe.As<T, Int32>(ref right);
+			}
+
+			if (typeof(T) == typeof(UInt32))
+			{
+				return Unsafe.As<T, UInt32>(ref left) >= Unsafe.As<T, UInt32>(ref right);
+			}
+
+			if (typeof(T) == typeof(Int64))
+			{
+				return Unsafe.As<T, Int64>(ref left) >= Unsafe.As<T, Int64>(ref right);
+			}
+
+			if (typeof(T) == typeof(UInt64))
+			{
+				return Unsafe.As<T, UInt64>(ref left) >= Unsafe.As<T, UInt64>(ref right);
+			}
+
+			if (typeof(T) == typeof(Single))
+			{
+				return Unsafe.As<T, Single>(ref left) >= Unsafe.As<T, Single>(ref right);
+			}
+
+			if (typeof(T) == typeof(Double))
+			{
+				return Unsafe.As<T, Double>(ref left) >= Unsafe.As<T, Double>(ref right);
+			}
+
+			if (typeof(T) == typeof(Decimal))
+			{
+				return Unsafe.As<T, Decimal>(ref left) >= Unsafe.As<T, Decimal>(ref right);
+			}
+
+			throw new NotSupportedException($"Operator >= is not supported for {typeof(T)} type");
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static Boolean Less<T>(T left, T right) where T : unmanaged, IComparable
+		{
+			if (typeof(T) == typeof(Char))
+			{
+				return Unsafe.As<T, Char>(ref left) < Unsafe.As<T, Char>(ref right);
+			}
+
+			if (typeof(T) == typeof(SByte))
+			{
+				return Unsafe.As<T, SByte>(ref left) < Unsafe.As<T, SByte>(ref right);
+			}
+
+			if (typeof(T) == typeof(Byte))
+			{
+				return Unsafe.As<T, Byte>(ref left) < Unsafe.As<T, Byte>(ref right);
+			}
+
+			if (typeof(T) == typeof(Int16))
+			{
+				return Unsafe.As<T, Int16>(ref left) < Unsafe.As<T, Int16>(ref right);
+			}
+
+			if (typeof(T) == typeof(UInt16))
+			{
+				return Unsafe.As<T, UInt16>(ref left) < Unsafe.As<T, UInt16>(ref right);
+			}
+
+			if (typeof(T) == typeof(Int32))
+			{
+				return Unsafe.As<T, Int32>(ref left) < Unsafe.As<T, Int32>(ref right);
+			}
+
+			if (typeof(T) == typeof(UInt32))
+			{
+				return Unsafe.As<T, UInt32>(ref left) < Unsafe.As<T, UInt32>(ref right);
+			}
+
+			if (typeof(T) == typeof(Int64))
+			{
+				return Unsafe.As<T, Int64>(ref left) < Unsafe.As<T, Int64>(ref right);
+			}
+
+			if (typeof(T) == typeof(UInt64))
+			{
+				return Unsafe.As<T, UInt64>(ref left) < Unsafe.As<T, UInt64>(ref right);
+			}
+
+			if (typeof(T) == typeof(Single))
+			{
+				return Unsafe.As<T, Single>(ref left) < Unsafe.As<T, Single>(ref right);
+			}
+
+			if (typeof(T) == typeof(Double))
+			{
+				return Unsafe.As<T, Double>(ref left) < Unsafe.As<T, Double>(ref right);
+			}
+
+			if (typeof(T) == typeof(Decimal))
+			{
+				return Unsafe.As<T, Decimal>(ref left) < Unsafe.As<T, Decimal>(ref right);
+			}
+
+			throw new NotSupportedException($"Operator < is not supported for {typeof(T)} type");
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static Boolean LessEqual<T>(T left, T right) where T : unmanaged, IComparable
+		{
+			if (typeof(T) == typeof(Char))
+			{
+				return Unsafe.As<T, Char>(ref left) <= Unsafe.As<T, Char>(ref right);
+			}
+
+			if (typeof(T) == typeof(SByte))
+			{
+				return Unsafe.As<T, SByte>(ref left) <= Unsafe.As<T, SByte>(ref right);
+			}
+
+			if (typeof(T) == typeof(Byte))
+			{
+				return Unsafe.As<T, Byte>(ref left) <= Unsafe.As<T, Byte>(ref right);
+			}
+
+			if (typeof(T) == typeof(Int16))
+			{
+				return Unsafe.As<T, Int16>(ref left) <= Unsafe.As<T, Int16>(ref right);
+			}
+
+			if (typeof(T) == typeof(UInt16))
+			{
+				return Unsafe.As<T, UInt16>(ref left) <= Unsafe.As<T, UInt16>(ref right);
+			}
+
+			if (typeof(T) == typeof(Int32))
+			{
+				return Unsafe.As<T, Int32>(ref left) <= Unsafe.As<T, Int32>(ref right);
+			}
+
+			if (typeof(T) == typeof(UInt32))
+			{
+				return Unsafe.As<T, UInt32>(ref left) <= Unsafe.As<T, UInt32>(ref right);
+			}
+
+			if (typeof(T) == typeof(Int64))
+			{
+				return Unsafe.As<T, Int64>(ref left) <= Unsafe.As<T, Int64>(ref right);
+			}
+
+			if (typeof(T) == typeof(UInt64))
+			{
+				return Unsafe.As<T, UInt64>(ref left) <= Unsafe.As<T, UInt64>(ref right);
+			}
+
+			if (typeof(T) == typeof(Single))
+			{
+				return Unsafe.As<T, Single>(ref left) <= Unsafe.As<T, Single>(ref right);
+			}
+
+			if (typeof(T) == typeof(Double))
+			{
+				return Unsafe.As<T, Double>(ref left) <= Unsafe.As<T, Double>(ref right);
+			}
+
+			if (typeof(T) == typeof(Decimal))
+			{
+				return Unsafe.As<T, Decimal>(ref left) <= Unsafe.As<T, Decimal>(ref right);
+			}
+
+			throw new NotSupportedException($"Operator <= is not supported for {typeof(T)} type");
+		}
 
     }
 }

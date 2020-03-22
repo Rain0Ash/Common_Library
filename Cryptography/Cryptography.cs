@@ -10,16 +10,16 @@ namespace Common_Library.Crypto
     [Flags]
     public enum CryptAction
     {
-        None,
-        Decrypt,
-        Encrypt,
-        Crypt
+        None = 0,
+        Decrypt = 1,
+        Encrypt = 2,
+        Crypt = 3
     }
-    
+
     public static partial class Cryptography
     {
         public static readonly Byte[] DefaultHash = CurrentUserCryptoSIDHash();
-        
+
         public static Byte[] CurrentUserCryptoSIDHash()
         {
             return Hash.MD5(Encoding.UTF8.GetBytes(WorkStation.CurrentUserSID));

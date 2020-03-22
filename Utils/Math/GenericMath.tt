@@ -49,6 +49,31 @@ namespace Common_Library.Utils.Math
         {"<=", "LessEqual"}
     };
 
+    Boolean IsSmallType(String type)
+    {
+        return type == nameof(Char) || type == nameof(Byte) || type == nameof(SByte) || type == nameof(Int16) || type == nameof(UInt16);
+    }
+
+    Boolean IsUnsignedType(String type)
+    {
+        return type == nameof(Char) || type == nameof(Byte) || type == nameof(UInt16) || type == nameof(UInt32) || type == nameof(UInt64);
+    }
+
+    void ForEach(IEnumerable<String> types, Action<String> action)
+    {
+        String[] etype = types.ToArray();
+
+        for (Int32 i = 0; i < etype.Length; i++)
+        {
+            action(etype[i]);
+
+            if (i <= etype.Length - 2)
+            {
+                WriteLine(String.Empty);
+            }
+        }
+    }
+
     void Functions(String @operator)
     {
         Boolean comparison = @operator == "==" || @operator == "!=" ||
@@ -57,28 +82,28 @@ namespace Common_Library.Utils.Math
 
         Boolean unary = @operator == "~" || @operator == "| |" || @operator == "-| |";
 
-        WriteLine("\t\t\t[MethodImpl(MethodImplOptions.AggressiveInlining)]");
+        WriteLine("\t\t[MethodImpl(MethodImplOptions.AggressiveInlining)]");
 
-        WriteLine($"\t\t\tpublic static {(comparison ? nameof(Boolean) : "T")} {operandName[@operator]}<T>({(unary ? "T value" : "T left, T right")}) where T : unmanaged, IComparable");
+        WriteLine($"\t\tpublic static {(comparison ? nameof(Boolean) : "T")} {operandName[@operator]}<T>({(unary ? "T value" : "T left, T right")}) where T : unmanaged, IComparable");
 
-        WriteLine("\t\t\t{");
+        WriteLine("\t\t{");
 
         foreach (
             String type in
                 unmanagedTypes.Where(type => type != nameof(Single) && type != nameof(Double) && type != nameof(Decimal) || @operator != "&" && @operator != "|" && @operator != "^"))
         {
-            Boolean unsigned = type == nameof(Char) || type == nameof(Byte) || type == nameof(UInt16) || type == nameof(UInt32) || type == nameof(UInt64);
-            Boolean small = type == nameof(Char) || type == nameof(Byte) || type == nameof(SByte) || type == nameof(Int16) || type == nameof(UInt16);
+            Boolean unsigned = IsUnsignedType(type);
+            Boolean small = IsSmallType(type);
 
             if (unsigned && (@operator == "| |" || @operator == "-| |") || @operator == "~" && (type == nameof(Single) || type == nameof(Double) || type == nameof(Decimal)))
             {
                 continue;
             }
 
-            WriteLine($"\t\t\t\tif (typeof(T) == typeof({type}))");
-            WriteLine("\t\t\t\t{");
+            WriteLine($"\t\t\tif (typeof(T) == typeof({type}))");
+            WriteLine("\t\t\t{");
 
-            #if !unsafe
+#if !unsafe
 
             String expression = $"Unsafe.As<T, {type}>(ref left) {@operator} Unsafe.As<T, {type}>(ref right)";
 
@@ -101,32 +126,32 @@ namespace Common_Library.Utils.Math
                         _ => throw new NotSupportedException()
                         };
                 }
-                WriteLine($"\t\t\t\t\treturn {expression};");
+                WriteLine($"\t\t\t\treturn {expression};");
             }
             else if (unary)
             {
                 switch (@operator)
                 {
                     case "~":
-                        WriteLine($"\t\t\t\t\t{(small ? nameof(Int32) : $"{type}")} {(small ? "i" : "val")} = ~Unsafe.As<T, {type}>(ref value);");
+                        WriteLine($"\t\t\t\t{(small ? nameof(Int32) : $"{type}")} {(small ? "i" : "val")} = ~Unsafe.As<T, {type}>(ref value);");
                         if (small)
                         {
-                            WriteLine($"\t\t\t\t\t{type} val = Unsafe.As<{nameof(Int32)}, {type}>(ref i);");
+                            WriteLine($"\t\t\t\t{type} val = Unsafe.As<{nameof(Int32)}, {type}>(ref i);");
                         }
 
-                        WriteLine($"\t\t\t\t\treturn Unsafe.As<{type}, T>(ref val);");
+                        WriteLine($"\t\t\t\treturn Unsafe.As<{type}, T>(ref val);");
                         break;
                     case "| |":
-                        WriteLine($"\t\t\t\t\t{type} val = System.Math.Abs(Unsafe.As<T, {type}>(ref value));");
-                        WriteLine($"\t\t\t\t\treturn Unsafe.As<{type}, T>(ref val);");
+                        WriteLine($"\t\t\t\t{type} val = System.Math.Abs(Unsafe.As<T, {type}>(ref value));");
+                        WriteLine($"\t\t\t\treturn Unsafe.As<{type}, T>(ref val);");
                         break;
                     case "-| |":
-                        WriteLine($"\t\t\t\t\t{(small ? nameof(Int32) : $"{type}")} {(small ? "i" : "val")} = -System.Math.Abs(Unsafe.As<T, {type}>(ref value));");
+                        WriteLine($"\t\t\t\t{(small ? nameof(Int32) : $"{type}")} {(small ? "i" : "val")} = -System.Math.Abs(Unsafe.As<T, {type}>(ref value));");
                         if (small)
                         {
-                            WriteLine($"\t\t\t\t\t{type} val = Unsafe.As<{nameof(Int32)}, {type}>(ref i);");
+                            WriteLine($"\t\t\t\t{type} val = Unsafe.As<{nameof(Int32)}, {type}>(ref i);");
                         }
-                        WriteLine($"\t\t\t\t\treturn Unsafe.As<{type}, T>(ref val);");
+                        WriteLine($"\t\t\t\treturn Unsafe.As<{type}, T>(ref val);");
                         break;
                     default:
                         throw new NotSupportedException();
@@ -134,8 +159,8 @@ namespace Common_Library.Utils.Math
             }
             else
             {
-                WriteLine($"\t\t\t\t\t{type} value = {expression};");
-                WriteLine($"\t\t\t\t\treturn Unsafe.As<{type}, T>(ref value);");
+                WriteLine($"\t\t\t\t{type} value = {expression};");
+                WriteLine($"\t\t\t\treturn Unsafe.As<{type}, T>(ref value);");
             }
 
 
@@ -166,71 +191,108 @@ namespace Common_Library.Utils.Math
 
 #endif
 
-            WriteLine("\t\t\t\t}");
+            WriteLine("\t\t\t}");
             WriteLine(String.Empty);
         }
 
-        WriteLine($"\t\t\t\tthrow new NotSupportedException($\"Operator {@operator} is not supported for {{typeof(T)}} type\");");
-        WriteLine("\t\t\t}");
+        WriteLine($"\t\t\tthrow new NotSupportedException($\"Operator {@operator} is not supported for {{typeof(T)}} type\");");
+        WriteLine("\t\t}");
         WriteLine(String.Empty);
     }
 
-    void Range()
+    void RangeFunc(String type)
     {
         const Boolean defaultLooped = false;
         String looped = defaultLooped.ToString().ToLower();
 
-        foreach (String type in unmanagedTypes)
-        {
-            String func =
-                $"public static {{0}} {nameof(Range)}({{1}}{type} value, {type} minimum = {(type == "Char" ? $"{type}.MinValue" : "0")}, {type} maximum = {type}.MaxValue, Boolean looped = {looped})";
+        String func =
+            $"public static {{0}} {nameof(Range)}({{1}}{type} value, {type} minimum = {(type == "Char" ? $"{type}.MinValue" : "0")}, {type} maximum = {type}.MaxValue, Boolean looped = {looped})";
 
-            WriteLine("\t\t[MethodImpl(MethodImplOptions.AggressiveInlining)]");
-            WriteLine($"\t\t{String.Format(func, "void", "ref ")}");
-            WriteLine("\t\t{");
-            WriteLine($"\t\t\t value = {nameof(Range)}(value, minimum, maximum, looped);");
-            WriteLine("\t\t}");
-            WriteLine(String.Empty);
+        WriteLine("\t\t[MethodImpl(MethodImplOptions.AggressiveInlining)]");
+        WriteLine($"\t\t{String.Format(func, "void", "ref ")}");
+        WriteLine("\t\t{");
+        WriteLine($"\t\t\t value = {nameof(Range)}(value, minimum, maximum, looped);");
+        WriteLine("\t\t}");
+        WriteLine(String.Empty);
 
-            WriteLine("\t\t[MethodImpl(MethodImplOptions.AggressiveInlining)]");
-            WriteLine($"\t\t{String.Format(func, type, String.Empty)}");
-            WriteLine("\t\t{");
-            WriteLine("\t\t\tif (value > maximum)");
-            WriteLine("\t\t\t{");
-            WriteLine("\t\t\t\treturn looped ? minimum : maximum;");
-            WriteLine("\t\t\t}");
-            WriteLine(String.Empty);
-            WriteLine("\t\t\tif (value < minimum)");
-            WriteLine("\t\t\t{");
-            WriteLine("\t\t\t\treturn looped ? maximum : minimum;");
-            WriteLine("\t\t\t}");
-            WriteLine(String.Empty);
-            WriteLine("\t\t\treturn value;");
-            WriteLine("\t\t}");
-            WriteLine(String.Empty);
-        }
+        WriteLine("\t\t[MethodImpl(MethodImplOptions.AggressiveInlining)]");
+        WriteLine($"\t\t{String.Format(func, type, String.Empty)}");
+        WriteLine("\t\t{");
+        WriteLine("\t\t\tif (value > maximum)");
+        WriteLine("\t\t\t{");
+        WriteLine("\t\t\t\treturn looped ? minimum : maximum;");
+        WriteLine("\t\t\t}");
+        WriteLine(String.Empty);
+        WriteLine("\t\t\tif (value < minimum)");
+        WriteLine("\t\t\t{");
+        WriteLine("\t\t\t\treturn looped ? maximum : minimum;");
+        WriteLine("\t\t\t}");
+        WriteLine(String.Empty);
+        WriteLine("\t\t\treturn value;");
+        WriteLine("\t\t}");
+    }
+
+    void Range()
+    {
+        ForEach(unmanagedTypes, RangeFunc);
+    }
+
+    void InRangeFunc(String type)
+    {
+        WriteLine("\t\t[MethodImpl(MethodImplOptions.AggressiveInlining)]");
+        WriteLine(
+            $"\t\tpublic static Boolean {nameof(InRange)}({type} value, Position comparison = Position.LeftRight, {type} minimum = {(type == "Char" ? $"{type}.MinValue" : "0")}, {type} maximum = {type}.MaxValue)");
+        WriteLine("\t\t{");
+        WriteLine("\t\t\treturn comparison switch");
+        WriteLine("\t\t\t{");
+        WriteLine("\t\t\t\tPosition.None => value > minimum && value < maximum,");
+        WriteLine("\t\t\t\tPosition.Left => value >= minimum && value < maximum,");
+        WriteLine("\t\t\t\tPosition.Right => value > minimum && value <= maximum,");
+        WriteLine("\t\t\t\tPosition.LeftRight => value >= minimum && value <= maximum,");
+        WriteLine("\t\t\t\t_ => throw new NotSupportedException(comparison.ToString())");
+        WriteLine("\t\t\t};");
+        WriteLine("\t\t}");
     }
 
     void InRange()
     {
-        foreach (String type in unmanagedTypes)
-        {
-            WriteLine("\t\t[MethodImpl(MethodImplOptions.AggressiveInlining)]");
-            WriteLine(
-                $"\t\tpublic static Boolean {nameof(InRange)}({type} value, Position comparison = Position.LeftRight, {type} minimum = {(type == "Char" ? $"{type}.MinValue" : "0")}, {type} maximum = {type}.MaxValue)");
-            WriteLine("\t\t{");
-            WriteLine("\t\t\treturn comparison switch");
-            WriteLine("\t\t\t{");
-            WriteLine("\t\t\t\tPosition.None => value > minimum && value < maximum,");
-            WriteLine("\t\t\t\tPosition.Left => value >= minimum && value < maximum,");
-            WriteLine("\t\t\t\tPosition.Right => value > minimum && value <= maximum,");
-            WriteLine("\t\t\t\tPosition.LeftRight => value >= minimum && value <= maximum,");
-            WriteLine("\t\t\t\t_ => throw new NotSupportedException(comparison.ToString())");
-            WriteLine("\t\t\t};");
+        ForEach(unmanagedTypes, InRangeFunc);
+    }
 
-            WriteLine("\t\t}");
-            WriteLine(String.Empty);
+    void AbsFunc(String type)
+    {
+        WriteLine("\t\t[MethodImpl(MethodImplOptions.AggressiveInlining)]");
+        WriteLine($"\t\tpublic static {type} Abs(this {type} value)");
+        WriteLine("\t\t{");
+
+        if (IsSmallType(type))
+        {
+            if (IsUnsignedType(type))
+            {
+                WriteLine("\t\t\treturn value;");
+            }
+            else
+            {
+                WriteLine("\t\t\tif (value >= 0)");
+                WriteLine("\t\t\t{");
+                WriteLine("\t\t\t\treturn value;");
+                WriteLine("\t\t\t}");
+                WriteLine(String.Empty);
+                WriteLine($"\t\t\t{nameof(Int32)} val = -value;");
+                WriteLine($"\t\t\treturn Unsafe.As<{nameof(Int32)}, {type}>(ref val);");
+            }
         }
+        else
+        {
+            WriteLine($"\t\t\treturn {(IsUnsignedType(type) ? "value" : "value >= 0 ? value : -value")};");
+        }
+
+        WriteLine("\t\t}");
+    }
+
+    void Abs()
+    {
+        ForEach(unmanagedTypes, AbsFunc);
     }
 
 #>
@@ -239,7 +301,10 @@ namespace Common_Library.Utils.Math
     {
 <#
     Range();
+    WriteLine(String.Empty);
     InRange();
+    WriteLine(String.Empty);
+    Abs();
 #>
     }
 

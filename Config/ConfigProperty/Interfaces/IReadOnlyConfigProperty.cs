@@ -8,7 +8,7 @@ namespace Common_Library.Config
     public interface IReadOnlyConfigProperty<T> : IReadOnlyConfigPropertyBase
     {
         public event Handlers.EmptyHandler Changed;
-        
+
         public T DefaultValue { get; }
         public T Value { get; }
         public Boolean IsValid { get; }

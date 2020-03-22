@@ -19,12 +19,13 @@ namespace Common_Library.Config
         {
             return property.ToString();
         }
-        
+
         public T DefaultValue { get; private set; }
 
-        public event Handlers.EmptyHandler Changed; 
-        
+        public event Handlers.EmptyHandler Changed;
+
         private T _value;
+
         public T Value
         {
             get
@@ -63,7 +64,7 @@ namespace Common_Library.Config
         public void SetValue(T value)
         {
             Value = value;
-            
+
             if (!Caching)
             {
                 Save();
@@ -98,7 +99,7 @@ namespace Common_Library.Config
             {
                 Value = value;
             }
-            
+
             DefaultValue = value;
         }
 

@@ -47,7 +47,7 @@ namespace Common_Library.Workstation
 
         [DllImport("kernel32.dll")]
         public static extern void GetNativeSystemInfo([MarshalAs(UnmanagedType.Struct)] ref SYSTEM_INFO lpSystemInfo);
-        
+
         public static ProcessorArchitecture GetProcessorBits()
         {
             ProcessorArchitecture pbits = ProcessorArchitecture.Unknown;
@@ -490,34 +490,34 @@ namespace Common_Library.Workstation
 
             return "BIOS Maker: Unknown";
         }
-        
+
         [DllImport("user32.dll")]
         private static extern Boolean EnumDisplaySettings(String lpszDeviceName, Int32 iModeNum, ref DEVMODE lpDevMode);
-        
+
         private const Int32 EnumCurrentSettings = -1;
 
         public static Monitor GetMonitor(Int32 id)
         {
             return GetMonitor(Screen.AllScreens[id], id);
         }
-        
+
         public static Monitor GetMonitor(Screen screen)
         {
             return GetMonitor(screen, Array.IndexOf(Screen.AllScreens, screen));
         }
-        
+
         public static Monitor GetMonitor(Screen screen, Int32 customID)
         {
-            DEVMODE dm = new DEVMODE {dmSize = (Int16)Marshal.SizeOf(typeof(DEVMODE))};
+            DEVMODE dm = new DEVMODE {dmSize = (Int16) Marshal.SizeOf(typeof(DEVMODE))};
             EnumDisplaySettings(screen.DeviceName, EnumCurrentSettings, ref dm);
             return new Monitor(customID, screen.DeviceName, screen.Bounds, screen.WorkingArea, screen.Bounds, dm);
         }
-        
+
         public static Monitor GetPrimaryMonitor()
         {
             return GetMonitor(Screen.PrimaryScreen, 0);
         }
-        
+
         public static Monitor[] GetMonitors()
         {
             return Screen.AllScreens.Select(screen => GetMonitor(screen)).ToArray();

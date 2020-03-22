@@ -15,9 +15,9 @@ namespace Common_Library.Config
         public CryptAction Crypt { get; }
         public Byte[] CryptKey { get; }
         public Boolean Caching { get; }
-        
+
         public void Read();
-        
+
         public Boolean KeyExist();
     }
 }

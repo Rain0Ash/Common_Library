@@ -58,9 +58,9 @@ namespace Common_Library.Utils
 
                 XmlSerializer serializer = new XmlSerializer(outType);
                 using XmlReader reader = new XmlTextReader(read);
-                
-                value = (T)serializer.Deserialize(reader);
-                
+
+                value = (T) serializer.Deserialize(reader);
+
                 return true;
             }
             catch (Exception)

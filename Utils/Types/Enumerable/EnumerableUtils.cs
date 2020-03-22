@@ -32,7 +32,7 @@ namespace Common_Library.Utils
                 }
             }
         }
-        
+
         public static IEnumerable<TOut> SelectWhere<T, TOut>(this IEnumerable<T> source, Func<T, Boolean> where, Func<T, TOut> select)
         {
             return source.Where(where).Select(select);
@@ -48,7 +48,7 @@ namespace Common_Library.Utils
 
             return source;
         }
-        
+
         [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
         public static IEnumerable<T> ForEachWhere<T>(this IEnumerable<T> source, Func<T, Boolean> where, Action<T> action)
         {

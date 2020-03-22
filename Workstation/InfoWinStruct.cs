@@ -19,8 +19,10 @@ namespace Common_Library.Workstation
         {
             private const Int32 CCHDEVICENAME = 0x20;
             private const Int32 CCHFORMNAME = 0x20;
+
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 0x20)]
             public String dmDeviceName;
+
             public Int16 dmSpecVersion;
             public Int16 dmDriverVersion;
             public Int16 dmSize;
@@ -35,8 +37,10 @@ namespace Common_Library.Workstation
             public Int16 dmYResolution;
             public Int16 dmTTOption;
             public Int16 dmCollate;
+
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 0x20)]
             public String dmFormName;
+
             public Int16 dmLogPixels;
             public Int32 dmBitsPerPel;
             public Int32 dmPelsWidth;
@@ -52,7 +56,7 @@ namespace Common_Library.Workstation
             public Int32 dmPanningWidth;
             public Int32 dmPanningHeight;
         }
-        
+
         [StructLayout(LayoutKind.Explicit)]
         [SuppressMessage("ReSharper", "InconsistentNaming")]
         public struct _PROCESSOR_INFO_UNION
@@ -61,7 +65,7 @@ namespace Common_Library.Workstation
             [FieldOffset(0)] internal UInt16 wProcessorArchitecture;
             [FieldOffset(2)] internal UInt16 wReserved;
         }
-    
+
         [StructLayout(LayoutKind.Sequential)]
         [SuppressMessage("ReSharper", "InconsistentNaming")]
         public struct SYSTEM_INFO
@@ -78,7 +82,7 @@ namespace Common_Library.Workstation
             public UInt16 dwProcessorRevision;
         }
     }
-    
+
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     [SuppressMessage("ReSharper", "UnassignedField.Global")]
     [SuppressMessage("ReSharper", "FieldCanBeMadeReadOnly.Local")]

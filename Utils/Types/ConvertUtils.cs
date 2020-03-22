@@ -150,49 +150,49 @@ namespace Common_Library.Utils
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SByte ToSByte<T>(this T value) where T : Enum
         {
-            return (SByte)(Object)value;
+            return (SByte) (Object) value;
         }
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Byte ToByte<T>(this T value) where T : Enum
         {
-            return (Byte)(Object)value;
+            return (Byte) (Object) value;
         }
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Int16 ToInt16<T>(this T value) where T : Enum
         {
-            return (Int16)(Object)value;
+            return (Int16) (Object) value;
         }
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static UInt16 ToUInt16<T>(this T value) where T : Enum
         {
-            return (UInt16)(Object)value;
+            return (UInt16) (Object) value;
         }
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Int32 ToInt32<T>(this T value) where T : Enum
         {
-            return (Int32)(Object)value;
+            return (Int32) (Object) value;
         }
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static UInt32 ToUInt32<T>(this T value) where T : Enum
         {
-            return (UInt32)(Object)value;
+            return (UInt32) (Object) value;
         }
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Int64 ToInt64<T>(this T value) where T : Enum
         {
-            return (Int64)(Object)value;
+            return (Int64) (Object) value;
         }
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static UInt64 ToUInt64<T>(this T value) where T : Enum
         {
-            return (UInt64)(Object)value;
+            return (UInt64) (Object) value;
         }
 
         #endregion
@@ -201,12 +201,12 @@ namespace Common_Library.Utils
         {
             return ToBytes(input, Encoding.UTF8);
         }
-        
+
         public static Byte[] ToBytes(this String input, Encoding encoding)
         {
             return input == null ? null : encoding.GetBytes(input);
         }
-        
+
         public static String Convert(this Object obj, IFormatProvider info = null)
         {
             return System.Convert.ToString(obj, info ?? CultureInfo.InvariantCulture);

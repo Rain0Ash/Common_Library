@@ -29,7 +29,7 @@ namespace Common_Library.Utils.Network
             IPAddress result = IPAddress.Parse(ip);
             return result.GetAddressBytes().Reverse().ToArray();
         }
-        
+
         public static Boolean ValidatePort(Int32 port)
         {
             return MathUtils.InRange(port, MathUtils.Position.LeftRight, 1, UInt16.MaxValue);

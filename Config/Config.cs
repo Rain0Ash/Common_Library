@@ -28,14 +28,14 @@ namespace Common_Library.Config
         RAM,
         JSON
     }
-    
+
     public abstract partial class Config
     {
         protected const String DefaultName = "config";
 
         private static readonly IndexDictionary<Config, IndexDictionary<String, IConfigPropertyBase>> ConfigDictionary =
             new IndexDictionary<Config, IndexDictionary<String, IConfigPropertyBase>>();
-        
+
         public static Config Factory(String configPath = null, Boolean isReadOnly = true, ConfigType configType = ConfigType.Registry)
         {
             return configType switch
@@ -74,7 +74,7 @@ namespace Common_Library.Config
         {
             return Convert.ToString(value, CultureInfo.InvariantCulture);
         }
-        
+
         public void SetValue(String key, Object value, params String[] sections)
         {
             this[key, sections] = ConvertToValue(value);
@@ -84,7 +84,7 @@ namespace Common_Library.Config
         {
             SetValue(key, value, encrypt, null, sections);
         }
-        
+
         public void SetValue(String key, Object value, Boolean crypt, Byte[] cryptKey, params String[] sections)
         {
             if (crypt)
@@ -100,7 +100,7 @@ namespace Common_Library.Config
         {
             return value.Convert<T>();
         }
-        
+
         public String GetValue(String key, params String[] sections)
         {
             return this[key, sections];
@@ -115,7 +115,7 @@ namespace Common_Library.Config
         {
             return GetValue(key, Convert.ToString(defaultValue, CultureInfo.InvariantCulture), sections);
         }
-        
+
         public String GetValue(String key, Object defaultValue, Boolean decrypt, params String[] sections)
         {
             return GetValue(key, defaultValue, decrypt, null, sections);
@@ -144,7 +144,7 @@ namespace Common_Library.Config
 
             return value.TryConvert(out T cval) ? cval : defaultValue;
         }
-        
+
         public T GetValue<T>(String key, T defaultValue, Boolean decrypt, params String[] sections)
         {
             return GetValue(key, defaultValue, decrypt, null, sections);
@@ -167,7 +167,7 @@ namespace Common_Library.Config
         {
             return GetOrSetValue(key, defaultValue, CryptAction.Decrypt, sections);
         }
-        
+
         public String GetOrSetValue(String key, Object defaultValue, CryptAction crypt, params String[] sections)
         {
             return GetOrSetValue(key, defaultValue, crypt, null, sections);
@@ -190,7 +190,7 @@ namespace Common_Library.Config
         {
             return GetOrSetValue(key, defaultValue, CryptAction.Decrypt, sections);
         }
-        
+
         public T GetOrSetValue<T>(String key, T defaultValue, CryptAction crypt, params String[] sections)
         {
             return GetOrSetValue(key, defaultValue, crypt, null, sections);

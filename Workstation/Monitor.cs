@@ -23,7 +23,7 @@ namespace Common_Library.Workstation
                 return DEVMODE.dmDeviceName;
             }
         }
-        
+
         public Int32 Frequency
         {
             get
@@ -31,8 +31,7 @@ namespace Common_Library.Workstation
                 return DEVMODE.dmDisplayFrequency;
             }
         }
-        
-        
+
 
         public Monitor(Int32 id, String name, Rectangle resolution, Rectangle workingArea, Rectangle bounds, HardwareInfo.DEVMODE devmode)
         {

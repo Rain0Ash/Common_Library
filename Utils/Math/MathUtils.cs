@@ -22,7 +22,7 @@ namespace Common_Library.Utils.Math
             ValueAndPercent,
             Percent
         }
-        
+
         public static void Range(ref IConvertible value, Decimal minimum = Decimal.Zero, Decimal maximum = Decimal.MaxValue,
             Boolean looped = false)
         {

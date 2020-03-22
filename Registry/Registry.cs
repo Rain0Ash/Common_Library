@@ -24,11 +24,9 @@ namespace Common_Library.Registry
         LocalMachine,
         PerformanceData
     }
-    
+
     public sealed class Registry : IDisposable
     {
-        
-
         private static readonly Dictionary<BaseKey, RegistryKey> Keys = new Dictionary<BaseKey, RegistryKey>
         {
             {BaseKey.Default, Microsoft.Win32.Registry.CurrentUser},

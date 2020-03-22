@@ -213,7 +213,7 @@ namespace Common_Library.Workstation
             get
             {
                 OSVERSIONINFOEX osVersionInfo = new OSVERSIONINFOEX {dwOSVersionInfoSize = Marshal.SizeOf(typeof(OSVERSIONINFOEX))};
-                
+
                 return GetVersionEx(ref osVersionInfo) ? osVersionInfo.szCSDVersion : String.Empty;
             }
         }

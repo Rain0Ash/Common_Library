@@ -44,6 +44,9 @@
     <Compile Update="GUI\WinForms\Forms\FixedForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="GUI\WinForms\Forms\FlashForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="GUI\WinForms\Forms\HelpForm.cs">
       <SubType>Form</SubType>
     </Compile>

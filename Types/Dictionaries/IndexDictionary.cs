@@ -223,12 +223,12 @@ namespace System.Collections.Generic
         {
             return _orderList.Select(key => new KeyValuePair<TKey, TValue>(key, this[key])).GetEnumerator();
         }
-        
+
         public IEnumerator<TKey> GetKeyEnumerator()
         {
             return _orderList.GetEnumerator();
         }
-        
+
         public IEnumerator<TValue> GetValueEnumerator()
         {
             return _orderList.Select(key => this[key]).GetEnumerator();

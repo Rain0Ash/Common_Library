@@ -25,6 +25,7 @@
       <Folder Include="Combinatorics" />
       <Folder Include="GUI\WinForms\Common" />
       <Folder Include="Resources\" />
+      <Folder Include="Types\Queue" />
     </ItemGroup>
 
     <ItemGroup>

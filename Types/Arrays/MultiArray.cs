@@ -14,20 +14,20 @@ namespace Common_Library.Types.Arrays
         {
             return array.ToArray();
         }
-        
+
         public readonly T[] Matrix;
 
         public Int32 Width { get; }
         public Int32 Height { get; }
-        
+
         public MultiArray(Int32 width, Int32 height)
         {
             Width = width;
             Height = height;
-            
+
             Matrix = new T[Width * Height];
         }
-        
+
         public T[] ToArray()
         {
             return Matrix;
@@ -37,7 +37,7 @@ namespace Common_Library.Types.Arrays
         {
             return Matrix.AsSpan(y * Width);
         }
-        
+
         public Span<T> GetAxisY(Int32 x)
         {
             return Matrix.AsSpan(x * Height);
@@ -54,7 +54,7 @@ namespace Common_Library.Types.Arrays
                 Matrix[index] = value;
             }
         }
-        
+
         public T this[Int32 x, Int32 y]
         {
             get

@@ -46,7 +46,7 @@ namespace Common_Library.Types.Other
         }
 
         public event Handlers.EmptyHandler IconExistCheckChanged;
-        
+
         private Boolean _iconExistCheck = true;
 
         public Boolean IconExistCheck

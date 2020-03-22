@@ -68,7 +68,7 @@ namespace Common_Library.Utils.IO
         {
             ToConsole(obj, color, true, info);
         }
-        
+
         public static void WriteLine(Object obj, ConsoleColor color, ConsoleColor bColor, IFormatProvider info = null)
         {
             ToConsole(obj, color, bColor, true, info);

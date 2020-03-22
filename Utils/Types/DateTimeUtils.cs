@@ -21,14 +21,15 @@ namespace Common_Library.Utils
         November,
         December
     }
-    
+
     public static class DateTimeUtils
     {
-        public static DateTime DateTime(this Month month, Int32 year, Int32 day, Int32 hour = 0, Int32 minute = 0, Int32 second = 0, Int32 millisecond = 0, DateTimeKind kind = DateTimeKind.Unspecified)
+        public static DateTime DateTime(this Month month, Int32 year, Int32 day, Int32 hour = 0, Int32 minute = 0, Int32 second = 0, Int32 millisecond = 0,
+            DateTimeKind kind = DateTimeKind.Unspecified)
         {
             return new DateTime(year, (Int32) month, day, hour, minute, second, millisecond, kind);
         }
-        
+
         public static DateTime DateTime(this Month month, Int32 year, Int32 day, Int32 hour, Int32 minute, Int32 second, Int32 millisecond, Calendar calendar)
         {
             return new DateTime(year, (Int32) month, day, hour, minute, second, millisecond, calendar);

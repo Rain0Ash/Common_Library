@@ -16,7 +16,7 @@ namespace System.Collections.Generic.Interfaces
         public Int32 IndexOf(TKey key);
 
         public IEnumerator<TKey> GetKeyEnumerator();
-        
+
         public IEnumerator<TValue> GetValueEnumerator();
     }
 }

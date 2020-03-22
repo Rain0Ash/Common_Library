@@ -275,12 +275,12 @@ namespace Common_Library.Types.Map
         {
             return _orderList.Select(key => new KeyValuePair<TValue, TKey>(this[key], key)).GetEnumerator();
         }
-        
+
         public IEnumerator<TKey> GetKeyEnumerator()
         {
             return _orderList.GetEnumerator();
         }
-        
+
         public IEnumerator<TValue> GetValueEnumerator()
         {
             return _orderList.Select(key => this[key]).GetEnumerator();

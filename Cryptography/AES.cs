@@ -16,7 +16,7 @@ namespace Common_Library.Crypto
             {
                 return Encrypt(plainText, key.ToBytes());
             }
-            
+
             public static String Encrypt(String plainText, Byte[] key = null)
             {
                 if (plainText == null)
@@ -59,7 +59,7 @@ namespace Common_Library.Crypto
                     return null;
                 }
             }
-            
+
             public static String Decrypt(String plainText, String key)
             {
                 return Decrypt(plainText, key.ToBytes());

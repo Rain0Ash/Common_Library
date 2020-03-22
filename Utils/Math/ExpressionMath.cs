@@ -1,4 +1,7 @@
-﻿using System;
+﻿// This is an independent project of an individual developer. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
+
+using System;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -75,12 +78,12 @@ namespace Common_Library.Utils.Math
         {
             return MathGeneric<T2, T1>.Divide(value1, value2);
         }
-        
+
         public static T Modulo<T>(T value1, T value2)
         {
             return MathGeneric<T>.Modulo(value1, value2);
         }
-        
+
         public static T1 AltModulo<T1, T2>(T1 value1, T2 value2)
         {
             return MathGeneric<T2, T1>.Modulo(value1, value2);
@@ -100,7 +103,7 @@ namespace Common_Library.Utils.Math
         {
             return MathGeneric<T>.Greater(value1, value2);
         }
-        
+
         public static Boolean GreaterEqual<T>(T value1, T value2)
         {
             return MathGeneric<T>.GreaterEqual(value1, value2);
@@ -145,6 +148,7 @@ namespace Common_Library.Utils.Math
         }
 
         private static readonly Lazy<Func<TResult, TValue, TResult>> AddFunc, SubtractFunc, MultiplyFunc, DivideFunc, ModuloFunc;
+
         public static Func<TResult, TValue, TResult> Add
         {
             get
@@ -176,7 +180,7 @@ namespace Common_Library.Utils.Math
                 return DivideFunc.Value;
             }
         }
-        
+
         public static Func<TResult, TValue, TResult> Modulo
         {
             get
@@ -191,12 +195,12 @@ namespace Common_Library.Utils.Math
         static MathGeneric()
         {
             Type type = typeof(T);
-            
+
             if (type.GetTypeInfo().IsValueType && type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
             {
                 throw new InvalidOperationException($"Generic math between {nameof(Nullable)} types is NotFunc implemented. Type: {typeof(T).FullName} is nullable.");
             }
-            
+
             AddFunc = new Lazy<Func<T, T, T>>(() => ExpressionUtils.CreateExpression<T, T, T>(Expression.Add), true);
             SubtractFunc = new Lazy<Func<T, T, T>>(() => ExpressionUtils.CreateExpression<T, T, T>(Expression.Subtract), true);
             MultiplyFunc = new Lazy<Func<T, T, T>>(() => ExpressionUtils.CreateExpression<T, T, T>(Expression.Multiply), true);
@@ -216,12 +220,12 @@ namespace Common_Library.Utils.Math
             NotFunc = new Lazy<Func<T, T>>(() => ExpressionUtils.CreateExpression<T, T>(Expression.Not), true);
             XorFunc = new Lazy<Func<T, T, T>>(() => ExpressionUtils.CreateExpression<T, T, T>(Expression.ExclusiveOr), true);
         }
-        
+
         public static T Zero { get; } = default;
 
         private static readonly Lazy<Func<T, T>> NegateFunc, NotFunc;
         private static readonly Lazy<Func<T, T, T>> OrFunc, AndFunc, XorFunc;
-        
+
         public static Func<T, T> Negate
         {
             get
@@ -229,7 +233,7 @@ namespace Common_Library.Utils.Math
                 return NegateFunc.Value;
             }
         }
-        
+
         public static Func<T, T> Not
         {
             get
@@ -237,7 +241,7 @@ namespace Common_Library.Utils.Math
                 return NotFunc.Value;
             }
         }
-        
+
         public static Func<T, T, T> Or
         {
             get
@@ -245,7 +249,7 @@ namespace Common_Library.Utils.Math
                 return OrFunc.Value;
             }
         }
-        
+
         public static Func<T, T, T> And
         {
             get
@@ -253,7 +257,7 @@ namespace Common_Library.Utils.Math
                 return AndFunc.Value;
             }
         }
-        
+
         public static Func<T, T, T> Xor
         {
             get
@@ -263,7 +267,7 @@ namespace Common_Library.Utils.Math
         }
 
         private static readonly Lazy<Func<T, T, T>> AddFunc, SubtractFunc, MultiplyFunc, DivideFunc, ModuloFunc;
-        
+
         public static Func<T, T, T> Add
         {
             get
@@ -313,7 +317,7 @@ namespace Common_Library.Utils.Math
                 return EqualFunc.Value;
             }
         }
-        
+
         public static Func<T, T, Boolean> NotEqual
         {
             get
@@ -321,7 +325,7 @@ namespace Common_Library.Utils.Math
                 return NotEqualFunc.Value;
             }
         }
-        
+
         public static Func<T, T, Boolean> Greater
         {
             get
@@ -337,7 +341,7 @@ namespace Common_Library.Utils.Math
                 return GreaterEqualFunc.Value;
             }
         }
-        
+
         public static Func<T, T, Boolean> Less
         {
             get

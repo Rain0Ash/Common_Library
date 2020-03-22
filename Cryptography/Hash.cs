@@ -20,7 +20,7 @@ namespace Common_Library.Crypto
         SHA384 = 48,
         SHA512 = 64,
     }
-    
+
     public static partial class Cryptography
     {
         public static class Hash
@@ -30,7 +30,7 @@ namespace Common_Library.Crypto
                 // ReSharper disable once SwitchExpressionHandlesSomeKnownEnumValuesWithExceptionInDefault
                 return type switch
                 {
-                    HashType.CRC8 => new []{Crc8(data)},
+                    HashType.CRC8 => new[] {Crc8(data)},
                     HashType.MD5 => MD5(data),
                     HashType.SHA1 => Sha1(data),
                     HashType.SHA256 => Sha256(data),
@@ -39,7 +39,7 @@ namespace Common_Library.Crypto
                     _ => throw new NotImplementedException()
                 };
             }
-            
+
             public static Byte[] Sha1(Byte[] data)
             {
                 using SHA1 sha1 = new SHA1Managed();

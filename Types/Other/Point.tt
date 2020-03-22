@@ -26,11 +26,11 @@
         {
             Boolean small = type == nameof(Char) || type == nameof(Byte) || type == nameof(SByte) || type == nameof(Int16) || type == nameof(UInt16);
             Boolean unsigned = type == nameof(Char) || type == nameof(Byte) || type == nameof(UInt16) || type == nameof(UInt32) || type == nameof(UInt64);
-            
+
             String name = $"{type}Point";
             WriteLine($"\tpublic struct {name}");
             WriteLine("\t{");
-            
+
             foreach (String @operator in operators)
             {
                 WriteLine($"\t\tpublic static {name} operator {@operator}({name} point1, {name} point2)");
@@ -47,7 +47,7 @@
                 }
                 WriteLine("\t\t}");
             }
-            
+
             WriteLine(String.Empty);
             WriteLine($"\t\tpublic readonly {type} X;");
             WriteLine($"\t\tpublic readonly {type} Y;");
@@ -116,11 +116,12 @@
             WriteLine("\t\t{");
             WriteLine($"\t\t\treturn {(unsigned ? "true" : $"X >= {cast}0 && Y >= {cast}0")};");
             WriteLine("\t\t}");
-            
+
             WriteLine("\t}");
             WriteLine(String.Empty);
         }
     }
+
 #>
 // This is an independent project of an individual developer. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
@@ -147,6 +148,6 @@ namespace Common_Library.Types.Other
     }
 
 <#
-Point();
+    Point();
 #>
 }

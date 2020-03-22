@@ -12,12 +12,12 @@ namespace Common_Library.GUI.WinForms.Forms
         {
             FormUtils.NotifyFlash(this);
         }
-        
+
         public void StartFlash(UInt32 count = UInt32.MaxValue)
         {
             FormUtils.StartFlash(this, count);
         }
-        
+
         public void StopFlash()
         {
             FormUtils.StopFlash(this);

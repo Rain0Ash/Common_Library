@@ -9,7 +9,7 @@ namespace Common_Library.Workstation
     public static partial class WorkStation
     {
         public static readonly String CurrentUserSID = GetCurrentUserSID();
-        
+
         public static String GetCurrentUserSID()
         {
             WindowsIdentity user = WindowsIdentity.GetCurrent();

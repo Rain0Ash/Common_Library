@@ -35,7 +35,7 @@ namespace Common_Library.Utils
             {
                 return val;
             }
-            
+
             dictionary.Add(key, value);
             return value;
         }
@@ -87,6 +87,11 @@ namespace Common_Library.Utils
             }
 
             return ret;
+        }
+
+        public static void CopyTo<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, KeyValuePair<TKey, TValue>[] array, Int32 arrayIndex)
+        {
+            dictionary.CopyTo(array, arrayIndex);
         }
     }
 }

@@ -11,12 +11,12 @@ namespace Common_Library.Config.RAM
         protected NestedDictionary<String, String> Config;
 
         public RAMConfig(String configPath = null, Boolean isReadOnly = true)
-            : this(new NestedDictionary<String, String>(), configPath ?? "RAM", isReadOnly)
+            : this(new NestedDictionary<String, String>(), configPath, isReadOnly)
         {
         }
 
         public RAMConfig(NestedDictionary<String, String> config, String configPath = null, Boolean isReadOnly = true)
-            : base("RAM", isReadOnly)
+            : base(configPath ?? "RAM", isReadOnly)
         {
             Config = config;
         }

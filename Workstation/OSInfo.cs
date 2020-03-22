@@ -11,7 +11,7 @@ namespace Common_Library.Workstation
     /// </summary>
     public static partial class SoftwareInfo
     {
-        static private String s_Edition;
+        private static String s_Edition;
 
         /// <summary>
         /// Gets the edition of the operating system running on this computer.
@@ -212,17 +212,19 @@ namespace Common_Library.Workstation
             }
         }
 
-        static private String s_Name;
+        private static String s_Name;
 
         /// <summary>
         /// Gets the name of the operating system running on this computer.
         /// </summary>
-        static public String Name
+        public static String Name
         {
             get
             {
                 if (s_Name != null)
+                {
                     return s_Name; //***** RETURN *****//
+                }
 
                 String name = "unknown";
 
@@ -275,15 +277,25 @@ namespace Common_Library.Workstation
                                 {
                                     case 0:
                                         if (csdVersion == "B" || csdVersion == "C")
+                                        {
                                             name = "Windows 95 OSR2";
+                                        }
                                         else
+                                        {
                                             name = "Windows 95";
+                                        }
+
                                         break;
                                     case 10:
                                         if (csdVersion == "A")
+                                        {
                                             name = "Windows 98 Second Edition";
+                                        }
                                         else
+                                        {
                                             name = "Windows 98";
+                                        }
+
                                         break;
                                     case 90:
                                         name = "Windows Me";
@@ -490,7 +502,6 @@ namespace Common_Library.Workstation
 
         private const Int32 PRODUCT_ULTIMATE_E = 0x00000047;
         //private const int PRODUCT_UNLICENSED = 0xABCDABCD;
-
 
 
         private const Int32 VER_NT_WORKSTATION = 1;

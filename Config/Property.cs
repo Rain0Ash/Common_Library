@@ -20,17 +20,17 @@ namespace Common_Library.Config
         {
             return GetValue(property.Key, property.DefaultValue, property.Crypt.HasFlag(CryptAction.Encrypt), property.CryptKey, property.Sections);
         }
-        
+
         public T GetOrSetValue<T>(IConfigProperty<T> property)
         {
             return GetOrSetValue(property.Key, property.DefaultValue, property.Crypt, property.CryptKey, property.Sections);
         }
-        
+
         public Boolean KeyExist(IConfigPropertyBase property)
         {
             return KeyExist(property.Key, property.Sections);
         }
-        
+
         public void RemoveValue(IConfigPropertyBase property)
         {
             RemoveValue(property.Key, property.Sections);
@@ -45,7 +45,7 @@ namespace Common_Library.Config
         {
             return GetProperty(key, defaultValue, null, sections);
         }
-        
+
         public IConfigProperty<T> GetProperty<T>(String key, T defaultValue, Func<T, Boolean> validate, params String[] sections)
         {
             return GetProperty(key, defaultValue, validate, CryptAction.Decrypt, sections);
@@ -55,7 +55,7 @@ namespace Common_Library.Config
         {
             return GetProperty(key, defaultValue, validate, crypt, null, sections);
         }
-        
+
         public IConfigProperty<T> GetProperty<T>(String key, T defaultValue, Func<T, Boolean> validate, CryptAction crypt, Byte[] cryptKey, params String[] sections)
         {
             return GetProperty(key, defaultValue, validate, crypt, cryptKey, CachingByDefault, sections);
@@ -65,7 +65,7 @@ namespace Common_Library.Config
         {
             return (IConfigProperty<T>) GetOrAddProperty(new ConfigProperty<T>(this, key, defaultValue, validate, crypt, cryptKey, caching, sections));
         }
-        
+
         private static IConfigPropertyBase GetOrAddProperty(IConfigPropertyBase property)
         {
             return ConfigDictionary.GetOrAdd(property.Config, new IndexDictionary<String, IConfigPropertyBase>())
