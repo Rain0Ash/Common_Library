@@ -49,7 +49,7 @@ namespace Common_Library.Config
             };
         }
 
-        public PathObject ConfigPath { get; }
+        public FSWatcher ConfigPath { get; }
 
         public virtual Boolean IsReadOnly { get; set; }
 
@@ -60,11 +60,11 @@ namespace Common_Library.Config
         public Boolean CachingByDefault { get; set; } = true;
 
         protected Config(String configPath, Boolean isReadOnly)
-            : this(new PathObject(configPath), isReadOnly)
+            : this(new FSWatcher(configPath), isReadOnly)
         {
         }
 
-        protected Config(PathObject configPath, Boolean isReadOnly)
+        protected Config(FSWatcher configPath, Boolean isReadOnly)
         {
             ConfigPath = configPath;
             IsReadOnly = isReadOnly;

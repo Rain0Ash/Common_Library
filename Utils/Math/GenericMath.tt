@@ -7,6 +7,7 @@
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
@@ -202,16 +203,32 @@ namespace Common_Library.Utils.Math
 
     void RangeFunc(String type)
     {
+        WriteLine($"\t\tpublic static IEnumerable<{type}> {nameof(Range)}({type} start = 0, {type} stop = {type}.MaxValue, {type} step = 1)");
+        WriteLine("\t\t{");
+        WriteLine($"\t\t\tfor ({type} i = start; start < stop; start += step)");
+        WriteLine("\t\t\t{");
+        WriteLine("\t\t\t\tyield return i;");
+        WriteLine("\t\t\t}");
+        WriteLine("\t\t}");
+    }
+    
+    void Range()
+    {
+        ForEach(unmanagedTypes.Where(type => type != nameof(Char)), RangeFunc);
+    }
+
+    void ToRangeFunc(String type)
+    {
         const Boolean defaultLooped = false;
         String looped = defaultLooped.ToString().ToLower();
 
         String func =
-            $"public static {{0}} {nameof(Range)}({{1}}{type} value, {type} minimum = {(type == "Char" ? $"{type}.MinValue" : "0")}, {type} maximum = {type}.MaxValue, Boolean looped = {looped})";
+            $"public static {{0}} {nameof(ToRange)}({{1}}{type} value, {type} minimum = {(type == "Char" ? $"{type}.MinValue" : "0")}, {type} maximum = {type}.MaxValue, Boolean looped = {looped})";
 
         WriteLine("\t\t[MethodImpl(MethodImplOptions.AggressiveInlining)]");
         WriteLine($"\t\t{String.Format(func, "void", "ref ")}");
         WriteLine("\t\t{");
-        WriteLine($"\t\t\t value = {nameof(Range)}(value, minimum, maximum, looped);");
+        WriteLine($"\t\t\t value = {nameof(ToRange)}(value, minimum, maximum, looped);");
         WriteLine("\t\t}");
         WriteLine(String.Empty);
 
@@ -232,9 +249,9 @@ namespace Common_Library.Utils.Math
         WriteLine("\t\t}");
     }
 
-    void Range()
+    void ToRange()
     {
-        ForEach(unmanagedTypes, RangeFunc);
+        ForEach(unmanagedTypes, ToRangeFunc);
     }
 
     void InRangeFunc(String type)
@@ -301,6 +318,8 @@ namespace Common_Library.Utils.Math
     {
 <#
     Range();
+    WriteLine(String.Empty);
+    ToRange();
     WriteLine(String.Empty);
     InRange();
     WriteLine(String.Empty);

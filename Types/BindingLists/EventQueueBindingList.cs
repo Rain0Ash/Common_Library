@@ -18,7 +18,7 @@ namespace System.Collections.Generic
             }
             set
             {
-                Int32 val = MathUtils.Range(value);
+                Int32 val = MathUtils.ToRange(value);
                 if (_maximumLength == val)
                 {
                     return;
@@ -59,7 +59,7 @@ namespace System.Collections.Generic
 
         public T Pop(Int32 index = 0)
         {
-            index = MathUtils.Range(index);
+            index = MathUtils.ToRange(index);
             if (index > Count - 1)
             {
                 index = Count - 1;

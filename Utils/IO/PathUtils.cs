@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Common_Library.LongPath;
+using Common_Library.Types.Network;
 using Path = Common_Library.LongPath.Path;
 using Directory = Common_Library.LongPath.Directory;
 
@@ -185,6 +186,23 @@ namespace Common_Library.Utils.IO
             {
                 return false;
             }
+        }
+
+        public static Boolean IsValidUrl(String path)
+        {
+            return Uri.TryCreate(path, UriKind.Absolute, out Uri uriResult) && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
+        }
+        
+        public static Boolean IsUrlContainData(String path)
+        {
+            if (!IsValidUrl(path))
+            {
+                return false;
+            }
+
+            using WebClientExtended client = new WebClientExtended { HeadOnly = true };
+
+            return !String.IsNullOrEmpty(client.DownloadString(path));
         }
 
         public static Boolean IsValidNetworkFolderPath(String path)

@@ -2,6 +2,7 @@
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
@@ -9,14 +10,102 @@ namespace Common_Library.Utils.Math
 {   
     public static partial class MathUtils
     {
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static void Range(ref Char value, Char minimum = Char.MinValue, Char maximum = Char.MaxValue, Boolean looped = false)
+		public static IEnumerable<SByte> Range(SByte start = 0, SByte stop = SByte.MaxValue, SByte step = 1)
 		{
-			 value = Range(value, minimum, maximum, looped);
+			for (SByte i = start; start < stop; start += step)
+			{
+				yield return i;
+			}
+		}
+
+		public static IEnumerable<Byte> Range(Byte start = 0, Byte stop = Byte.MaxValue, Byte step = 1)
+		{
+			for (Byte i = start; start < stop; start += step)
+			{
+				yield return i;
+			}
+		}
+
+		public static IEnumerable<Int16> Range(Int16 start = 0, Int16 stop = Int16.MaxValue, Int16 step = 1)
+		{
+			for (Int16 i = start; start < stop; start += step)
+			{
+				yield return i;
+			}
+		}
+
+		public static IEnumerable<UInt16> Range(UInt16 start = 0, UInt16 stop = UInt16.MaxValue, UInt16 step = 1)
+		{
+			for (UInt16 i = start; start < stop; start += step)
+			{
+				yield return i;
+			}
+		}
+
+		public static IEnumerable<Int32> Range(Int32 start = 0, Int32 stop = Int32.MaxValue, Int32 step = 1)
+		{
+			for (Int32 i = start; start < stop; start += step)
+			{
+				yield return i;
+			}
+		}
+
+		public static IEnumerable<UInt32> Range(UInt32 start = 0, UInt32 stop = UInt32.MaxValue, UInt32 step = 1)
+		{
+			for (UInt32 i = start; start < stop; start += step)
+			{
+				yield return i;
+			}
+		}
+
+		public static IEnumerable<Int64> Range(Int64 start = 0, Int64 stop = Int64.MaxValue, Int64 step = 1)
+		{
+			for (Int64 i = start; start < stop; start += step)
+			{
+				yield return i;
+			}
+		}
+
+		public static IEnumerable<UInt64> Range(UInt64 start = 0, UInt64 stop = UInt64.MaxValue, UInt64 step = 1)
+		{
+			for (UInt64 i = start; start < stop; start += step)
+			{
+				yield return i;
+			}
+		}
+
+		public static IEnumerable<Single> Range(Single start = 0, Single stop = Single.MaxValue, Single step = 1)
+		{
+			for (Single i = start; start < stop; start += step)
+			{
+				yield return i;
+			}
+		}
+
+		public static IEnumerable<Double> Range(Double start = 0, Double stop = Double.MaxValue, Double step = 1)
+		{
+			for (Double i = start; start < stop; start += step)
+			{
+				yield return i;
+			}
+		}
+
+		public static IEnumerable<Decimal> Range(Decimal start = 0, Decimal stop = Decimal.MaxValue, Decimal step = 1)
+		{
+			for (Decimal i = start; start < stop; start += step)
+			{
+				yield return i;
+			}
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static Char Range(Char value, Char minimum = Char.MinValue, Char maximum = Char.MaxValue, Boolean looped = false)
+		public static void ToRange(ref Char value, Char minimum = Char.MinValue, Char maximum = Char.MaxValue, Boolean looped = false)
+		{
+			 value = ToRange(value, minimum, maximum, looped);
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static Char ToRange(Char value, Char minimum = Char.MinValue, Char maximum = Char.MaxValue, Boolean looped = false)
 		{
 			if (value > maximum)
 			{
@@ -32,35 +121,13 @@ namespace Common_Library.Utils.Math
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static void Range(ref SByte value, SByte minimum = 0, SByte maximum = SByte.MaxValue, Boolean looped = false)
+		public static void ToRange(ref SByte value, SByte minimum = 0, SByte maximum = SByte.MaxValue, Boolean looped = false)
 		{
-			 value = Range(value, minimum, maximum, looped);
+			 value = ToRange(value, minimum, maximum, looped);
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static SByte Range(SByte value, SByte minimum = 0, SByte maximum = SByte.MaxValue, Boolean looped = false)
-		{
-			if (value > maximum)
-			{
-				return looped ? minimum : maximum;
-			}
-
-			if (value < minimum)
-			{
-				return looped ? maximum : minimum;
-			}
-
-			return value;
-		}
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static void Range(ref Byte value, Byte minimum = 0, Byte maximum = Byte.MaxValue, Boolean looped = false)
-		{
-			 value = Range(value, minimum, maximum, looped);
-		}
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static Byte Range(Byte value, Byte minimum = 0, Byte maximum = Byte.MaxValue, Boolean looped = false)
+		public static SByte ToRange(SByte value, SByte minimum = 0, SByte maximum = SByte.MaxValue, Boolean looped = false)
 		{
 			if (value > maximum)
 			{
@@ -76,35 +143,13 @@ namespace Common_Library.Utils.Math
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static void Range(ref Int16 value, Int16 minimum = 0, Int16 maximum = Int16.MaxValue, Boolean looped = false)
+		public static void ToRange(ref Byte value, Byte minimum = 0, Byte maximum = Byte.MaxValue, Boolean looped = false)
 		{
-			 value = Range(value, minimum, maximum, looped);
+			 value = ToRange(value, minimum, maximum, looped);
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static Int16 Range(Int16 value, Int16 minimum = 0, Int16 maximum = Int16.MaxValue, Boolean looped = false)
-		{
-			if (value > maximum)
-			{
-				return looped ? minimum : maximum;
-			}
-
-			if (value < minimum)
-			{
-				return looped ? maximum : minimum;
-			}
-
-			return value;
-		}
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static void Range(ref UInt16 value, UInt16 minimum = 0, UInt16 maximum = UInt16.MaxValue, Boolean looped = false)
-		{
-			 value = Range(value, minimum, maximum, looped);
-		}
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static UInt16 Range(UInt16 value, UInt16 minimum = 0, UInt16 maximum = UInt16.MaxValue, Boolean looped = false)
+		public static Byte ToRange(Byte value, Byte minimum = 0, Byte maximum = Byte.MaxValue, Boolean looped = false)
 		{
 			if (value > maximum)
 			{
@@ -120,35 +165,13 @@ namespace Common_Library.Utils.Math
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static void Range(ref Int32 value, Int32 minimum = 0, Int32 maximum = Int32.MaxValue, Boolean looped = false)
+		public static void ToRange(ref Int16 value, Int16 minimum = 0, Int16 maximum = Int16.MaxValue, Boolean looped = false)
 		{
-			 value = Range(value, minimum, maximum, looped);
+			 value = ToRange(value, minimum, maximum, looped);
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static Int32 Range(Int32 value, Int32 minimum = 0, Int32 maximum = Int32.MaxValue, Boolean looped = false)
-		{
-			if (value > maximum)
-			{
-				return looped ? minimum : maximum;
-			}
-
-			if (value < minimum)
-			{
-				return looped ? maximum : minimum;
-			}
-
-			return value;
-		}
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static void Range(ref UInt32 value, UInt32 minimum = 0, UInt32 maximum = UInt32.MaxValue, Boolean looped = false)
-		{
-			 value = Range(value, minimum, maximum, looped);
-		}
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static UInt32 Range(UInt32 value, UInt32 minimum = 0, UInt32 maximum = UInt32.MaxValue, Boolean looped = false)
+		public static Int16 ToRange(Int16 value, Int16 minimum = 0, Int16 maximum = Int16.MaxValue, Boolean looped = false)
 		{
 			if (value > maximum)
 			{
@@ -164,35 +187,13 @@ namespace Common_Library.Utils.Math
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static void Range(ref Int64 value, Int64 minimum = 0, Int64 maximum = Int64.MaxValue, Boolean looped = false)
+		public static void ToRange(ref UInt16 value, UInt16 minimum = 0, UInt16 maximum = UInt16.MaxValue, Boolean looped = false)
 		{
-			 value = Range(value, minimum, maximum, looped);
+			 value = ToRange(value, minimum, maximum, looped);
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static Int64 Range(Int64 value, Int64 minimum = 0, Int64 maximum = Int64.MaxValue, Boolean looped = false)
-		{
-			if (value > maximum)
-			{
-				return looped ? minimum : maximum;
-			}
-
-			if (value < minimum)
-			{
-				return looped ? maximum : minimum;
-			}
-
-			return value;
-		}
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static void Range(ref UInt64 value, UInt64 minimum = 0, UInt64 maximum = UInt64.MaxValue, Boolean looped = false)
-		{
-			 value = Range(value, minimum, maximum, looped);
-		}
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static UInt64 Range(UInt64 value, UInt64 minimum = 0, UInt64 maximum = UInt64.MaxValue, Boolean looped = false)
+		public static UInt16 ToRange(UInt16 value, UInt16 minimum = 0, UInt16 maximum = UInt16.MaxValue, Boolean looped = false)
 		{
 			if (value > maximum)
 			{
@@ -208,35 +209,13 @@ namespace Common_Library.Utils.Math
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static void Range(ref Single value, Single minimum = 0, Single maximum = Single.MaxValue, Boolean looped = false)
+		public static void ToRange(ref Int32 value, Int32 minimum = 0, Int32 maximum = Int32.MaxValue, Boolean looped = false)
 		{
-			 value = Range(value, minimum, maximum, looped);
+			 value = ToRange(value, minimum, maximum, looped);
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static Single Range(Single value, Single minimum = 0, Single maximum = Single.MaxValue, Boolean looped = false)
-		{
-			if (value > maximum)
-			{
-				return looped ? minimum : maximum;
-			}
-
-			if (value < minimum)
-			{
-				return looped ? maximum : minimum;
-			}
-
-			return value;
-		}
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static void Range(ref Double value, Double minimum = 0, Double maximum = Double.MaxValue, Boolean looped = false)
-		{
-			 value = Range(value, minimum, maximum, looped);
-		}
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static Double Range(Double value, Double minimum = 0, Double maximum = Double.MaxValue, Boolean looped = false)
+		public static Int32 ToRange(Int32 value, Int32 minimum = 0, Int32 maximum = Int32.MaxValue, Boolean looped = false)
 		{
 			if (value > maximum)
 			{
@@ -252,13 +231,123 @@ namespace Common_Library.Utils.Math
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static void Range(ref Decimal value, Decimal minimum = 0, Decimal maximum = Decimal.MaxValue, Boolean looped = false)
+		public static void ToRange(ref UInt32 value, UInt32 minimum = 0, UInt32 maximum = UInt32.MaxValue, Boolean looped = false)
 		{
-			 value = Range(value, minimum, maximum, looped);
+			 value = ToRange(value, minimum, maximum, looped);
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static Decimal Range(Decimal value, Decimal minimum = 0, Decimal maximum = Decimal.MaxValue, Boolean looped = false)
+		public static UInt32 ToRange(UInt32 value, UInt32 minimum = 0, UInt32 maximum = UInt32.MaxValue, Boolean looped = false)
+		{
+			if (value > maximum)
+			{
+				return looped ? minimum : maximum;
+			}
+
+			if (value < minimum)
+			{
+				return looped ? maximum : minimum;
+			}
+
+			return value;
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static void ToRange(ref Int64 value, Int64 minimum = 0, Int64 maximum = Int64.MaxValue, Boolean looped = false)
+		{
+			 value = ToRange(value, minimum, maximum, looped);
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static Int64 ToRange(Int64 value, Int64 minimum = 0, Int64 maximum = Int64.MaxValue, Boolean looped = false)
+		{
+			if (value > maximum)
+			{
+				return looped ? minimum : maximum;
+			}
+
+			if (value < minimum)
+			{
+				return looped ? maximum : minimum;
+			}
+
+			return value;
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static void ToRange(ref UInt64 value, UInt64 minimum = 0, UInt64 maximum = UInt64.MaxValue, Boolean looped = false)
+		{
+			 value = ToRange(value, minimum, maximum, looped);
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static UInt64 ToRange(UInt64 value, UInt64 minimum = 0, UInt64 maximum = UInt64.MaxValue, Boolean looped = false)
+		{
+			if (value > maximum)
+			{
+				return looped ? minimum : maximum;
+			}
+
+			if (value < minimum)
+			{
+				return looped ? maximum : minimum;
+			}
+
+			return value;
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static void ToRange(ref Single value, Single minimum = 0, Single maximum = Single.MaxValue, Boolean looped = false)
+		{
+			 value = ToRange(value, minimum, maximum, looped);
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static Single ToRange(Single value, Single minimum = 0, Single maximum = Single.MaxValue, Boolean looped = false)
+		{
+			if (value > maximum)
+			{
+				return looped ? minimum : maximum;
+			}
+
+			if (value < minimum)
+			{
+				return looped ? maximum : minimum;
+			}
+
+			return value;
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static void ToRange(ref Double value, Double minimum = 0, Double maximum = Double.MaxValue, Boolean looped = false)
+		{
+			 value = ToRange(value, minimum, maximum, looped);
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static Double ToRange(Double value, Double minimum = 0, Double maximum = Double.MaxValue, Boolean looped = false)
+		{
+			if (value > maximum)
+			{
+				return looped ? minimum : maximum;
+			}
+
+			if (value < minimum)
+			{
+				return looped ? maximum : minimum;
+			}
+
+			return value;
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static void ToRange(ref Decimal value, Decimal minimum = 0, Decimal maximum = Decimal.MaxValue, Boolean looped = false)
+		{
+			 value = ToRange(value, minimum, maximum, looped);
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static Decimal ToRange(Decimal value, Decimal minimum = 0, Decimal maximum = Decimal.MaxValue, Boolean looped = false)
 		{
 			if (value > maximum)
 			{

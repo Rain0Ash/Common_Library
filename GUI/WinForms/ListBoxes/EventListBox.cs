@@ -99,7 +99,7 @@ namespace Common_Library.GUI.WinForms.ListBoxes
                 return;
             }
 
-            index = MathUtils.Range(index, 0, Items.Count);
+            index = MathUtils.ToRange(index, 0, Items.Count);
             Items.Insert(index, item);
             ItemAdded?.Invoke(item, index);
             ItemsChanged?.Invoke();

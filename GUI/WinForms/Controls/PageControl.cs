@@ -163,7 +163,7 @@ namespace Common_Library.GUI.WinForms.Controls
             }
             set
             {
-                Int32 nextPage = MathUtils.Range(value, MinimumPage, MaximumPage - 1);
+                Int32 nextPage = MathUtils.ToRange(value, MinimumPage, MaximumPage - 1);
                 if (_currentPage == nextPage)
                 {
                     return;
@@ -183,7 +183,7 @@ namespace Common_Library.GUI.WinForms.Controls
 
             if (ControlsList.Any())
             {
-                ControlsList[MathUtils.Range(CurrentPage, MinimumPage, MaximumPage - 1)].Visible = true;
+                ControlsList[MathUtils.ToRange(CurrentPage, MinimumPage, MaximumPage - 1)].Visible = true;
             }
         }
 

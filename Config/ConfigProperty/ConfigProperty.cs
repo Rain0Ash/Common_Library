@@ -80,6 +80,16 @@ namespace Common_Library.Config
 
             return Value;
         }
+        
+        public T GetValue(Func<T, Boolean> validate)
+        {
+            if (!Caching)
+            {
+                Read();
+            }
+
+            return validate(_value) ? _value : DefaultValue;
+        }
 
         public T GetOrSetValue()
         {

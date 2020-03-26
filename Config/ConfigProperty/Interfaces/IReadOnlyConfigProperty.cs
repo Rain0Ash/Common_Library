@@ -14,5 +14,6 @@ namespace Common_Library.Config
         public Boolean IsValid { get; }
         public Func<T, Boolean> Validate { get; }
         public T GetValue();
+        public T GetValue(Func<T, Boolean> validate);
     }
 }

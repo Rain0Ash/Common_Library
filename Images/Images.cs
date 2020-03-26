@@ -2,6 +2,8 @@
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
 using System.Drawing;
+using Common_Library.Images.icons.blue;
+using Common_Library.Images.icons.circular;
 using Common_Library.Images.icons.fill;
 using Common_Library.Images.icons.flat;
 using Common_Library.Images.icons.gradient;
@@ -74,6 +76,10 @@ namespace Common_Library.Images
             public static readonly Image Folder = LinealImages.folder;
 
             public static readonly Image NotFolder = LinealImages.not_folder;
+            
+            public static readonly Image WWW = LinealImages.www;
+            
+            public static readonly Image Wifi = LinealImages.wifi;
         }
 
         public static class Fill
@@ -115,6 +121,8 @@ namespace Common_Library.Images
             public static readonly Image Folder = GradientImages.folder;
 
             public static readonly Image NotFolder = GradientImages.not_folder;
+            
+            public static readonly Image Wifi = GradientImages.wifi;
         }
 
         /*
@@ -130,6 +138,16 @@ namespace Common_Library.Images
         }
         */
 
+        public static class Blue
+        {
+            public static readonly Image Question = BlueImages.question;
+        }
+        
+        public static class Circular
+        {
+            public static readonly Image Wifi = CircularImages.wifi;
+        }
+        
         public static class Others
         {
             public static readonly Image Monitor = OtherImages.monitor;

@@ -1,5 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <assembly name="Common_Library">
+  <member name="M:Common_Library.FileSystem.Watcher.#ctor(System.String)">
+    <parameter name="path">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+  <member name="M:Common_Library.FileSystem.Watcher.#ctor(System.String,System.String)">
+    <parameter name="path">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+    <parameter name="filter">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
   <member name="M:Common_Library.Localization.CultureInfoFixed.#ctor(System.String)">
     <parameter name="name">
       <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
@@ -58,22 +71,37 @@
       <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
     </parameter>
   </member>
-  <member name="M:Common_Library.Types.Other.PathObject.GetFiles(System.String,System.IO.SearchOption)">
+  <member name="M:Common_Library.Types.Other.FSWatcher.GetFiles(System.String,System.IO.SearchOption)">
     <parameter name="searchPattern">
       <attribute ctor="M:JetBrains.Annotations.RegexPatternAttribute.#ctor" />
     </parameter>
   </member>
-  <member name="M:Common_Library.Types.Other.PathObject.GetFolders(System.String,System.IO.SearchOption)">
+  <member name="M:Common_Library.Types.Other.FSWatcher.GetFolders(System.String,System.IO.SearchOption)">
     <parameter name="searchPattern">
       <attribute ctor="M:JetBrains.Annotations.RegexPatternAttribute.#ctor" />
     </parameter>
   </member>
-  <member name="M:Common_Library.Types.Other.PathObject.GetFoldersAndFiles(System.String,System.String,System.IO.SearchOption,System.IO.SearchOption)">
+  <member name="M:Common_Library.Types.Other.FSWatcher.GetFoldersAndFiles(System.String,System.String,System.IO.SearchOption,System.IO.SearchOption)">
     <parameter name="foldersSearchPattern">
       <attribute ctor="M:JetBrains.Annotations.RegexPatternAttribute.#ctor" />
     </parameter>
     <parameter name="filesSearchPattern">
       <attribute ctor="M:JetBrains.Annotations.RegexPatternAttribute.#ctor" />
+    </parameter>
+  </member>
+  <member name="M:Common_Library.Utils.Browser.SeleniumUtils.WaitUntil``1(OpenQA.Selenium.IWebDriver,System.Func{OpenQA.Selenium.IWebDriver,``0})">
+    <parameter name="condition">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+  <member name="M:Common_Library.Utils.Browser.SeleniumUtils.WaitUntil``1(OpenQA.Selenium.IWebDriver,System.Func{OpenQA.Selenium.IWebDriver,``0},System.TimeSpan)">
+    <parameter name="condition">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+  <member name="M:Common_Library.Utils.Browser.SeleniumUtils.WaitUntil``1(OpenQA.Selenium.IWebDriver,System.Func{OpenQA.Selenium.IWebDriver,``0},System.TimeSpan,System.TimeSpan)">
+    <parameter name="condition">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
     </parameter>
   </member>
   <member name="M:Common_Library.Utils.RegexUtils.GetCaptures(System.String,System.String,System.Text.RegularExpressions.RegexOptions)">

@@ -40,7 +40,7 @@ namespace Common_Library.GUI.WinForms.ListBoxes
 
         protected override Boolean CheckValidFormatItem(Object item)
         {
-            if (item is PathObject path)
+            if (item is FSWatcher path)
             {
                 return path.IsValid();
             }
@@ -62,7 +62,7 @@ namespace Common_Library.GUI.WinForms.ListBoxes
             Graphics graphics = e.Graphics;
             Rectangle bounds = e.Bounds;
 
-            if (item is PathObject path && path.Recursive)
+            if (item is FSWatcher path && path.Recursive)
             {
                 graphics.DrawString("R", e.Font, Brushes.Red,
                     new Rectangle(bounds.Width - TextRenderer.MeasureText("R", e.Font).Width, bounds.Y, bounds.Width, bounds.Height));
@@ -76,7 +76,7 @@ namespace Common_Library.GUI.WinForms.ListBoxes
                 return;
             }
 
-            base.Draw(e, Items[e.Index] is PathObject path ? path.GetPathTypeIcon : null, null);
+            base.Draw(e, Items[e.Index] is FSWatcher path ? path.Icon : null, null);
         }
     }
 }

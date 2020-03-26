@@ -115,7 +115,7 @@ namespace Common_Library.GUI.WinForms.TextBoxes
                     return;
                 }
 
-                count = MathUtils.Range(count, 1, Int32.MaxValue, true);
+                count = MathUtils.ToRange(count, 1, Int32.MaxValue, true);
 
                 String text = Text;
                 Int32 selectionStart = SelectionStart;
@@ -152,8 +152,8 @@ namespace Common_Library.GUI.WinForms.TextBoxes
                 }
 
                 Text = text;
-                SelectionStart = MathUtils.Range(selectionStart);
-                SelectionLength = MathUtils.Range(selectionLength);
+                SelectionStart = MathUtils.ToRange(selectionStart);
+                SelectionLength = MathUtils.ToRange(selectionLength);
 
                 if (recursive)
                 {

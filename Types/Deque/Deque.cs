@@ -2,6 +2,7 @@
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
 using System.Linq;
+using Common_Library.Utils.Math;
 
 namespace Common_Library.Types.Deque
 {
@@ -17,7 +18,7 @@ namespace Common_Library.Types.Deque
         /// <typeparam name="T">The type of elements contained in the deque.</typeparam>
         [DebuggerDisplay("Count = {Count}, Capacity = {Capacity}")]
         [DebuggerTypeProxy(typeof(Deque<>.DebugView))]
-        public sealed class Deque<T> : Queue<T>, IList<T>, IReadOnlyList<T>
+        public sealed class Deque<T> : IList<T>, IReadOnlyList<T>
         {
             /// <summary>
             /// The default capacity.
@@ -105,7 +106,7 @@ namespace Common_Library.Types.Deque
             /// Gets the number of elements contained in this deque.
             /// </summary>
             /// <returns>The number of elements contained in this deque.</returns>
-            public new Int32 Count { get; private set; }
+            public Int32 Count { get; private set; }
 
             /// <summary>
             /// Initializes a new instance of the <see cref="Deque&lt;T&gt;"/> class with the specified capacity.
@@ -298,9 +299,19 @@ namespace Common_Library.Types.Deque
                 {
                 }
 
-                for (Int32 i = 0; i < count; i++)
+                if (count >= 0)
                 {
-                    AddToBack(Dequeue());
+                    for (Int32 i = 0; i < count; i++)
+                    {
+                        AddToBack(RemoveFromFront());
+                    }
+                }
+                else
+                {
+                    for (Int32 i = 0; i < count.Abs(); i++)
+                    {
+                        AddToFront(RemoveFromBack());
+                    }
                 }
             }
 
@@ -394,7 +405,7 @@ namespace Common_Library.Types.Deque
             /// <returns>
             /// A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.
             /// </returns>
-            public new IEnumerator<T> GetEnumerator()
+            public IEnumerator<T> GetEnumerator()
             {
                 Int32 count = Count;
                 for (Int32 i = 0; i != count; ++i)
@@ -827,7 +838,7 @@ namespace Common_Library.Types.Deque
             /// <summary>
             /// Removes all items from this deque.
             /// </summary>
-            public new void Clear()
+            public void Clear()
             {
                 _offset = 0;
                 Count = 0;
@@ -836,7 +847,7 @@ namespace Common_Library.Types.Deque
             /// <summary>
             /// Creates and returns a new array containing the elements in this deque.
             /// </summary>
-            public new T[] ToArray()
+            public T[] ToArray()
             {
                 T[] result = new T[Count];
                 ((ICollection<T>) this).CopyTo(result, 0);

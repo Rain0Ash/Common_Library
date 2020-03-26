@@ -106,7 +106,7 @@ namespace Common_Library.Utils.Math
 
         public static Double Round(Double number, Int32 digits = 0, RoundType roundType = RoundType.Banking)
         {
-            digits = Range(digits, 0, 15);
+            digits = ToRange(digits, 0, 15);
             return roundType switch
             {
                 RoundType.Banking => System.Math.Round(number, digits, MidpointRounding.ToEven),

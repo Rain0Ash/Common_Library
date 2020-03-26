@@ -25,7 +25,7 @@ namespace Common_Library.GUI.WinForms.RichTextBoxes
             }
             set
             {
-                _messages.MaximumLength = MathUtils.Range(value);
+                _messages.MaximumLength = MathUtils.ToRange(value);
                 UpdateLog();
             }
         }

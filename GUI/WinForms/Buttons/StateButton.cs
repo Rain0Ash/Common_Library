@@ -20,7 +20,7 @@ namespace Common_Library.GUI.WinForms.Buttons
             }
             set
             {
-                Int32 val = MathUtils.Range(value, 0, MaximumStates);
+                Int32 val = MathUtils.ToRange(value, 0, MaximumStates);
                 if (_state == val)
                 {
                     return;

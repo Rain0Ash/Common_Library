@@ -21,7 +21,7 @@ namespace Common_Library.GUI.WinForms.TextBoxes
             }
             set
             {
-                _defaultPort = MathUtils.Range(value, 1, 65535);
+                _defaultPort = MathUtils.ToRange(value, 1, 65535);
             }
         }
 

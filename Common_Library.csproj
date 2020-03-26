@@ -37,6 +37,7 @@
       <PackageReference Include="Microsoft.Data.Sqlite" Version="5.0.0-preview.2.20120.8" />
       <PackageReference Include="MySql.Data" Version="8.0.19" />
       <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+      <PackageReference Include="Selenium.WebDriver" Version="4.0.0-alpha05" />
       <PackageReference Include="System.Drawing.Common" Version="5.0.0-preview.1.20120.5" />
       <PackageReference Include="System.Drawing.Primitives" Version="4.3.0" />
       <PackageReference Include="System.IO.FileSystem.AccessControl" Version="5.0.0-preview.1.20120.5" />
@@ -60,6 +61,11 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Compile Update="Images\icons\circular\CircularImages.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>CircularImages.resx</DependentUpon>
+      </Compile>
       <Compile Update="Utils\Math\Primes.cs">
         <DependentUpon>PrimeUtils.cs</DependentUpon>
       </Compile>
@@ -75,6 +81,13 @@
       <Compile Update="Types\Other\Point.cs">
         <DependentUpon>Point.tt</DependentUpon>
       </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="Images\icons\circular\CircularImages.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>CircularImages.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
     </ItemGroup>
 
 </Project>

@@ -24,7 +24,7 @@ namespace Common_Library.GUI.WinForms.Labels
             }
             set
             {
-                Int32 val = MathUtils.Range(value, 0, MaximumValue);
+                Int32 val = MathUtils.ToRange(value, 0, MaximumValue);
                 if (_currentValue == val)
                 {
                     return;
@@ -87,7 +87,7 @@ namespace Common_Library.GUI.WinForms.Labels
 
         public void PerformStep()
         {
-            CurrentValue = MathUtils.Range(CurrentValue + Step, 0, MaximumValue, Loop);
+            CurrentValue = MathUtils.ToRange(CurrentValue + Step, 0, MaximumValue, Loop);
         }
 
         public CurrentMaxValueLabel()

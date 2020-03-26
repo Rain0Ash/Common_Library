@@ -7,26 +7,37 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Common_Library.Exceptions;
+using Common_Library.FileSystem;
+using Common_Library.FileSystem.Interfaces;
 using Common_Library.Utils.IO;
 using JetBrains.Annotations;
 
 namespace Common_Library.Types.Other
 {
-    public class PathObject
+    public class FSWatcher : IPathWatcher
     {
-        public static implicit operator String(PathObject path)
+        public static implicit operator String(FSWatcher path)
         {
             return path.ToString();
         }
 
         public String Path { get; }
         public PathType PathType { get; set; }
-
         public PathStatus PathStatus { get; set; }
+
+        private readonly FileSystemWatcherExtended _watcher;
+
+        public IReadOnlyFileSystemWatcher Watcher
+        {
+            get
+            {
+                return _watcher;
+            }
+        }
 
         public event Handlers.EmptyHandler RecursiveChanged;
         private Boolean _recursive;
-
         public Boolean Recursive
         {
             get
@@ -123,7 +134,7 @@ namespace Common_Library.Types.Other
             }
         }
 
-        public Image GetPathTypeIcon
+        public Image Icon
         {
             get
             {
@@ -139,8 +150,8 @@ namespace Common_Library.Types.Other
                 };
             }
         }
-
-        public PathObject(String path, PathType type = PathType.All, PathStatus status = PathStatus.All)
+        
+        public FSWatcher(String path, PathType type = PathType.All, PathStatus status = PathStatus.All)
         {
             if (!PathUtils.IsValidPath(path))
             {
@@ -150,6 +161,27 @@ namespace Common_Library.Types.Other
             Path = path;
             PathType = type;
             PathStatus = status;
+            
+            _watcher = new FileSystemWatcherExtended(Path)
+            {
+                EnableRaisingEvents = false,
+                IncludeSubdirectories = Recursive
+            };
+        }
+
+        private void OnRecursive_Changed()
+        {
+            _watcher.IncludeSubdirectories = Recursive;
+        }
+
+        public void StartWatch()
+        {
+            _watcher.StartWatch();
+        }
+
+        public void StopWatch()
+        {
+            _watcher.StopWatch();
         }
 
         public Boolean IsValid()
@@ -311,6 +343,11 @@ namespace Common_Library.Types.Other
         public override Int32 GetHashCode()
         {
             return Path.GetHashCode();
+        }
+
+        public void Dispose()
+        {
+            _watcher.Dispose();
         }
     }
 }

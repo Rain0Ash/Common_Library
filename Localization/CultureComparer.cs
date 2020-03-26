@@ -34,7 +34,7 @@ namespace Common_Library.Localization
 
         public Int32 GetLanguageOrderID(String code)
         {
-            return MathUtils.Range(Order.IndexOf(code.ToLower()));
+            return MathUtils.ToRange(Order.IndexOf(code.ToLower()));
         }
     }
 }
