@@ -9,7 +9,7 @@ namespace Common_Library.Workstation
     /// <summary>
     /// Provides detailed information about the host operating system.
     /// </summary>
-    public static partial class SoftwareInfo
+    public static partial class Software
     {
         private static String s_Edition;
 

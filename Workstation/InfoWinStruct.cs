@@ -13,7 +13,7 @@ namespace Common_Library.Workstation
     [SuppressMessage("ReSharper", "UnassignedField.Global")]
     [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
     [SuppressMessage("ReSharper", "NotAccessedField.Global")]
-    public static partial class HardwareInfo
+    public static partial class Hardware
     {
         public struct DEVMODE
         {
@@ -87,7 +87,7 @@ namespace Common_Library.Workstation
     [SuppressMessage("ReSharper", "UnassignedField.Global")]
     [SuppressMessage("ReSharper", "FieldCanBeMadeReadOnly.Local")]
     [SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
-    public static partial class SoftwareInfo
+    public static partial class Software
     {
         [DllImport("Kernel32.dll")]
         internal static extern Boolean GetProductInfo(

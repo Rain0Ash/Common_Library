@@ -5,5 +5,11 @@ using System;
 
 namespace Common_Library.Exceptions
 {
-    
+    public class CloneException : Exception
+    {
+        public CloneException(String message = null)
+            : base(message)
+        {
+        }
+    }
 }

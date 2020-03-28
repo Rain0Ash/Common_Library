@@ -72,6 +72,9 @@ namespace Common_Library.LongPath
             }
         }
 
+        /// <summary>
+        /// <inheritdoc cref="System.IO.FileInfo.Length"/>
+        /// </summary>
         public Int64 Length
         {
             get

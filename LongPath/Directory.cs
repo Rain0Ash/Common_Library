@@ -48,11 +48,19 @@ namespace Common_Library.LongPath
             return Common.GetAttributes(path);
         }
 
+        /// <summary>
+        /// <inheritdoc cref="System.IO.Directory.GetCurrentDirectory"/>
+        /// </summary>
         public static String GetCurrentDirectory()
         {
             return Path.RemoveLongPathPrefix(Path.NormalizeLongPath("."));
         }
 
+
+        /// <summary>
+        /// <inheritdoc cref="System.IO.Directory.Delete(string)"/>
+        /// <param name="recursive">Recursive delete</param>
+        /// </summary>
         public static void Delete(String path, Boolean recursive)
         {
             if (Common.IsRunningOnMono())
@@ -127,55 +135,8 @@ namespace Common_Library.LongPath
         }
 
         /// <summary>
-        ///     Deletes the specified empty directory.
+        /// <inheritdoc cref="System.IO.Directory.Delete(String)"/>
         /// </summary>
-        /// <param name="path">
-        ///      A <see cref="string"/> containing the path of the directory to delete.
-        /// </param>
-        /// <exception cref="ArgumentNullException">
-        ///     <paramref name="path"/> is <see langword="null"/>.
-        /// </exception>
-        /// <exception cref="ArgumentException">
-        ///     <paramref name="path"/> is an empty string (""), contains only white
-        ///     space, or contains one or more invalid characters as defined in
-        ///     <see cref="Common_Library.LongPath.Path.GetInvalidPathChars()"/>.
-        ///     <para>
-        ///         -or-
-        ///     </para>
-        ///     <paramref name="path"/> contains one or more components that exceed
-        ///     the drive-defined maximum length. For example, on Windows-based
-        ///     platforms, components must not exceed 255 characters.
-        /// </exception>
-        /// <exception cref="System.IO.PathTooLongException">
-        ///     <paramref name="path"/> exceeds the system-defined maximum length.
-        ///     For example, on Windows-based platforms, paths must not exceed
-        ///     32,000 characters.
-        /// </exception>
-        /// <exception cref="System.IO.DirectoryNotFoundException">
-        ///     <paramref name="path"/> could not be found.
-        /// </exception>
-        /// <exception cref="UnauthorizedAccessException">
-        ///     The caller does not have the required access permissions.
-        ///     <para>
-        ///         -or-
-        ///     </para>
-        ///     <paramref name="path"/> refers to a directory that is read-only.
-        /// </exception>
-        /// <exception cref="System.IO.IOException">
-        ///     <paramref name="path"/> is a file.
-        ///     <para>
-        ///         -or-
-        ///     </para>
-        ///     <paramref name="path"/> refers to a directory that is not empty.
-        ///     <para>
-        ///         -or-
-        ///     </para>
-        ///     <paramref name="path"/> refers to a directory that is in use.
-        ///     <para>
-        ///         -or-
-        ///     </para>
-        ///     <paramref name="path"/> specifies a device that is not ready.
-        /// </exception>
         public static void Delete(String path)
         {
             if (Common.IsRunningOnMono())
@@ -191,22 +152,8 @@ namespace Common_Library.LongPath
         }
 
         /// <summary>
-        ///     Returns a value indicating whether the specified path refers to an existing directory.
+        /// <inheritdoc cref="System.IO.Directory.Exists"/>
         /// </summary>
-        /// <param name="path">
-        ///     A <see cref="string"/> containing the path to check.
-        /// </param>
-        /// <returns>
-        ///     <see langword="true"/> if <paramref name="path"/> refers to an existing directory;
-        ///     otherwise, <see langword="false"/>.
-        /// </returns>
-        /// <remarks>
-        ///     Note that this method will return false if any error occurs while trying to determine
-        ///     if the specified directory exists. This includes situations that would normally result in
-        ///     thrown exceptions including (but not limited to); passing in a directory name with invalid
-        ///     or too many characters, an I/O error such as a failing or missing disk, or if the caller
-        ///     does not have Windows or Code Access Security (CAS) permissions to to read the directory.
-        /// </remarks>
         public static Boolean Exists(String path)
         {
             if (Common.IsRunningOnMono())
@@ -712,6 +659,9 @@ namespace Common_Library.LongPath
                    directoryName.Equals("..", StringComparison.OrdinalIgnoreCase);
         }
 
+        /// <summary>
+        /// <inheritdoc cref="System.IO.Directory.Move"/>
+        /// </summary>
         public static void Move(String sourcePath, String destinationPath)
         {
             if (Common.IsRunningOnMono())

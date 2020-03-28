@@ -41,5 +41,13 @@ namespace Common_Library.Utils
 
             return comboList.ToList();
         }
+
+        public static void AddRange<T>(this ICollection<T> collection, IEnumerable<T> items)
+        {
+            foreach (T item in items)
+            {
+                collection.Add(item);
+            }
+        }
     }
 }

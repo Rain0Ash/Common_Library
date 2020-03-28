@@ -3,7 +3,14 @@
 
 using System;
 
-namespace Common_Library.Exceptions
+namespace Common_Library.Interfaces
 {
+    public interface ICopyable : ICopyable<Object>
+    {
+    }
     
+    public interface ICopyable<out T>
+    {
+        public T Copy();
+    }
 }

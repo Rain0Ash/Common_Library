@@ -8,12 +8,13 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Common_Library.Exceptions;
-using Common_Library.FileSystem;
-using Common_Library.FileSystem.Interfaces;
+using Common_Library.Watchers.Interfaces;
 using Common_Library.Utils.IO;
+using Common_Library.Watchers.FileSystem;
+using Common_Library.Watchers.FileSystem.Interfaces;
 using JetBrains.Annotations;
 
-namespace Common_Library.Types.Other
+namespace Common_Library.Watchers
 {
     public class FSWatcher : IPathWatcher
     {
@@ -26,9 +27,9 @@ namespace Common_Library.Types.Other
         public PathType PathType { get; set; }
         public PathStatus PathStatus { get; set; }
 
-        private readonly FileSystemWatcherExtended _watcher;
+        private readonly IWatcher _watcher;
 
-        public IReadOnlyFileSystemWatcher Watcher
+        public IReadOnlyWatcher Watcher
         {
             get
             {
@@ -151,7 +152,7 @@ namespace Common_Library.Types.Other
             }
         }
         
-        public FSWatcher(String path, PathType type = PathType.All, PathStatus status = PathStatus.All)
+        public FSWatcher(String path, PathType type = PathType.All, PathStatus status = PathStatus.All, WatcherType watcher = WatcherType.None)
         {
             if (!PathUtils.IsValidPath(path))
             {
@@ -161,27 +162,42 @@ namespace Common_Library.Types.Other
             Path = path;
             PathType = type;
             PathStatus = status;
-            
-            _watcher = new FileSystemWatcherExtended(Path)
+        }
+        
+        public FSWatcher(String path, IWatcher watcher, PathType type = PathType.All, PathStatus status = PathStatus.All)
+            : this(path, type, status)
+        {
+            if (_watcher.Path != path)
             {
-                EnableRaisingEvents = false,
-                IncludeSubdirectories = Recursive
-            };
+                throw new ArgumentException("Watcher path need to equals path");
+            }
+            
+            _watcher = watcher;
         }
 
         private void OnRecursive_Changed()
         {
+            if (_watcher == null)
+            {
+                return;
+            }
+            
             _watcher.IncludeSubdirectories = Recursive;
         }
 
         public void StartWatch()
         {
+            if (_watcher == null)
+            {
+                throw new NotInitializedException("Watcher is not initialized");
+            }
+            
             _watcher.StartWatch();
         }
 
         public void StopWatch()
         {
-            _watcher.StopWatch();
+            _watcher?.StopWatch();
         }
 
         public Boolean IsValid()
@@ -229,90 +245,32 @@ namespace Common_Library.Types.Other
             return PathUtils.GetFullPath(Path);
         }
 
-        public IEnumerable<String> GetFolders()
+        public IEnumerable<String> GetEntries(FileType type = FileType.All)
         {
-            return GetFolders(new Regex(".*"), Recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
+            return GetEntries(new Regex(".*"), Recursive);
         }
 
-        public IEnumerable<String> GetFolders(SearchOption searchOption)
+        public IEnumerable<String> GetEntries(Boolean recursive, FileType type = FileType.All)
         {
-            return GetFolders(new Regex(".*"), searchOption);
+            return GetEntries(new Regex(".*"), recursive);
         }
 
-        public IEnumerable<String> GetFolders([RegexPattern] String searchPattern, SearchOption searchOption = SearchOption.TopDirectoryOnly)
+        public IEnumerable<String> GetEntries([NotNull][RegexPattern] String searchPattern, Boolean recursive = false, FileType type = FileType.All)
         {
-            return GetFolders(new Regex(String.IsNullOrEmpty(searchPattern) ? ".*" : searchPattern), searchOption);
+            return GetEntries(new Regex(String.IsNullOrEmpty(searchPattern) ? ".*" : searchPattern), recursive, type);
         }
 
-        public IEnumerable<String> GetFolders(Regex regex, SearchOption searchOption = SearchOption.TopDirectoryOnly)
+        public IEnumerable<String> GetEntries(Regex regex, Boolean recursive = false, FileType type = FileType.All)
         {
             regex ??= new Regex(".*");
             try
             {
-                return DirectoryUtils.EnumerateDirectories(Path, "*", searchOption)
-                    .Where(name => regex.IsMatch(name));
+                return DirectoryUtils.GetEntries(Path, recursive, type).Where(name => regex.IsMatch(name));
             }
             catch (Exception)
             {
                 return null;
             }
-        }
-
-        public IEnumerable<String> GetFiles()
-        {
-            return GetFiles(new Regex(".*"), Recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
-        }
-
-        public IEnumerable<String> GetFiles(SearchOption searchOption)
-        {
-            return GetFiles(new Regex(".*"), searchOption);
-        }
-
-        public IEnumerable<String> GetFiles([RegexPattern] String searchPattern, SearchOption searchOption = SearchOption.TopDirectoryOnly)
-        {
-            return GetFiles(new Regex(String.IsNullOrEmpty(searchPattern) ? ".*" : searchPattern), searchOption);
-        }
-
-        public IEnumerable<String> GetFiles(Regex regex, SearchOption searchOption = SearchOption.TopDirectoryOnly)
-        {
-            regex ??= new Regex(".*");
-            try
-            {
-                return DirectoryUtils.EnumerateFiles(Path, "*", searchOption)
-                    .Where(name => regex.IsMatch(name));
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-
-        public IEnumerable<String> GetFoldersAndFiles()
-        {
-            SearchOption searchOption = Recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
-            return GetFoldersAndFiles(searchOption, searchOption);
-        }
-
-        public IEnumerable<String> GetFoldersAndFiles(SearchOption searchOption)
-        {
-            return GetFoldersAndFiles(searchOption, searchOption);
-        }
-
-        public IEnumerable<String> GetFoldersAndFiles(SearchOption foldersSearchOption, SearchOption filesSearchOption)
-        {
-            return GetFolders(foldersSearchOption).Concat(GetFiles(filesSearchOption));
-        }
-
-        public IEnumerable<String> GetFoldersAndFiles([RegexPattern] String foldersSearchPattern, [RegexPattern] String filesSearchPattern, SearchOption foldersSearchOption,
-            SearchOption filesSearchOption)
-        {
-            return GetFolders(foldersSearchPattern, foldersSearchOption).Concat(GetFiles(filesSearchPattern, filesSearchOption));
-        }
-
-        public IEnumerable<String> GetFoldersAndFiles(Regex foldersSearchPattern, Regex filesSearchPattern, SearchOption foldersSearchOption,
-            SearchOption filesSearchOption)
-        {
-            return GetFolders(foldersSearchPattern, foldersSearchOption).Concat(GetFiles(filesSearchPattern, filesSearchOption));
         }
 
         public Byte[] ReadFileBytes(Boolean isThrow = false)
@@ -347,7 +305,7 @@ namespace Common_Library.Types.Other
 
         public void Dispose()
         {
-            _watcher.Dispose();
+            Watcher?.Dispose();
         }
     }
 }

@@ -5,12 +5,15 @@ using System;
 
 namespace Common_Library.Objects
 {
-    public interface IPauseable
+    public interface IEventPausable : IPausable
     {
         event Handlers.EmptyHandler Resumed;
         event Handlers.EmptyHandler Paused;
-
-        Boolean IsPaused { get; set; }
+    }
+    
+    public interface IPausable
+    {
+        Boolean IsPaused { get; }
 
         void Pause();
         void Resume();

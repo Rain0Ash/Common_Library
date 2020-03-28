@@ -5,32 +5,49 @@ using System;
 
 namespace Common_Library.Utils
 {
+    public enum TimeType
+    {
+        Milliseconds,
+        Seconds,
+        Minutes,
+        Hours,
+        Days
+    }
+    
     public static class TimeUtils
     {
         private static readonly DateTime UnixDate = new DateTime(1970, 1, 1, 0, 0, 0);
-
+        
         /// <summary>
         /// Return unix time in seconds
         /// </summary>
         public static Int64 UnixTime()
         {
-            TimeSpan timeSpan = DateTime.Now - UnixDate;
-            return (Int64) timeSpan.TotalSeconds;
+            return (Int64) (DateTime.Now - UnixDate).TotalSeconds;
         }
 
         /// <summary>
         /// Return unix time in seconds
         /// </summary>
-        /// <param name="milli">Return unix time in milliseconds</param>
-        public static Int64 UnixTime(Boolean milli)
+        /// <param name="type">Return unix time in this date type</param>
+        public static Int64 UnixTime(TimeType type)
         {
-            if (!milli)
-            {
-                return UnixTime();
-            }
+            return (Int64) GetTime(type);
+        }
 
-            TimeSpan timeSpan = DateTime.Now - UnixDate;
-            return (Int64) timeSpan.TotalMilliseconds;
+        public static Double GetTime(TimeType type)
+        {
+            TimeSpan time = DateTime.Now - UnixDate;
+            
+            return type switch
+            {
+                TimeType.Milliseconds => time.TotalMilliseconds,
+                TimeType.Seconds => time.TotalSeconds,
+                TimeType.Minutes => time.TotalMinutes,
+                TimeType.Hours => time.TotalHours,
+                TimeType.Days => time.TotalDays,
+                _ => throw new NotSupportedException()
+            };
         }
 
         public static Int64 UnixTime(this DateTime time)

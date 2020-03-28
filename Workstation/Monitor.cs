@@ -14,7 +14,7 @@ namespace Common_Library.Workstation
         public readonly Rectangle WorkingArea;
         public readonly Rectangle Bounds;
 
-        public HardwareInfo.DEVMODE DEVMODE { get; }
+        public Hardware.DEVMODE DEVMODE { get; }
 
         public String DeviceName
         {
@@ -33,7 +33,7 @@ namespace Common_Library.Workstation
         }
 
 
-        public Monitor(Int32 id, String name, Rectangle resolution, Rectangle workingArea, Rectangle bounds, HardwareInfo.DEVMODE devmode)
+        public Monitor(Int32 id, String name, Rectangle resolution, Rectangle workingArea, Rectangle bounds, Hardware.DEVMODE devmode)
         {
             ID = id;
             Name = name;

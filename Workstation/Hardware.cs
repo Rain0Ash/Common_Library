@@ -19,7 +19,7 @@ namespace Common_Library.Workstation
         Arm64
     }
 
-    public static partial class HardwareInfo
+    public static partial class Hardware
     {
         /// <summary>
         /// Retrieving Processor Id.

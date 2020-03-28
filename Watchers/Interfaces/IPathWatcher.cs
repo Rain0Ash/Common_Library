@@ -5,7 +5,7 @@ using System;
 using System.Drawing;
 using Common_Library.Utils.IO;
 
-namespace Common_Library.Types.Other
+namespace Common_Library.Watchers.Interfaces
 {
     public interface IPathWatcher : IDisposable
     {

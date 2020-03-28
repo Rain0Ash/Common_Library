@@ -5,8 +5,11 @@ using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Globalization;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
+using Common_Library.Exceptions;
+using Common_Library.Interfaces;
 using Common_Library.Utils.Math;
 
 namespace Common_Library.Utils
@@ -277,6 +280,27 @@ namespace Common_Library.Utils
         public static String ToByteString(this Byte[] data)
         {
             return data == null ? null : BitConverter.ToString(data).Replace("-", String.Empty);
+        }
+
+        public static T Clone<T>(this Object obj) where T : class
+        {
+            return obj switch
+            {
+                null => null,
+                ICloneable cloneable => cloneable.Clone<T>(),
+                _ => (T)obj.GetType().GetMethod("MemberwiseClone", BindingFlags.Instance | BindingFlags.NonPublic)?.Invoke(obj, null) ??
+                     throw new CloneException($"{obj.GetType()} is not have MemberwiseClone method")
+            };
+        }
+
+        public static T Clone<T>(this ICloneable cloneable)
+        {
+            if (cloneable.Clone() is T clone)
+            {
+                return clone;
+            }
+
+            throw new CloneException($"{cloneable.GetType()} is not {typeof(T)}");
         }
     }
 }

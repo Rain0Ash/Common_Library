@@ -8,9 +8,19 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using Common_Library.Workstation;
 
 namespace Common_Library.Utils.IO
 {
+    [Flags]
+    public enum FileType
+    {
+        None = 0,
+        Directories = 1,
+        Files = 2,
+        All = 3,
+    };
+    
     public static class DirectoryUtils
     {
         public static void CreateDirectory(String path)
@@ -120,52 +130,37 @@ namespace Common_Library.Utils.IO
         [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         private static extern Boolean FindNextFileW(IntPtr hFindFile, out WIN32_FIND_DATA lpFindFileData);
 
-        private enum EntryType
-        {
-            All = 0,
-            Directories = 1,
-            Files = 2
-        };
+        public const String AnySearchPattern = ".*";
 
-        public static IEnumerable<String> EnumerateDirectories(String path, String searchPattern = "*", SearchOption searchOption = SearchOption.TopDirectoryOnly)
+        public static IEnumerable<String> GetDirectories(String path, Boolean recursive)
         {
-            CheckErrors(path, searchPattern);
-            List<String> retValue = new List<String>();
-            Enumerate(path, searchPattern, searchOption, ref retValue, EntryType.Directories);
-            return retValue;
+            return GetDirectories(path, AnySearchPattern, recursive);
         }
 
-        public static IEnumerable<String> EnumerateFiles(String path, String searchPattern = "*", SearchOption searchOption = SearchOption.TopDirectoryOnly)
+        public static IEnumerable<String> GetDirectories(String path, String searchPattern = AnySearchPattern, Boolean recursive = false)
         {
-            CheckErrors(path, searchPattern);
-            List<String> retValue = new List<String>();
-            Enumerate(path, searchPattern, searchOption, ref retValue, EntryType.Files);
-            return retValue;
+            return GetEntries(path, searchPattern, recursive, FileType.Directories);
         }
 
-
-        public static IEnumerable<String> EnumerateFileSystemEntries(String path, String searchPattern = "*", SearchOption searchOption = SearchOption.TopDirectoryOnly)
+        public static IEnumerable<String> GetFiles(String path, Boolean recursive)
         {
-            CheckErrors(path, searchPattern);
-            List<String> retValue = new List<String>();
-            Enumerate(path, searchPattern, searchOption, ref retValue, EntryType.All);
-            return retValue;
+            return GetFiles(path, AnySearchPattern, recursive);
+        }
+        
+        public static IEnumerable<String> GetFiles(String path, String searchPattern = AnySearchPattern, Boolean recursive = false)
+        {
+            return GetEntries(path, searchPattern, recursive, FileType.Files);
         }
 
         // ReSharper disable once ParameterOnlyUsedForPreconditionCheck.Local
-        private static void CheckErrors(String path, String searchPattern)
+        private static void CheckErrors(String path)
         {
-            if (path.Trim() == "")
+            if (path.Trim() == String.Empty)
             {
                 throw new ArgumentException();
             }
 
-            if (searchPattern == null)
-            {
-                throw new ArgumentNullException();
-            }
-
-            if (!Directory.Exists(path))
+            if (!LongPath.Directory.Exists(path))
             {
                 throw new DirectoryNotFoundException();
             }
@@ -184,76 +179,74 @@ namespace Common_Library.Utils.IO
             }
         }
 
-        private static void Enumerate(String path, String searchPattern, SearchOption searchOption, ref List<String> retValue, EntryType entryType)
+        public static IEnumerable<String> GetEntries([NotNull] String path, Boolean recursive, FileType type = FileType.All)
         {
+            return GetEntries(path, AnySearchPattern, recursive, type);
+        }
+
+        public static IEnumerable<String> GetEntries([NotNull] String path, [NotNull][JetBrains.Annotations.RegexPattern] String searchPattern = AnySearchPattern, Boolean recursive = false, FileType type = FileType.All)
+        {
+            return GetEntries(path, new Regex(String.IsNullOrEmpty(searchPattern) ? ".*" : searchPattern), recursive, type);
+        }
+
+        public static IEnumerable<String> GetEntries([NotNull] String path, Regex regex, Boolean recursive = false, FileType type = FileType.All)
+        {
+            if (type == FileType.None)
+            {
+                yield break;
+            }
+            
+            CheckErrors(path);
             if (path.Last() != '\\')
             {
                 path += "\\";
             }
 
-            AdjustSearchPattern(ref path, ref searchPattern);
-            searchPattern = searchPattern.Replace("*.*", "*");
-            Regex rx = new Regex(
-                "^" + Regex.Escape(path) + Regex.Escape(searchPattern)
-                    .Replace("\\*", ".*")
-                    .Replace("\\?", ".") + "$",
-                RegexOptions.IgnoreCase);
-            IntPtr hFile = FindFirstFileW(path + "*", out WIN32_FIND_DATA findData);
-            List<String> subDirs = new List<String>();
-            if ((IntPtr.Size == 4 ? hFile.ToInt32() : hFile.ToInt64()) != -1)
+            IntPtr handle = FindFirstFileW(path + "*", out WIN32_FIND_DATA data);
+
+            try
             {
+                if ((Environment.Is64BitProcess ? handle.ToInt64() : handle.ToInt32()) == -1)
+                {
+                    yield break;
+                }
+                
                 do
                 {
-                    if (findData.cFileName == "." || findData.cFileName == "..")
+                    if (data.cFileName == "." || data.cFileName == "..")
                     {
                         continue;
                     }
-
-                    if ((findData.dwFileAttributes & (UInt32) FileAttributes.Directory) == (UInt32) FileAttributes.Directory)
+                    
+                    if ((data.dwFileAttributes & (UInt32) FileAttributes.Directory) == (UInt32) FileAttributes.Directory)
                     {
-                        subDirs.Add(path + findData.cFileName);
-                        if ((entryType == EntryType.Directories || entryType == EntryType.All) && rx.IsMatch(path + findData.cFileName))
+                        if (recursive)
                         {
-                            retValue.Add(path + findData.cFileName);
+                            foreach (String entry in GetEntries(path + data.cFileName, regex, true, type))
+                            {
+                                yield return entry;
+                            }
+                        }
+
+                        if (type.HasFlag(FileType.Directories) && regex.IsMatch(path + data.cFileName))
+                        {
+                            yield return path + data.cFileName;
                         }
                     }
                     else
                     {
-                        if ((entryType == EntryType.Files || entryType == EntryType.All) && rx.IsMatch(path + findData.cFileName))
+                        if (type.HasFlag(FileType.Files) && regex.IsMatch(path + data.cFileName))
                         {
-                            retValue.Add(path + findData.cFileName);
+                            yield return path + data.cFileName;
                         }
                     }
-                } while (FindNextFileW(hFile, out findData));
-
-                if (searchOption == SearchOption.AllDirectories)
-                {
-                    foreach (String subdir in subDirs)
-                    {
-                        Enumerate(subdir, searchPattern, searchOption, ref retValue, entryType);
-                    }
-                }
+                    
+                    
+                } while (FindNextFileW(handle, out data));
             }
-
-            FindClose(hFile);
-        }
-
-        private static void AdjustSearchPattern(ref String path, ref String searchPattern)
-        {
-            if (path.Last() != '\\')
+            finally
             {
-                path += "\\";
-            }
-
-            if (searchPattern.Contains("\\"))
-            {
-                path = (path + searchPattern).Substring(0, (path + searchPattern).LastIndexOf("\\", StringComparison.Ordinal) + 1);
-                searchPattern = searchPattern.Substring(searchPattern.IndexOf("\\", StringComparison.Ordinal) + 1);
-            }
-
-            if (searchPattern == "*.*")
-            {
-                searchPattern = "*";
+                FindClose(handle);
             }
         }
     }

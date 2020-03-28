@@ -3,11 +3,10 @@
 
 using System;
 using System.Drawing;
-using System.IO;
 using Common_Library.Utils.IO;
-using Common_Library.Utils.Network;
+using Common_Library.Watchers.Interfaces;
 
-namespace Common_Library.Types.Other
+namespace Common_Library.Watchers
 {
     public class UrlWatcher : IPathWatcher
     {

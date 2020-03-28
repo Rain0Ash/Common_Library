@@ -51,7 +51,7 @@ namespace Common_Library.Workstation
         Bit64
     }
 
-    public static partial class SoftwareInfo
+    public static partial class Software
     {
         public struct OSData
         {
@@ -67,10 +67,10 @@ namespace Common_Library.Workstation
 
         public static SoftwareArchitecture GetSoftwareArchitecture()
         {
-            return (IntPtr.Size * 8) switch
+            return IntPtr.Size switch
             {
-                64 => SoftwareArchitecture.Bit64,
-                32 => SoftwareArchitecture.Bit32,
+                8 => SoftwareArchitecture.Bit64,
+                4 => SoftwareArchitecture.Bit32,
                 _ => SoftwareArchitecture.Unknown
             };
         }
