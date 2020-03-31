@@ -151,7 +151,7 @@ namespace System.Collections.Generic
 
         public void Swap(Int32 index1, Int32 index2)
         {
-            ListUtils.Swap(ref _orderList, index1, index2);
+            _orderList.Swap(index1, index2);
         }
 
         public new void Remove(TKey key)

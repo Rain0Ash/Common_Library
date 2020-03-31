@@ -9,7 +9,7 @@ namespace Common_Library.Utils.IO
     {
         String GetConsoleText(IFormatProvider provider = null)
         {
-            return this.Convert(provider);
+            return this.GetString(provider);
         }
 
         void ToConsole(Boolean newLine = true, IFormatProvider provider = null)

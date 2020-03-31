@@ -67,7 +67,7 @@ namespace Common_Library.Utils.Math
 
         public static Int32 GetDigitsAfterPoint<T>(T value)
         {
-            String[] splitted = value.Convert(CultureInfo.InvariantCulture).Split('.');
+            String[] splitted = value.GetString(CultureInfo.InvariantCulture).Split('.');
 
             return splitted.Length <= 1 ? 0 : splitted[1].Length;
         }

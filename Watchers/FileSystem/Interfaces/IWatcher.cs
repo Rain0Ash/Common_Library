@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using Common_Library.Watchers.Interfaces;
 
 namespace Common_Library.Watchers.FileSystem.Interfaces
 {

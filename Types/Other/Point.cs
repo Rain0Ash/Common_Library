@@ -3,7 +3,6 @@
 
 using System;
 using System.Runtime.CompilerServices;
-using Common_Library.Utils.Math;
 
 namespace Common_Library.Types.Other
 {

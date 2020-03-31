@@ -3,17 +3,20 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using Common_Library.Exceptions;
-using Common_Library.Interfaces;
 using Common_Library.Utils.Math;
 
 namespace Common_Library.Utils
 {
+    [SuppressMessage("ReSharper", "UnusedParameter.Global")]
     public static class ConvertUtils
     {
         public static T Convert<T>(this Object obj)
@@ -26,6 +29,16 @@ namespace Common_Library.Utils
         {
             TryConvert(input, out T value);
             return value;
+        }
+        
+        public static IEnumerable<T> Convert<T>(this IEnumerable source)
+        {
+            return source.Cast<T>();
+        }
+        
+        public static IEnumerable<T> TryConvert<T>(this IEnumerable source)
+        {
+            return source.OfType<T>();
         }
 
         #region DecimalConvert
@@ -210,11 +223,198 @@ namespace Common_Library.Utils
             return input == null ? null : encoding.GetBytes(input);
         }
 
-        public static String Convert(this Object obj, IFormatProvider info = null)
+        #region ToString
+
+        public static String GetString(this Object obj)
         {
-            return System.Convert.ToString(obj, info ?? CultureInfo.InvariantCulture);
+            return GetString(obj, CultureInfo.InvariantCulture);
+        }
+        
+        public static String GetString(this Object value, IFormatProvider provider, Boolean escape = false)
+        {
+            return value switch
+            {
+                null => null,
+                Char chr => escape ? $"\'{chr.GetString(provider)}\'" : chr.GetString(provider), 
+                String str => escape ? $"\"{str}\"" : str,
+                IDictionary id => id.GetString(provider),
+                IEnumerable ie => ie.GetString(provider),
+                IFormattable formattable => formattable.ToString(null, provider),
+                IConvertible ic => ic.ToString(provider),
+                _ => value.ToString()
+            };
         }
 
+        public static String GetString(this Boolean value)
+        {
+            return value.ToString();
+        }
+        
+        public static String GetString(this Boolean value, IFormatProvider provider)
+        {
+            return value.ToString();
+        }
+
+        public static String GetString(this Char value)
+        {
+            return Char.ToString(value);
+        }
+
+        public static String GetString(this Char value, IFormatProvider provider)
+        {
+            return Char.ToString(value);
+        }
+        
+        public static String GetString(this SByte value)
+        {
+            return value.ToString(CultureInfo.InvariantCulture);
+        }
+        
+        public static String GetString(this SByte value, IFormatProvider provider)
+        {
+            return value.ToString(provider);
+        }
+
+        public static String GetString(this Byte value)
+        {
+            return value.ToString(CultureInfo.InvariantCulture);
+        }
+
+        public static String GetString(this Byte value, IFormatProvider provider)
+        {
+            return value.ToString(provider);
+        }
+
+        public static String GetString(this Int16 value)
+        {
+            return value.ToString(CultureInfo.InvariantCulture);
+        }
+
+        public static String GetString(this Int16 value, IFormatProvider provider)
+        {
+            return value.ToString(provider);
+        }
+
+                public static String GetString(this UInt16 value)
+        {
+            return value.ToString(CultureInfo.InvariantCulture);
+        }
+
+                public static String GetString(this UInt16 value, IFormatProvider provider)
+        {
+            return value.ToString(provider);
+        }
+
+        public static String GetString(this Int32 value)
+        {
+            return value.ToString(CultureInfo.InvariantCulture);
+        }
+
+        public static String GetString(this Int32 value, IFormatProvider provider)
+        {
+            return value.ToString(provider);
+        }
+
+                public static String GetString(this UInt32 value)
+        {
+            return value.ToString(CultureInfo.InvariantCulture);
+        }
+
+                public static String GetString(this UInt32 value, IFormatProvider provider)
+        {
+            return value.ToString(provider);
+        }
+
+        public static String GetString(this Int64 value)
+        {
+            return value.ToString(CultureInfo.InvariantCulture);
+        }
+
+        public static String GetString(this Int64 value, IFormatProvider provider)
+        {
+            return value.ToString(provider);
+        }
+
+        public static String GetString(this UInt64 value)
+        {
+            return value.ToString(CultureInfo.InvariantCulture);
+        }
+
+        public static String GetString(UInt64 value, IFormatProvider provider)
+        {
+            return value.ToString(provider);
+        }
+
+        public static String GetString(this Single value)
+        {
+            return value.ToString(CultureInfo.InvariantCulture);
+        }
+
+        public static String GetString(this Single value, IFormatProvider provider)
+        {
+            return value.ToString(provider);
+        }
+
+        public static String GetString(this Double value)
+        {
+            return value.ToString(CultureInfo.InvariantCulture);
+        }
+
+        public static String GetString(this Double value, IFormatProvider provider)
+        {
+            return value.ToString(provider);
+        }
+
+        public static String GetString(this Decimal value)
+        {
+            return value.ToString(CultureInfo.InvariantCulture);
+        }
+
+        public static String GetString(this Decimal value, IFormatProvider provider)
+        {
+            return value.ToString(provider);
+        }
+
+        public static String GetString(this DateTime value)
+        {
+            return value.ToString(CultureInfo.InvariantCulture);
+        }
+
+        public static String GetString(this DateTime value, IFormatProvider provider)
+        {
+            return value.ToString(provider);
+        }
+        
+        public static String GetString(this String value)
+        {
+            return value;
+        }
+        
+        public static String GetString(this String value, IFormatProvider provider)
+        {
+            return value;
+        }
+
+        public static String GetString(this IEnumerable source)
+        {
+            return GetString(source, CultureInfo.InvariantCulture);
+        }
+
+        [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
+        public static String GetString(this IEnumerable source, IFormatProvider provider)
+        {
+            return source switch
+            {
+                null => null,
+                String str => str,
+                IDictionary dict => $"{{{String.Join(", ", dict.Keys.Cast<Object>().Select(key => $"{key.GetString(provider, true)} : {dict[key].GetString(provider, true)}"))}}}",
+                IEnumerable<IEnumerable> jagged => $"[{String.Join(", ", jagged.Select(e => e.GetString(provider, true)))}]",
+                _ => $"[{String.Join(", ", source.Cast<Object>().Select(item => item.GetString(provider, true)))}]"
+            };
+        }
+        
+        #endregion
+        
         public static Boolean TryConvert<T>(this String input, out T value)
         {
             try

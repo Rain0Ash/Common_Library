@@ -4,7 +4,6 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Common_Library.Exceptions;
@@ -34,6 +33,35 @@ namespace Common_Library.Watchers
             get
             {
                 return _watcher;
+            }
+        }
+
+        public TimeSpan? Polling
+        {
+            get
+            {
+                CheckWatcher();
+
+                if (_watcher is IPoller poller)
+                {
+                    return poller.Polling;
+                }
+                
+                return null;
+            }
+            set
+            {
+                CheckWatcher();
+
+                if (!(_watcher is IPoller poller))
+                {
+                    return;
+                }
+
+                if (value != null)
+                {
+                    poller.Polling = value.Value;
+                }
             }
         }
 
@@ -162,6 +190,8 @@ namespace Common_Library.Watchers
             Path = path;
             PathType = type;
             PathStatus = status;
+
+            _watcher = FileSystem.Watcher.Factory(watcher, Path);
         }
         
         public FSWatcher(String path, IWatcher watcher, PathType type = PathType.All, PathStatus status = PathStatus.All)
@@ -175,6 +205,14 @@ namespace Common_Library.Watchers
             _watcher = watcher;
         }
 
+        private void CheckWatcher()
+        {
+            if (_watcher == null)
+            {
+                throw new NotInitializedException("Watcher is not initialized");
+            }
+        }
+        
         private void OnRecursive_Changed()
         {
             if (_watcher == null)
@@ -187,10 +225,7 @@ namespace Common_Library.Watchers
 
         public void StartWatch()
         {
-            if (_watcher == null)
-            {
-                throw new NotInitializedException("Watcher is not initialized");
-            }
+            CheckWatcher();
             
             _watcher.StartWatch();
         }
@@ -245,22 +280,32 @@ namespace Common_Library.Watchers
             return PathUtils.GetFullPath(Path);
         }
 
-        public IEnumerable<String> GetEntries(FileType type = FileType.All)
+        public IEnumerable<String> GetEntries()
         {
-            return GetEntries(new Regex(".*"), Recursive);
+            return GetEntries(PathType);
+        }
+        
+        public IEnumerable<String> GetEntries(PathType type)
+        {
+            return GetEntries(type, Recursive);
+        }
+        
+        public IEnumerable<String> GetEntries(Boolean recursive)
+        {
+            return GetEntries(PathType, recursive);
+        }
+        
+        public IEnumerable<String> GetEntries(PathType type, Boolean recursive)
+        {
+            return GetEntries(new Regex(".*"), recursive, type);
         }
 
-        public IEnumerable<String> GetEntries(Boolean recursive, FileType type = FileType.All)
-        {
-            return GetEntries(new Regex(".*"), recursive);
-        }
-
-        public IEnumerable<String> GetEntries([NotNull][RegexPattern] String searchPattern, Boolean recursive = false, FileType type = FileType.All)
+        public IEnumerable<String> GetEntries([NotNull][RegexPattern] String searchPattern, Boolean recursive = false, PathType type = PathType.All)
         {
             return GetEntries(new Regex(String.IsNullOrEmpty(searchPattern) ? ".*" : searchPattern), recursive, type);
         }
 
-        public IEnumerable<String> GetEntries(Regex regex, Boolean recursive = false, FileType type = FileType.All)
+        public IEnumerable<String> GetEntries(Regex regex, Boolean recursive = false, PathType type = PathType.All)
         {
             regex ??= new Regex(".*");
             try

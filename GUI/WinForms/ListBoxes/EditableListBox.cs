@@ -2,6 +2,7 @@
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
 using System;
+using System.Linq;
 using System.Windows.Forms;
 using Common_Library.Utils;
 
@@ -15,12 +16,7 @@ namespace Common_Library.GUI.WinForms.ListBoxes
         {
             switch (e.KeyCode)
             {
-                case Keys.Delete:
-                    if (!ActionType.HasFlag(ActionType.Remove))
-                    {
-                        return;
-                    }
-
+                case Keys.Delete when ActionType.HasFlag(ActionType.Remove):
                     try
                     {
                         foreach (Int32 index in SelectedIndices)
@@ -30,11 +26,25 @@ namespace Common_Library.GUI.WinForms.ListBoxes
                     }
                     catch (Exception)
                     {
-                        //ignore
+                        //ignored
                     }
 
                     e.Handled = true;
                     return;
+                case Keys.Up when ActionType.HasFlag(ActionType.Swap) && e.Shift:
+                    foreach (Int32 index in SelectedIndices.OfType<Int32>().Sort())
+                    {
+                        ListUtils.TrySwap(Items, index, index - 1);
+                    }
+                    
+                    break;
+                case Keys.Down when ActionType.HasFlag(ActionType.Swap) && e.Shift:
+                    foreach (Int32 index in SelectedIndices.OfType<Int32>().Sort())
+                    {
+                        ListUtils.TrySwap(Items, index, index + 1);
+                    }
+                    
+                    break;
                 default:
                     break;
             }

@@ -73,12 +73,12 @@
       <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
     </parameter>
   </member>
-  <member name="M:Common_Library.Utils.IO.DirectoryUtils.GetEntries(System.String,System.Boolean,Common_Library.Utils.IO.FileType)">
+  <member name="M:Common_Library.Utils.IO.DirectoryUtils.GetDirectories(System.String,System.Boolean)">
     <parameter name="path">
       <attribute ctor="M:System.Diagnostics.CodeAnalysis.NotNullAttribute.#ctor" />
     </parameter>
   </member>
-  <member name="M:Common_Library.Utils.IO.DirectoryUtils.GetEntries(System.String,System.String,System.Boolean,Common_Library.Utils.IO.FileType)">
+  <member name="M:Common_Library.Utils.IO.DirectoryUtils.GetDirectories(System.String,System.String,System.Boolean)">
     <parameter name="path">
       <attribute ctor="M:System.Diagnostics.CodeAnalysis.NotNullAttribute.#ctor" />
     </parameter>
@@ -87,9 +87,37 @@
       <attribute ctor="M:JetBrains.Annotations.RegexPatternAttribute.#ctor" />
     </parameter>
   </member>
-  <member name="M:Common_Library.Utils.IO.DirectoryUtils.GetEntries(System.String,System.Text.RegularExpressions.Regex,System.Boolean,Common_Library.Utils.IO.FileType)">
+  <member name="M:Common_Library.Utils.IO.DirectoryUtils.GetEntries(System.String,System.Boolean,Common_Library.Utils.IO.PathType)">
     <parameter name="path">
       <attribute ctor="M:System.Diagnostics.CodeAnalysis.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+  <member name="M:Common_Library.Utils.IO.DirectoryUtils.GetEntries(System.String,System.String,System.Boolean,Common_Library.Utils.IO.PathType)">
+    <parameter name="path">
+      <attribute ctor="M:System.Diagnostics.CodeAnalysis.NotNullAttribute.#ctor" />
+    </parameter>
+    <parameter name="searchPattern">
+      <attribute ctor="M:System.Diagnostics.CodeAnalysis.NotNullAttribute.#ctor" />
+      <attribute ctor="M:JetBrains.Annotations.RegexPatternAttribute.#ctor" />
+    </parameter>
+  </member>
+  <member name="M:Common_Library.Utils.IO.DirectoryUtils.GetEntries(System.String,System.Text.RegularExpressions.Regex,System.Boolean,Common_Library.Utils.IO.PathType)">
+    <parameter name="path">
+      <attribute ctor="M:System.Diagnostics.CodeAnalysis.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+  <member name="M:Common_Library.Utils.IO.DirectoryUtils.GetFiles(System.String,System.Boolean)">
+    <parameter name="path">
+      <attribute ctor="M:System.Diagnostics.CodeAnalysis.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+  <member name="M:Common_Library.Utils.IO.DirectoryUtils.GetFiles(System.String,System.String,System.Boolean)">
+    <parameter name="path">
+      <attribute ctor="M:System.Diagnostics.CodeAnalysis.NotNullAttribute.#ctor" />
+    </parameter>
+    <parameter name="searchPattern">
+      <attribute ctor="M:System.Diagnostics.CodeAnalysis.NotNullAttribute.#ctor" />
+      <attribute ctor="M:JetBrains.Annotations.RegexPatternAttribute.#ctor" />
     </parameter>
   </member>
   <member name="M:Common_Library.Utils.RegexUtils.GetCaptures(System.String,System.String,System.Text.RegularExpressions.RegexOptions)">
@@ -169,7 +197,7 @@
       <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
     </parameter>
   </member>
-  <member name="M:Common_Library.Watchers.FSWatcher.GetEntries(System.String,System.Boolean,Common_Library.Utils.IO.FileType)">
+  <member name="M:Common_Library.Watchers.FSWatcher.GetEntries(System.String,System.Boolean,Common_Library.Utils.IO.PathType)">
     <parameter name="searchPattern">
       <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
       <attribute ctor="M:JetBrains.Annotations.RegexPatternAttribute.#ctor" />

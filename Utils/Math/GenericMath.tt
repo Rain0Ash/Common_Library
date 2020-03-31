@@ -203,9 +203,14 @@ namespace Common_Library.Utils.Math
 
     void RangeFunc(String type)
     {
-        WriteLine($"\t\tpublic static IEnumerable<{type}> {nameof(Range)}({type} start = 0, {type} stop = {type}.MaxValue, {type} step = 1)");
+        WriteLine($"\t\tpublic static IEnumerable<{type}> {nameof(Range)}({type} stop)");
         WriteLine("\t\t{");
-        WriteLine($"\t\t\tfor ({type} i = start; start < stop; start += step)");
+        WriteLine($"\t\t\treturn {nameof(Range)}({(IsSmallType(type) ? $"({type})" : String.Empty)}0, stop);");
+        WriteLine("\t\t}");
+        WriteLine(String.Empty);
+        WriteLine($"\t\tpublic static IEnumerable<{type}> {nameof(Range)}({type} start, {type} stop, {type} step = 1)");
+        WriteLine("\t\t{");
+        WriteLine($"\t\t\tfor ({type} i = start; i < stop; i += step)");
         WriteLine("\t\t\t{");
         WriteLine("\t\t\t\tyield return i;");
         WriteLine("\t\t\t}");

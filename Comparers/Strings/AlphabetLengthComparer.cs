@@ -2,24 +2,31 @@
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Common_Library.Comparers
 {
-    public class AlphabetLengthComparer : System.Collections.IComparer
+    public class AlphabetLengthComparer : IComparer, IComparer<String>
     {
         public Int32 Compare(Object? x, Object? y)
+        {
+            return Compare(x?.ToString(), y?.ToString());
+        }
+
+        public Int32 Compare(String x, String y)
         {
             if (x == null || y == null)
             {
                 return -2;
             }
 
-            if (x.ToString().Length == y.ToString().Length)
+            if (x.Length == y.Length)
             {
-                return String.CompareOrdinal(x.ToString(), y.ToString());
+                return String.CompareOrdinal(x, y);
             }
 
-            if (x.ToString().Length > y.ToString().Length)
+            if (x.Length > y.Length)
             {
                 return 1;
             }

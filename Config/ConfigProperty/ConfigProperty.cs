@@ -8,7 +8,7 @@ using Common_Library.Utils;
 
 namespace Common_Library.Config
 {
-    public class ConfigProperty<T> : ConfigPropertyBase, IConfigProperty<T>
+    public class ConfigProperty<T> : ConfigPropertyBase, IConfigProperty<T>, IFormattable
     {
         public static implicit operator T(ConfigProperty<T> property)
         {
@@ -146,7 +146,12 @@ namespace Common_Library.Config
 
         public override String ToString()
         {
-            return GetValue().Convert();
+            return GetValue().GetString();
+        }
+
+        public String ToString(String? format, IFormatProvider? provider)
+        {
+            return GetValue().GetString(provider);
         }
     }
 

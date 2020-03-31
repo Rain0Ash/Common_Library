@@ -2,6 +2,7 @@
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Common_Library.Utils
@@ -25,18 +26,44 @@ namespace Common_Library.Utils
             return false;
         }
 
-        public static void Swap<T>(ref List<T> source, Int32 inx1, Int32 inx2)
+        public static void Swap(IList source, Int32 inx1, Int32 inx2)
+        {
+            Object temp = source[inx1];
+            source[inx1] = source[inx2];
+            source[inx2] = temp;
+        }
+        
+        public static Boolean TrySwap(IList source, Int32 inx1, Int32 inx2)
+        {
+            try
+            {
+                Swap(source, inx1, inx2);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public static void Swap<T>(this IList<T> source, Int32 inx1, Int32 inx2)
         {
             T temp = source[inx1];
             source[inx1] = source[inx2];
             source[inx2] = temp;
         }
-
-        public static void Swap<T>(ref IList<T> source, Int32 inx1, Int32 inx2)
+        
+        public static Boolean TrySwap<T>(this IList<T> source, Int32 inx1, Int32 inx2)
         {
-            T temp = source[inx1];
-            source[inx1] = source[inx2];
-            source[inx2] = temp;
+            try
+            {
+                Swap(source, inx1, inx2);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

@@ -2,7 +2,6 @@
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
 using System;
-using System.Collections.ObjectModel;
 using System.IO;
 
 namespace Common_Library.Watchers.FileSystem.Interfaces

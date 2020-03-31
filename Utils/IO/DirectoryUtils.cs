@@ -7,20 +7,11 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text.RegularExpressions;
-using Common_Library.Workstation;
 
 namespace Common_Library.Utils.IO
 {
-    [Flags]
-    public enum FileType
-    {
-        None = 0,
-        Directories = 1,
-        Files = 2,
-        All = 3,
-    };
-    
     public static class DirectoryUtils
     {
         public static void CreateDirectory(String path)
@@ -90,7 +81,7 @@ namespace Common_Library.Utils.IO
                 }
                 catch (Exception)
                 {
-                    //ignore
+                    //ignored
                 }
             }
         }
@@ -102,9 +93,9 @@ namespace Common_Library.Utils.IO
         private struct WIN32_FIND_DATA
         {
             public UInt32 dwFileAttributes;
-            public System.Runtime.InteropServices.ComTypes.FILETIME ftCreationTime;
-            public System.Runtime.InteropServices.ComTypes.FILETIME ftLastAccessTime;
-            public System.Runtime.InteropServices.ComTypes.FILETIME ftLastWriteTime;
+            public FILETIME ftCreationTime;
+            public FILETIME ftLastAccessTime;
+            public FILETIME ftLastWriteTime;
             public UInt32 nFileSizeHigh;
             public UInt32 nFileSizeLow;
             public UInt32 dwReserved0;
@@ -132,76 +123,54 @@ namespace Common_Library.Utils.IO
 
         public const String AnySearchPattern = ".*";
 
-        public static IEnumerable<String> GetDirectories(String path, Boolean recursive)
+        public static IEnumerable<String> GetDirectories([NotNull] String path, Boolean recursive)
         {
             return GetDirectories(path, AnySearchPattern, recursive);
         }
 
-        public static IEnumerable<String> GetDirectories(String path, String searchPattern = AnySearchPattern, Boolean recursive = false)
+        public static IEnumerable<String> GetDirectories([NotNull] String path, [NotNull][JetBrains.Annotations.RegexPattern] String searchPattern = AnySearchPattern, Boolean recursive = false)
         {
-            return GetEntries(path, searchPattern, recursive, FileType.Directories);
+            return GetEntries(path, searchPattern, recursive, PathType.Folder);
         }
 
-        public static IEnumerable<String> GetFiles(String path, Boolean recursive)
+        public static IEnumerable<String> GetFiles([NotNull] String path, Boolean recursive)
         {
             return GetFiles(path, AnySearchPattern, recursive);
         }
+
+        public static IEnumerable<String> GetFiles([NotNull] String path, [NotNull][JetBrains.Annotations.RegexPattern] String searchPattern = AnySearchPattern, Boolean recursive = false)
+        {
+            return GetEntries(path, searchPattern, recursive, PathType.File);
+        }
         
-        public static IEnumerable<String> GetFiles(String path, String searchPattern = AnySearchPattern, Boolean recursive = false)
-        {
-            return GetEntries(path, searchPattern, recursive, FileType.Files);
-        }
-
-        // ReSharper disable once ParameterOnlyUsedForPreconditionCheck.Local
-        private static void CheckErrors(String path)
-        {
-            if (path.Trim() == String.Empty)
-            {
-                throw new ArgumentException();
-            }
-
-            if (!LongPath.Directory.Exists(path))
-            {
-                throw new DirectoryNotFoundException();
-            }
-
-            try
-            {
-                LongPath.FileInfo fi = new LongPath.FileInfo(path);
-                if (fi.Length > 0)
-                {
-                    throw new IOException();
-                }
-            }
-            catch
-            {
-                // ignored
-            }
-        }
-
-        public static IEnumerable<String> GetEntries([NotNull] String path, Boolean recursive, FileType type = FileType.All)
+        public static IEnumerable<String> GetEntries([NotNull] String path, Boolean recursive, PathType type = PathType.All)
         {
             return GetEntries(path, AnySearchPattern, recursive, type);
         }
 
-        public static IEnumerable<String> GetEntries([NotNull] String path, [NotNull][JetBrains.Annotations.RegexPattern] String searchPattern = AnySearchPattern, Boolean recursive = false, FileType type = FileType.All)
+        public static IEnumerable<String> GetEntries([NotNull] String path, [NotNull][JetBrains.Annotations.RegexPattern]
+            String searchPattern = AnySearchPattern, Boolean recursive = false, PathType type = PathType.All)
         {
             return GetEntries(path, new Regex(String.IsNullOrEmpty(searchPattern) ? ".*" : searchPattern), recursive, type);
         }
 
-        public static IEnumerable<String> GetEntries([NotNull] String path, Regex regex, Boolean recursive = false, FileType type = FileType.All)
+        public static IEnumerable<String> GetEntries([NotNull] String path, Regex regex, Boolean recursive = false, PathType type = PathType.All)
         {
-            if (type == FileType.None)
+            if (type == PathType.None)
             {
                 yield break;
             }
-            
-            CheckErrors(path);
+
             if (path.Last() != '\\')
             {
                 path += "\\";
             }
 
+            if (!PathUtils.IsValidPath(path, type, PathStatus.Exist))
+            {
+                yield break;
+            }
+            
             IntPtr handle = FindFirstFileW(path + "*", out WIN32_FIND_DATA data);
 
             try
@@ -210,38 +179,38 @@ namespace Common_Library.Utils.IO
                 {
                     yield break;
                 }
-                
+
                 do
                 {
                     if (data.cFileName == "." || data.cFileName == "..")
                     {
                         continue;
                     }
-                    
+
+                    String entryname = path + data.cFileName;
+
                     if ((data.dwFileAttributes & (UInt32) FileAttributes.Directory) == (UInt32) FileAttributes.Directory)
                     {
                         if (recursive)
                         {
-                            foreach (String entry in GetEntries(path + data.cFileName, regex, true, type))
+                            foreach (String entry in GetEntries(entryname, regex, true, type))
                             {
                                 yield return entry;
                             }
                         }
-
-                        if (type.HasFlag(FileType.Directories) && regex.IsMatch(path + data.cFileName))
+                        
+                        if (type.HasFlag(PathType.Folder) && regex.IsMatch(entryname))
                         {
-                            yield return path + data.cFileName;
+                            yield return entryname;
                         }
                     }
                     else
                     {
-                        if (type.HasFlag(FileType.Files) && regex.IsMatch(path + data.cFileName))
+                        if (type.HasFlag(PathType.File) && regex.IsMatch(entryname))
                         {
-                            yield return path + data.cFileName;
+                            yield return entryname;
                         }
                     }
-                    
-                    
                 } while (FindNextFileW(handle, out data));
             }
             finally

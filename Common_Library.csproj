@@ -26,6 +26,7 @@
       <Folder Include="GUI\WinForms\Common" />
       <Folder Include="Resources\" />
       <Folder Include="Types\Queue" />
+      <Folder Include="Utils\Core\GC" />
     </ItemGroup>
 
     <ItemGroup>

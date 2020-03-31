@@ -10,89 +10,144 @@ namespace Common_Library.Utils.Math
 {   
     public static partial class MathUtils
     {
-		public static IEnumerable<SByte> Range(SByte start = 0, SByte stop = SByte.MaxValue, SByte step = 1)
+		public static IEnumerable<SByte> Range(SByte stop)
 		{
-			for (SByte i = start; start < stop; start += step)
+			return Range((SByte)0, stop);
+		}
+
+		public static IEnumerable<SByte> Range(SByte start, SByte stop, SByte step = 1)
+		{
+			for (SByte i = start; i < stop; i += step)
 			{
 				yield return i;
 			}
 		}
 
-		public static IEnumerable<Byte> Range(Byte start = 0, Byte stop = Byte.MaxValue, Byte step = 1)
+		public static IEnumerable<Byte> Range(Byte stop)
 		{
-			for (Byte i = start; start < stop; start += step)
+			return Range((Byte)0, stop);
+		}
+
+		public static IEnumerable<Byte> Range(Byte start, Byte stop, Byte step = 1)
+		{
+			for (Byte i = start; i < stop; i += step)
 			{
 				yield return i;
 			}
 		}
 
-		public static IEnumerable<Int16> Range(Int16 start = 0, Int16 stop = Int16.MaxValue, Int16 step = 1)
+		public static IEnumerable<Int16> Range(Int16 stop)
 		{
-			for (Int16 i = start; start < stop; start += step)
+			return Range((Int16)0, stop);
+		}
+
+		public static IEnumerable<Int16> Range(Int16 start, Int16 stop, Int16 step = 1)
+		{
+			for (Int16 i = start; i < stop; i += step)
 			{
 				yield return i;
 			}
 		}
 
-		public static IEnumerable<UInt16> Range(UInt16 start = 0, UInt16 stop = UInt16.MaxValue, UInt16 step = 1)
+		public static IEnumerable<UInt16> Range(UInt16 stop)
 		{
-			for (UInt16 i = start; start < stop; start += step)
+			return Range((UInt16)0, stop);
+		}
+
+		public static IEnumerable<UInt16> Range(UInt16 start, UInt16 stop, UInt16 step = 1)
+		{
+			for (UInt16 i = start; i < stop; i += step)
 			{
 				yield return i;
 			}
 		}
 
-		public static IEnumerable<Int32> Range(Int32 start = 0, Int32 stop = Int32.MaxValue, Int32 step = 1)
+		public static IEnumerable<Int32> Range(Int32 stop)
 		{
-			for (Int32 i = start; start < stop; start += step)
+			return Range(0, stop);
+		}
+
+		public static IEnumerable<Int32> Range(Int32 start, Int32 stop, Int32 step = 1)
+		{
+			for (Int32 i = start; i < stop; i += step)
 			{
 				yield return i;
 			}
 		}
 
-		public static IEnumerable<UInt32> Range(UInt32 start = 0, UInt32 stop = UInt32.MaxValue, UInt32 step = 1)
+		public static IEnumerable<UInt32> Range(UInt32 stop)
 		{
-			for (UInt32 i = start; start < stop; start += step)
+			return Range(0, stop);
+		}
+
+		public static IEnumerable<UInt32> Range(UInt32 start, UInt32 stop, UInt32 step = 1)
+		{
+			for (UInt32 i = start; i < stop; i += step)
 			{
 				yield return i;
 			}
 		}
 
-		public static IEnumerable<Int64> Range(Int64 start = 0, Int64 stop = Int64.MaxValue, Int64 step = 1)
+		public static IEnumerable<Int64> Range(Int64 stop)
 		{
-			for (Int64 i = start; start < stop; start += step)
+			return Range(0, stop);
+		}
+
+		public static IEnumerable<Int64> Range(Int64 start, Int64 stop, Int64 step = 1)
+		{
+			for (Int64 i = start; i < stop; i += step)
 			{
 				yield return i;
 			}
 		}
 
-		public static IEnumerable<UInt64> Range(UInt64 start = 0, UInt64 stop = UInt64.MaxValue, UInt64 step = 1)
+		public static IEnumerable<UInt64> Range(UInt64 stop)
 		{
-			for (UInt64 i = start; start < stop; start += step)
+			return Range(0, stop);
+		}
+
+		public static IEnumerable<UInt64> Range(UInt64 start, UInt64 stop, UInt64 step = 1)
+		{
+			for (UInt64 i = start; i < stop; i += step)
 			{
 				yield return i;
 			}
 		}
 
-		public static IEnumerable<Single> Range(Single start = 0, Single stop = Single.MaxValue, Single step = 1)
+		public static IEnumerable<Single> Range(Single stop)
 		{
-			for (Single i = start; start < stop; start += step)
+			return Range(0, stop);
+		}
+
+		public static IEnumerable<Single> Range(Single start, Single stop, Single step = 1)
+		{
+			for (Single i = start; i < stop; i += step)
 			{
 				yield return i;
 			}
 		}
 
-		public static IEnumerable<Double> Range(Double start = 0, Double stop = Double.MaxValue, Double step = 1)
+		public static IEnumerable<Double> Range(Double stop)
 		{
-			for (Double i = start; start < stop; start += step)
+			return Range(0, stop);
+		}
+
+		public static IEnumerable<Double> Range(Double start, Double stop, Double step = 1)
+		{
+			for (Double i = start; i < stop; i += step)
 			{
 				yield return i;
 			}
 		}
 
-		public static IEnumerable<Decimal> Range(Decimal start = 0, Decimal stop = Decimal.MaxValue, Decimal step = 1)
+		public static IEnumerable<Decimal> Range(Decimal stop)
 		{
-			for (Decimal i = start; start < stop; start += step)
+			return Range(0, stop);
+		}
+
+		public static IEnumerable<Decimal> Range(Decimal start, Decimal stop, Decimal step = 1)
+		{
+			for (Decimal i = start; i < stop; i += step)
 			{
 				yield return i;
 			}
