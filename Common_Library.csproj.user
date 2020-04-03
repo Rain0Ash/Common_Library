@@ -149,5 +149,11 @@
     <Compile Update="GUI\WinForms\ToolTips\HelpToolTip.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Update="Types\Network\WebClientExtended.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Watchers\FileSystem\Watchers\FileSystemWatcherExtended.cs">
+      <SubType>Component</SubType>
+    </Compile>
   </ItemGroup>
 </Project>

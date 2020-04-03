@@ -12,21 +12,21 @@ namespace Common_Library.Utils
 {
     public static class EnumerableUtils
     {
-        public static IEnumerable<T> AggregateAdd<T>(this IEnumerable<T> source, Func<T, T, T> aggregateFunc, Func<T, T> addFunc,
+        public static IEnumerable<T> AggregateAdd<T>(this IEnumerable<T> source, Func<T, T, T> aggregate, Func<T, T> add,
             Boolean prepend = false)
         {
             source = source.ToList();
 
-            T value = addFunc(source.Aggregate(aggregateFunc));
+            T value = add(source.Aggregate(aggregate));
 
             return prepend ? source.Prepend(value) : source.Append(value);
         }
 
-        public static IEnumerable<TOut> SelectWhere<T, TOut>(this IEnumerable<T> source, Func<T, (Boolean, TOut)> func)
+        public static IEnumerable<TOut> SelectWhere<T, TOut>(this IEnumerable<T> source, Func<T, (Boolean, TOut)> predicate)
         {
             foreach (T item in source)
             {
-                (Boolean ok, TOut output) = func(item);
+                (Boolean ok, TOut output) = predicate(item);
 
                 if (ok)
                 {
@@ -38,6 +38,26 @@ namespace Common_Library.Utils
         public static IEnumerable<TOut> SelectWhere<T, TOut>(this IEnumerable<T> source, Func<T, Boolean> where, Func<T, TOut> select)
         {
             return source.Where(where).Select(select);
+        }
+
+        public static IEnumerable<T> Change<T>(this IEnumerable<T> source, Func<T, T> change)
+        {
+            return source.Select(change);
+        }
+
+        public static IEnumerable<T> ChangeWhere<T>(this IEnumerable<T> source, Func<T, (Boolean, T)> predicate)
+        {
+            foreach (T item in source)
+            {
+                (Boolean ok, T output) = predicate(item);
+
+                yield return ok ? output : item;
+            }
+        }
+
+        public static IEnumerable<T> ChangeWhere<T>(this IEnumerable<T> source, Func<T, Boolean> where, Func<T, T> change)
+        {
+            return source.Select(item => where(item) ? change(item) : item);
         }
 
         public static IEnumerable<T> Sort<T>(this IEnumerable<T> source, IComparer<T> comparer = null)
@@ -55,7 +75,7 @@ namespace Common_Library.Utils
 
             return source;
         }
-
+        
         [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
         public static IEnumerable<T> ForEachWhere<T>(this IEnumerable<T> source, Func<T, Boolean> where, Action<T> action)
         {
