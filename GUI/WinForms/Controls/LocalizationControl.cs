@@ -2,11 +2,12 @@
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
 using System;
+using Common_Library.Interfaces;
 using Common_Library.Localization;
 
 namespace Common_Library.GUI.WinForms.Controls
 {
-    public class LocalizationControl : FixedControl
+    public class LocalizationControl : FixedControl, ILocalizable
     {
         protected override void OnHandleCreated(EventArgs e)
         {
@@ -23,7 +24,7 @@ namespace Common_Library.GUI.WinForms.Controls
             PerformLayout();
         }
 
-        protected virtual void UpdateText()
+        public virtual void UpdateText()
         {
             //override
         }

@@ -3,6 +3,8 @@
 
 using System;
 using System.Linq;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using System.Text.RegularExpressions;
 using Common_Library.LongPath;
 using Common_Library.Types.Network;

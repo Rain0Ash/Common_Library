@@ -242,13 +242,13 @@ namespace Common_Library.GUI.WinForms.TextBoxes
             TextBox.TextChanged += (sender, args) =>
             {
                 TextChanged?.Invoke(sender, args);
-                OnPathTextBoxTextChanged();
+                OnPathTextBox_TextChanged();
             };
             TextBox.AvailableFormatingPartsChanged += OnAvailableFormatingParts_Changed;
 
             _pathFormatHelpButton.Click += (sender, args) => FormatHelpButtonClicked?.Invoke(sender, args);
 
-            _pathTypeChangeButton.Click += (sender, args) => OnRelativeButtonClick();
+            _pathTypeChangeButton.Click += (sender, args) => OnRelativeButton_Click();
 
             PathDialogButton.PathBeenSelected += str => PathBeenSelected?.Invoke(str);
             PathDialogButton.PathsBeenSelected += list => PathsBeenSelected?.Invoke(list);
@@ -260,9 +260,9 @@ namespace Common_Library.GUI.WinForms.TextBoxes
 
             FormatHelpButtonClicked += OnFormatHelpButton_Click;
 
-            PathTypeChangeToolTipChanged += OnPathTextBoxTextChanged;
+            PathTypeChangeToolTipChanged += OnPathTextBox_TextChanged;
 
-            OnPathTextBoxTextChanged();
+            OnPathTextBox_TextChanged();
 
             Controls.Add(TextBox);
             Controls.Add(_pathTypeChangeButton);
@@ -297,7 +297,7 @@ namespace Common_Library.GUI.WinForms.TextBoxes
             //override
         }
 
-        private void OnPathTextBoxTextChanged()
+        private void OnPathTextBox_TextChanged()
         {
             if (PathUtils.IsAbsolutePath(TextBox.Text))
             {
@@ -310,7 +310,7 @@ namespace Common_Library.GUI.WinForms.TextBoxes
             HelpToolTip.SetToolTip(_pathTypeChangeButton, PathTypeChangeToAbsoluteToolTip);
         }
 
-        private void OnRelativeButtonClick()
+        private void OnRelativeButton_Click()
         {
             String text = TextBox.Text;
             if (PathUtils.IsAbsolutePath(text))

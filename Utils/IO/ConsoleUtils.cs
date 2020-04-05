@@ -2,7 +2,6 @@
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
 using System;
-using System.Collections;
 using System.Drawing;
 using Common_Library.Types.Map;
 
@@ -82,24 +81,13 @@ namespace Common_Library.Utils.IO
 
         public static void ToConsole(this Object obj, Boolean newLine = true, IFormatProvider info = null)
         {
-            while (true)
+            if (newLine)
             {
-                if (obj is IEnumerable enumerable && obj.GetType() != typeof(String))
-                {
-                    obj = enumerable.GetString();
-                    continue;
-                }
-
-                if (newLine)
-                {
-                    Console.WriteLine(obj.GetString(info));
-                }
-                else
-                {
-                    Console.Write(obj.GetString(info));
-                }
-
-                break;
+                Console.WriteLine(obj.GetString(info));
+            }
+            else
+            {
+                Console.Write(obj.GetString(info));
             }
         }
 

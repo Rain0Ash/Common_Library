@@ -29,7 +29,7 @@ namespace Common_Library.Logger
         };
 
         public CultureStringsBase Message { get; }
-        private Object[] FormatList { get; }
+        private Object[] Data { get; }
         public MessageType MessageType { get; }
         public ConsoleColor MessageColor { get; }
         public Int32 Priority { get; }
@@ -42,19 +42,19 @@ namespace Common_Library.Logger
             return obj.ToString();
         }
 
-        public LogMessage(String message, MessageType messageType = MessageType.Default, IEnumerable<Object> formatList = null,
+        public LogMessage(String message, MessageType messageType = MessageType.Default, IEnumerable<Object> data = null,
             ConsoleColor? messageColor = null, Int32 priority = 0,
             MessageAdditions messageAdditions = MessageAdditions.CurrentTime, Boolean newLine = true)
-            : this(new CultureStringsBase(message), messageType, formatList, messageColor, priority, messageAdditions, newLine)
+            : this(new CultureStringsBase(message), messageType, data, messageColor, priority, messageAdditions, newLine)
         {
         }
 
-        public LogMessage(CultureStringsBase message, MessageType messageType = MessageType.Default, IEnumerable<Object> formatList = null,
+        public LogMessage(CultureStringsBase message, MessageType messageType = MessageType.Default, IEnumerable<Object> data = null,
             ConsoleColor? messageColor = null, Int32 priority = 0,
             MessageAdditions messageAdditions = MessageAdditions.CurrentTime, Boolean newLine = true)
         {
             Message = message;
-            FormatList = formatList?.ToArray() ?? new Object[0];
+            Data = data?.ToArray();
             MessageType = messageType;
             MessageColor = messageColor ?? MessageColors[MessageType];
             Priority = priority;
@@ -96,7 +96,7 @@ namespace Common_Library.Logger
                 _ => String.Empty
             };
 
-            return $"{dateTime}{(dateTime.Any() ? " " : String.Empty)}{String.Format(Message, FormatList)}";
+            return $"{dateTime}{(dateTime.Any() ? " " : String.Empty)}{(Data?.Any() == true ? String.Format(Message, Data) : Message)}";
         }
     }
 }

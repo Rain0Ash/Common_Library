@@ -5,13 +5,14 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Common_Library.Types.Strings.Interfaces;
 using Common_Library.Utils;
 
 namespace Common_Library.Localization
 {
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     [SuppressMessage("ReSharper", "ClassWithVirtualMembersNeverInherited.Global")]
-    public class CultureStringsBase
+    public class CultureStringsBase : IString
     {
         public static CultureComparer Comparer
         {
@@ -51,11 +52,11 @@ namespace Common_Library.Localization
         {
             get
             {
-                return Localization.TryGetValue(DefaultLCID, StringMissing);
+                return Localization.TryGetValue(DefaultLCID, StringMissing) ?? StringMissing;
             }
             set
             {
-                Localization[DefaultLCID] = value ?? String.Empty;
+                Localization[DefaultLCID] = value ?? StringMissing;
             }
         }
 
@@ -91,7 +92,7 @@ namespace Common_Library.Localization
         {
             return ToString(LocalizationBase.CurrentCulture.LCID);
         }
-
+        
         public String ToString(Int32 lcid)
         {
             return Localization.TryGetValue(lcid, Default) ?? Default;

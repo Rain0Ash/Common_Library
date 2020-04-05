@@ -120,7 +120,7 @@ namespace Common_Library.Localization
             InitializeLanguage();
             UpdateLocalization(lcid, AvailableLocalization);
         }
-
+        
         public static void UpdateLocalization(Int32 lcid, IEnumerable<Int32> avlcid = null)
         {
             if (!CultureByLCID.ContainsKey(lcid) && avlcid?.Contains(lcid) != false)

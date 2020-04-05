@@ -3,6 +3,9 @@
 
 using System;
 using System.IO;
+using System.Linq;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using System.Threading;
 
 namespace Common_Library.Utils.IO
@@ -29,6 +32,37 @@ namespace Common_Library.Utils.IO
             return null;
         }
 
+        public static Boolean CheckPermissions(String path, FileSystemRights access, Boolean? error = false)
+        {
+            return CheckPermissions(new FileInfo(path), access, error);
+        }
+        
+        public static Boolean CheckPermissions(FileInfo info, FileSystemRights access, Boolean? error = false)
+        {
+            try
+            {
+                if (info.Exists)
+                {
+                    return info
+                        .GetAccessControl()
+                        .GetAccessRules(true, true, typeof(NTAccount))
+                        .Cast<FileSystemAccessRule>()
+                        .Any(rule => (rule.FileSystemRights & access) > 0);
+                }
+                
+                return DirectoryUtils.CheckPermissions(info.Directory, access, error);
+            }           
+            catch (Exception)
+            {
+                if (error == null)
+                {
+                    throw;
+                }
+                
+                return error.Value;
+            }
+        }
+        
         public static Byte[] ReadFileBytes(String path, Boolean isThrow = false)
         {
             try

@@ -8,7 +8,10 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace Common_Library.Utils.IO
 {
@@ -43,6 +46,7 @@ namespace Common_Library.Utils.IO
         public static Boolean TryCreateDirectory(String path, PathAction remove, out LongPath.DirectoryInfo directoryInfo)
         {
             directoryInfo = null;
+            
             try
             {
                 if (LongPath.Directory.Exists(path))
@@ -65,10 +69,11 @@ namespace Common_Library.Utils.IO
                     switch (remove)
                     {
                         case PathAction.Standart:
-                            if (LongPath.Directory.GetFiles(path).Length == 0 &&
-                                LongPath.Directory.GetDirectories(path).Length == 0)
+                            if (GetFiles(path).All(file => file.Equals("desktop.ini", StringComparison.OrdinalIgnoreCase)) &&
+                                !GetDirectories(path).Any())
                             {
-                                LongPath.Directory.Delete(path, false);
+                                LongPath.Directory.Delete(path, true);
+                                $"{path}\nExist: {Directory.Exists(path)}".ToMessageBox();
                             }
 
                             break;
@@ -81,8 +86,43 @@ namespace Common_Library.Utils.IO
                 }
                 catch (Exception)
                 {
-                    //ignored
+                    // ignored
                 }
+            }
+        }
+
+        public static Boolean CheckPermissions(String path, FileSystemRights access, Boolean? error = false)
+        {
+            return CheckPermissions(new DirectoryInfo(path), access, error);
+        }
+        
+        public static Boolean CheckPermissions(DirectoryInfo info, FileSystemRights access, Boolean? error = false)
+        {
+            try
+            {
+                while (!info.Exists)
+                {
+                    DirectoryInfo parent = info.Parent;
+                    if (parent != null)
+                    {
+                        info = parent;
+                    }
+                }
+
+                return info
+                    .GetAccessControl()
+                    .GetAccessRules(true, true, typeof(NTAccount))
+                    .Cast<FileSystemAccessRule>()
+                    .Any(rule => (rule.FileSystemRights & access) > 0);
+            }           
+            catch (Exception)
+            {
+                if (error == null)
+                {
+                    throw;
+                }
+                
+                return error.Value;
             }
         }
 
@@ -123,38 +163,43 @@ namespace Common_Library.Utils.IO
 
         public const String AnySearchPattern = ".*";
 
-        public static IEnumerable<String> GetDirectories([NotNull] String path, Boolean recursive)
+        public static IEnumerable<String> GetDirectories([NotNull] String path, Boolean recursive = false)
         {
-            return GetDirectories(path, AnySearchPattern, recursive);
+            return GetEntries(path, recursive, PathType.Folder);
         }
 
-        public static IEnumerable<String> GetDirectories([NotNull] String path, [NotNull][JetBrains.Annotations.RegexPattern] String searchPattern = AnySearchPattern, Boolean recursive = false)
+        public static IEnumerable<String> GetDirectories([NotNull] String path, [NotNull][JetBrains.Annotations.RegexPattern] String searchPattern, Boolean recursive = false)
         {
             return GetEntries(path, searchPattern, recursive, PathType.Folder);
         }
-
-        public static IEnumerable<String> GetFiles([NotNull] String path, Boolean recursive)
+        
+        public static IEnumerable<String> GetDirectories([NotNull] String path, Regex regex, Boolean recursive = false)
         {
-            return GetFiles(path, AnySearchPattern, recursive);
+            return GetEntries(path, regex, recursive, PathType.Folder);
         }
 
-        public static IEnumerable<String> GetFiles([NotNull] String path, [NotNull][JetBrains.Annotations.RegexPattern] String searchPattern = AnySearchPattern, Boolean recursive = false)
+        public static IEnumerable<String> GetFiles([NotNull] String path, Boolean recursive = false)
+        {
+            return GetEntries(path, recursive, PathType.File);
+        }
+
+        public static IEnumerable<String> GetFiles([NotNull] String path, [NotNull][JetBrains.Annotations.RegexPattern] String searchPattern, Boolean recursive = false)
         {
             return GetEntries(path, searchPattern, recursive, PathType.File);
         }
         
-        public static IEnumerable<String> GetEntries([NotNull] String path, Boolean recursive, PathType type = PathType.All)
+        public static IEnumerable<String> GetFiles([NotNull] String path, Regex regex, Boolean recursive = false)
         {
-            return GetEntries(path, AnySearchPattern, recursive, type);
+            return GetEntries(path, regex, recursive, PathType.File);
         }
 
         public static IEnumerable<String> GetEntries([NotNull] String path, [NotNull][JetBrains.Annotations.RegexPattern]
-            String searchPattern = AnySearchPattern, Boolean recursive = false, PathType type = PathType.All)
+            String searchPattern, Boolean recursive = false, PathType type = PathType.All)
         {
-            return GetEntries(path, new Regex(String.IsNullOrEmpty(searchPattern) ? ".*" : searchPattern), recursive, type);
+            return GetEntries(path, new Regex(String.IsNullOrEmpty(searchPattern) ? AnySearchPattern : searchPattern), recursive, type);
         }
 
-        public static IEnumerable<String> GetEntries([NotNull] String path, Regex regex, Boolean recursive = false, PathType type = PathType.All)
+        public static IEnumerable<String> GetEntries([NotNull] String path, Boolean recursive = false, PathType type = PathType.All)
         {
             if (type == PathType.None)
             {
@@ -166,7 +211,7 @@ namespace Common_Library.Utils.IO
                 path += "\\";
             }
 
-            if (!PathUtils.IsValidPath(path, type, PathStatus.Exist))
+            if (!PathUtils.IsValidPath(path, PathType.Folder, PathStatus.Exist))
             {
                 yield break;
             }
@@ -193,20 +238,20 @@ namespace Common_Library.Utils.IO
                     {
                         if (recursive)
                         {
-                            foreach (String entry in GetEntries(entryname, regex, true, type))
+                            foreach (String entry in GetEntries(entryname, true, type))
                             {
                                 yield return entry;
                             }
                         }
                         
-                        if (type.HasFlag(PathType.Folder) && regex.IsMatch(entryname))
+                        if (type.HasFlag(PathType.Folder))
                         {
                             yield return entryname;
                         }
                     }
                     else
                     {
-                        if (type.HasFlag(PathType.File) && regex.IsMatch(entryname))
+                        if (type.HasFlag(PathType.File))
                         {
                             yield return entryname;
                         }
@@ -217,6 +262,11 @@ namespace Common_Library.Utils.IO
             {
                 FindClose(handle);
             }
+        }
+
+        public static IEnumerable<String> GetEntries([NotNull] String path, Regex regex, Boolean recursive = false, PathType type = PathType.All)
+        {
+            return GetEntries(path, recursive, type).Where(file => regex.IsMatch(file));
         }
     }
 }

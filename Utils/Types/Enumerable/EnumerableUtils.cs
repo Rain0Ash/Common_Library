@@ -493,6 +493,33 @@ namespace Common_Library.Utils
         }
         
         /// <summary>
+        /// Determines whether the given sequence is not empty.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements of <paramref name="source"/>.</typeparam>
+        /// <param name="source">The <see cref="IEnumerable{TSource}"/> to check for emptiness.</param>
+        /// <returns>
+        ///   <c>true</c> if <paramref name="source"/> is empty; otherwise, <c>false</c>.
+        /// </returns>
+        public static Boolean IsNotEmpty<T>(this IEnumerable<T> source)
+        {
+            return source?.Any() == true;
+        }
+        
+        /// <summary>
+        /// Determines whether the given sequence is not empty.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements of <paramref name="source"/>.</typeparam>
+        /// <param name="source">The <see cref="IEnumerable{TSource}"/> to check for emptiness.</param>
+        /// <param name="predicate">A function to test each element for a condition.</param>
+        /// <returns>
+        ///   <c>true</c> if <paramref name="source"/> is empty; otherwise, <c>false</c>.
+        /// </returns>
+        public static Boolean IsNotEmpty<T>(this IEnumerable<T> source, Func<T, Boolean> predicate)
+        {
+            return source?.Any(predicate) == true;
+        }
+        
+        /// <summary>
         /// Determines whether the given sequence is empty.
         /// </summary>
         /// <typeparam name="T">The type of the elements of <paramref name="source"/>.</typeparam>

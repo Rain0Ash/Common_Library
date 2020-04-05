@@ -419,7 +419,7 @@ namespace Common_Library.LongPath
                 return false;
             }
 
-            return value.Contains(text[text.Length - 1]);
+            return value.Contains(text[^1]);
         }
     }
 }

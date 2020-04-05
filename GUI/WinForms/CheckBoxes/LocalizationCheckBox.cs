@@ -2,16 +2,33 @@
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
 using System;
+using System.Windows.Forms;
 using Common_Library.Interfaces;
 using Common_Library.Localization;
 
-namespace Common_Library.GUI.WinForms.Forms
+namespace Common_Library.GUI.WinForms.CheckBoxes
 {
-    public abstract class LocalizationForm : FlashForm, ILocalizable
+    public class LocalizationCheckBox : CheckBox, ILocalizable
     {
-        protected override void OnLoad(EventArgs e)
+        private CultureStringsBase _localizationText;
+
+        public CultureStringsBase LocalizationText
         {
-            base.OnLoad(e);
+            get
+            {
+                return _localizationText;
+            }
+            set
+            {
+                _localizationText = value;
+
+                OnUpdateText();
+            }
+        }
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            base.OnHandleCreated(e);
             LocalizationBase.LanguageChanged += OnUpdateText;
             OnUpdateText();
         }
@@ -26,7 +43,10 @@ namespace Common_Library.GUI.WinForms.Forms
 
         public virtual void UpdateText()
         {
-            //override
+            if (LocalizationText != null)
+            {
+                Text = LocalizationText;
+            }
         }
 
         protected override void Dispose(Boolean disposing)

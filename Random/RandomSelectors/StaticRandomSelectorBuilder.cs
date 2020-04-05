@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using Common_Library.Utils;
 
 namespace Common_Library.Random
 {
@@ -23,7 +24,7 @@ namespace Common_Library.Random
             _itemBuffer = new List<T>();
             _weightBuffer = new List<Double>();
 
-            if (items?.Any() == true)
+            if (items.IsNotEmpty())
             {
                 Add(items);
             }
