@@ -5,6 +5,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using Common_Library.Crypto;
 
 namespace Common_Library.Utils
 {
@@ -52,13 +53,18 @@ namespace Common_Library.Utils
             return new Icon(ms);
         }
 
-        public static Byte[] ImageToBytes(Image img)
+        public static Byte[] ToBytes(this Image img)
         {
             using MemoryStream stream = new MemoryStream();
             img.Save(stream, ImageFormat.Png);
             return stream.ToArray();
         }
 
+        public static Byte[] Hash(this Image img, HashType type)
+        {
+            return Cryptography.Hash.Hashing(img.ToBytes(), type);
+        }
+        
         public static Image BytesToImage(Byte[] img)
         {
             using MemoryStream stream = new MemoryStream(img);

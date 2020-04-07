@@ -21,7 +21,7 @@ namespace Common_Library.Serialization
         public static String ObjectToXML(Object temp, String rootName, String fileName)
         {
             String xml = ObjectToXML(temp, rootName);
-            LongPath.File.AppendAllText(fileName, xml);
+            File.AppendAllText(fileName, xml);
             return xml;
         }
 

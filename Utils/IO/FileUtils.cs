@@ -37,7 +37,7 @@ namespace Common_Library.Utils.IO
             return CheckPermissions(new FileInfo(path), access, error);
         }
         
-        public static Boolean CheckPermissions(FileInfo info, FileSystemRights access, Boolean? error = false)
+        public static Boolean CheckPermissions(this FileInfo info, FileSystemRights access, Boolean? error = false)
         {
             try
             {
@@ -50,7 +50,7 @@ namespace Common_Library.Utils.IO
                         .Any(rule => (rule.FileSystemRights & access) > 0);
                 }
                 
-                return DirectoryUtils.CheckPermissions(info.Directory, access, error);
+                return info.Directory.CheckPermissions(access, error);
             }           
             catch (Exception)
             {
@@ -67,7 +67,7 @@ namespace Common_Library.Utils.IO
         {
             try
             {
-                return PathUtils.IsExistAsFile(path) ? LongPath.File.ReadAllBytes(path) : null;
+                return PathUtils.IsExistAsFile(path) ? File.ReadAllBytes(path) : null;
             }
             catch (Exception)
             {
@@ -84,7 +84,7 @@ namespace Common_Library.Utils.IO
         {
             try
             {
-                return PathUtils.IsExistAsFile(path) ? LongPath.File.ReadAllText(path) : null;
+                return PathUtils.IsExistAsFile(path) ? File.ReadAllText(path) : null;
             }
             catch (Exception)
             {
@@ -101,7 +101,7 @@ namespace Common_Library.Utils.IO
         {
             try
             {
-                return PathUtils.IsExistAsFile(path) ? LongPath.File.ReadAllLines(path) : null;
+                return PathUtils.IsExistAsFile(path) ? File.ReadAllLines(path) : null;
             }
             catch (Exception)
             {

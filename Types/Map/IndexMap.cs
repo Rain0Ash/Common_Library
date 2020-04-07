@@ -266,16 +266,6 @@ namespace Common_Library.Types.Map
             }
         }
 
-        public new IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
-        {
-            return _orderList.Select(key => new KeyValuePair<TKey, TValue>(key, this[key])).GetEnumerator();
-        }
-
-        public new IEnumerator<KeyValuePair<TValue, TKey>> GetReversedEnumerator()
-        {
-            return _orderList.Select(key => new KeyValuePair<TValue, TKey>(this[key], key)).GetEnumerator();
-        }
-
         public IEnumerator<TKey> GetKeyEnumerator()
         {
             return _orderList.GetEnumerator();

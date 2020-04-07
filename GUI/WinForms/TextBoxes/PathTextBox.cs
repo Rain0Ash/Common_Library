@@ -3,9 +3,9 @@
 
 using System;
 using System.Drawing;
+using System.IO;
 using Common_Library.Utils;
 using Common_Library.Utils.IO;
-using Directory = Common_Library.LongPath.Directory;
 
 namespace Common_Library.GUI.WinForms.TextBoxes
 {
@@ -58,14 +58,10 @@ namespace Common_Library.GUI.WinForms.TextBoxes
 
         public PathTextBox()
         {
+            ValidateFunc = obj => !CheckWellFormed || IsWellFormed();
             PasswdChar = '\0';
             CheckWellFormedChanged += CheckValidFormatColor;
             PathTypeChanged += CheckValidFormatColor;
-        }
-
-        public override Boolean CheckValidFormat()
-        {
-            return !CheckWellFormed || IsWellFormed();
         }
 
         protected override void CheckValidFormatColor()

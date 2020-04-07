@@ -10,12 +10,8 @@ namespace Common_Library.GUI.WinForms.TextBoxes
     {
         public EmailTextBox()
         {
+            ValidateFunc = obj => EmailUtils.CheckValidEmail(Text);
             PasswdChar = '\0';
-        }
-
-        public override Boolean CheckValidFormat()
-        {
-            return EmailUtils.CheckValidEmail(Text);
         }
     }
 }

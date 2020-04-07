@@ -106,26 +106,6 @@ namespace Common_Library.GUI.WinForms.ListBoxes
             }
         }
 
-        public new Int32 SelectedIndex
-        {
-            get
-            {
-                return base.SelectedIndex;
-            }
-            set
-            {
-                Int32 index = base.SelectedIndex;
-                if (index == value)
-                {
-                    return;
-                }
-
-                base.SelectedIndex = value;
-                RefreshItem(index);
-                RefreshItem(value);
-            }
-        }
-
         private readonly EventDictionary<Object, Image> _itemsImageDictionary = new EventDictionary<Object, Image>();
         private readonly EventDictionary<Int32, Image> _indexImageDictionary = new EventDictionary<Int32, Image>();
         private readonly EventDictionary<Object, (Brush, Brush)> _itemsColorDictionary = new EventDictionary<Object, (Brush, Brush)>();
@@ -134,10 +114,12 @@ namespace Common_Library.GUI.WinForms.ListBoxes
         public RowImageColorListBox()
         {
             DrawMode = DrawMode.OwnerDrawFixed;
-            _itemsImageDictionary.ItemsChanged += Refresh;
-            _indexImageDictionary.ItemsChanged += Refresh;
-            _itemsColorDictionary.ItemsChanged += Refresh;
-            _indexColorDictionary.ItemsChanged += Refresh;
+            _itemsImageDictionary.ItemsChanged += RefreshItems;
+            _indexImageDictionary.ItemsChanged += RefreshItems;
+            _itemsColorDictionary.ItemsChanged += RefreshItems;
+            _indexColorDictionary.ItemsChanged += RefreshItems;
+            DrawItem += DrawItem_Action;
+            SelectedIndexChanged += (sender, args) => Refresh();
         }
 
         protected virtual void Draw(DrawItemEventArgs e, Image image, (Brush, Brush)? colors)
@@ -245,10 +227,8 @@ namespace Common_Library.GUI.WinForms.ListBoxes
             }
         }
 
-        protected override void OnDrawItem(DrawItemEventArgs e)
+        protected void DrawItem_Action(Object sender, DrawItemEventArgs e)
         {
-            base.OnDrawItem(e);
-
             e.DrawBackground();
 
             Draw(e, null, null);

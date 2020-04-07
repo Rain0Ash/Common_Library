@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Common_Library.Config.RAM;
 using Common_Library.Utils.IO;
 using Newtonsoft.Json;
@@ -12,7 +13,7 @@ namespace Common_Library.Config.JSON
     public class JSONConfig : RAMConfig
     {
         public JSONConfig(String configPath = null, Boolean isReadOnly = true)
-            : base(PathUtils.IsValidFilePath(configPath) ? configPath : new LongPath.FileInfo($"{DefaultName}.json").FullName, isReadOnly)
+            : base(PathUtils.IsValidFilePath(configPath) ? configPath : new FileInfo($"{DefaultName}.json").FullName, isReadOnly)
         {
             Config = ReadConfig();
         }
@@ -21,7 +22,7 @@ namespace Common_Library.Config.JSON
         {
             try
             {
-                String json = LongPath.File.ReadAllText(configPath ?? ConfigPath);
+                String json = File.ReadAllText(configPath ?? ConfigPath);
                 return JsonConvert.DeserializeObject<NestedDictionary<String, String>>(json);
             }
             catch (Exception)
@@ -33,7 +34,7 @@ namespace Common_Library.Config.JSON
         protected void WriteConfig(String configPath = null)
         {
             String json = JsonConvert.SerializeObject(Config, Formatting.Indented);
-            LongPath.File.WriteAllText(configPath ?? ConfigPath, json);
+            File.WriteAllText(configPath ?? ConfigPath, json);
         }
 
         protected override void Set(String key, String value, params String[] sections)

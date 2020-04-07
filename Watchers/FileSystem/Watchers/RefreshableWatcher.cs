@@ -158,6 +158,7 @@ namespace Common_Library.Watchers.FileSystem
             IWatcher newInternalWatcher = null;
             // Swallowing any exceptions that might occure when trying to get a clone of the current watcher
             CancellationToken cToken = _refreshTokenSource.Token;
+
             Policy.Handle<Exception>()
                 .RetryForever((Exception ex, Int32 con) => Thread.Sleep(RefreshAttempInterval))
                 .Execute(() =>

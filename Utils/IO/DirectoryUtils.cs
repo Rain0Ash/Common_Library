@@ -11,52 +11,34 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
 
 namespace Common_Library.Utils.IO
 {
     public static class DirectoryUtils
-    {
-        public static void CreateDirectory(String path)
-        {
-            CreateDirectory(path, out _);
-        }
-
-        public static void CreateDirectory(String path, out LongPath.DirectoryInfo directoryInfo)
-        {
-            if (LongPath.Directory.Exists(path))
-            {
-                directoryInfo = new LongPath.DirectoryInfo(path);
-                return;
-            }
-
-            directoryInfo = LongPath.Directory.CreateDirectory(path);
-        }
-
-        public static Boolean TryCreateDirectory(String path, PathAction remove = PathAction.Standart)
+    { public static Boolean TryCreateDirectory(String path, PathAction remove = PathAction.Standart)
         {
             return TryCreateDirectory(path, remove, out _);
         }
 
-        public static Boolean TryCreateDirectory(String path, out LongPath.DirectoryInfo directoryInfo)
+        public static Boolean TryCreateDirectory(String path, out DirectoryInfo directoryInfo)
         {
             return TryCreateDirectory(path, PathAction.Standart, out directoryInfo);
         }
 
-        public static Boolean TryCreateDirectory(String path, PathAction remove, out LongPath.DirectoryInfo directoryInfo)
+        public static Boolean TryCreateDirectory(String path, PathAction remove, out DirectoryInfo directoryInfo)
         {
             directoryInfo = null;
             
             try
             {
-                if (LongPath.Directory.Exists(path))
+                if (Directory.Exists(path))
                 {
                     return true;
                 }
 
-                CreateDirectory(path, out directoryInfo);
+                directoryInfo = Directory.CreateDirectory(path);
 
-                return LongPath.Directory.Exists(path);
+                return Directory.Exists(path);
             }
             catch (Exception)
             {
@@ -72,13 +54,13 @@ namespace Common_Library.Utils.IO
                             if (GetFiles(path).All(file => file.Equals("desktop.ini", StringComparison.OrdinalIgnoreCase)) &&
                                 !GetDirectories(path).Any())
                             {
-                                LongPath.Directory.Delete(path, true);
+                                Directory.Delete(path, true);
                                 $"{path}\nExist: {Directory.Exists(path)}".ToMessageBox();
                             }
 
                             break;
                         case PathAction.Force:
-                            LongPath.Directory.Delete(path, true);
+                            Directory.Delete(path, true);
                             break;
                         default:
                             break;
@@ -91,25 +73,52 @@ namespace Common_Library.Utils.IO
             }
         }
 
+        public static DirectoryInfo LatestExist(String path)
+        {
+            return LatestExist(new DirectoryInfo(path));
+        }
+
+        public static DirectoryInfo LatestExist(this FileSystemInfo info)
+        {
+            return info switch
+            {
+                DirectoryInfo directory => LatestExist(directory),
+                FileInfo file => LatestExist(file),
+                _ => throw new NotSupportedException($"{nameof(info)} not supported {info.GetType()}")
+            };
+        }
+        
+        public static DirectoryInfo LatestExist(this FileInfo info)
+        {
+            return LatestExist(info.Directory);
+        }
+        
+        public static DirectoryInfo LatestExist(this DirectoryInfo info)
+        {
+            while (!info.Exists)
+            {
+                DirectoryInfo parent = info.Parent;
+                if (parent == null)
+                {
+                    break;
+                }
+                
+                info = parent;
+            }
+
+            return info.Exists ? info : null;
+        }
+
         public static Boolean CheckPermissions(String path, FileSystemRights access, Boolean? error = false)
         {
             return CheckPermissions(new DirectoryInfo(path), access, error);
         }
-        
-        public static Boolean CheckPermissions(DirectoryInfo info, FileSystemRights access, Boolean? error = false)
+
+        public static Boolean CheckPermissions(this DirectoryInfo info, FileSystemRights access, Boolean? error = false)
         {
             try
             {
-                while (!info.Exists)
-                {
-                    DirectoryInfo parent = info.Parent;
-                    if (parent != null)
-                    {
-                        info = parent;
-                    }
-                }
-
-                return info
+                return info.LatestExist()
                     .GetAccessControl()
                     .GetAccessRules(true, true, typeof(NTAccount))
                     .Cast<FileSystemAccessRule>()

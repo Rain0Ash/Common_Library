@@ -77,6 +77,7 @@ namespace System.Windows.Forms
 
         public FormatPathTextBox(IReflect type = null)
         {
+            ValidateFunc = obj => CheckValid();
             UpdateAvailableFormatingParts(type);
 
             AvailableFormatingPartsChanged += CheckValidFormatColor;
@@ -132,7 +133,7 @@ namespace System.Windows.Forms
             return IsValidPath() && CheckValidFormat();
         }
 
-        public override Boolean CheckValidFormat()
+        private Boolean CheckValid()
         {
             Boolean check = IsWellFormed();
 

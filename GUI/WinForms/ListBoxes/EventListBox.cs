@@ -26,7 +26,7 @@ namespace Common_Library.GUI.WinForms.ListBoxes
             }
 
             Items.Add(item);
-            ItemAdded?.Invoke(item, Items.Count - 1);
+            ItemAdded?.Invoke(Items.Count - 1, item);
             ItemsChanged?.Invoke();
         }
 
@@ -48,7 +48,7 @@ namespace Common_Library.GUI.WinForms.ListBoxes
             ItemsChanged?.Invoke();
             */
 
-            ItemSourceAdded?.Invoke(item, -1);
+            ItemSourceAdded?.Invoke(-1, item);
         }
 
         public void Add(Object item)
@@ -101,7 +101,7 @@ namespace Common_Library.GUI.WinForms.ListBoxes
 
             index = MathUtils.ToRange(index, 0, Items.Count);
             Items.Insert(index, item);
-            ItemAdded?.Invoke(item, index);
+            ItemAdded?.Invoke(index, item);
             ItemsChanged?.Invoke();
         }
 
@@ -123,7 +123,7 @@ namespace Common_Library.GUI.WinForms.ListBoxes
             ItemsChanged?.Invoke();
             */
 
-            ItemSourceAdded?.Invoke(item, index);
+            ItemSourceAdded?.Invoke(index, item);
         }
 
         public void Insert(Object item, Int32 index = 0)
@@ -183,7 +183,7 @@ namespace Common_Library.GUI.WinForms.ListBoxes
             RemoveAt(source.IndexOf(item));
             */
 
-            ItemSourceRemoved?.Invoke(item, -1);
+            ItemSourceRemoved?.Invoke(-1, item);
         }
 
         public void Remove(Object item)
@@ -216,7 +216,7 @@ namespace Common_Library.GUI.WinForms.ListBoxes
                 RemoveImage(index);
                 RemoveImage(item);
 
-                ItemRemoved?.Invoke(item, index);
+                ItemRemoved?.Invoke(index, item);
                 ItemsChanged?.Invoke();
             }
             catch (ArgumentOutOfRangeException)
@@ -250,7 +250,7 @@ namespace Common_Library.GUI.WinForms.ListBoxes
             }
             */
 
-            ItemSourceRemoved?.Invoke(null, index);
+            ItemSourceRemoved?.Invoke(index, null);
         }
 
         public void RemoveAt(SelectedIndexCollection indexes)

@@ -3,6 +3,7 @@
 
 using System;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using Common_Library.Utils.IO;
 using Common_Library.Watchers;
@@ -35,10 +36,12 @@ namespace Common_Library.GUI.WinForms.ListBoxes
 
         public PathListBox()
         {
+            ValidateFunc = obj => Items.OfType<FSWatcher>().All(CheckValidFormatItem);
+            
             PathTypeChanged += CheckValidFormatColor;
         }
 
-        protected override Boolean CheckValidFormatItem(Object item)
+        protected Boolean CheckValidFormatItem(Object item)
         {
             if (item is FSWatcher path)
             {

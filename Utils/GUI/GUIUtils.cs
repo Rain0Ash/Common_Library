@@ -14,13 +14,20 @@ namespace Common_Library.Utils
         None = 0,
         Select = 1,
         Copy = 2,
+        ReadOnly = 3,
         Paste = 4,
         Cut = 8,
         Swap = 16,
         Add = 32,
         Remove = 64,
         Change = 128,
-        All = 255
+        Basic = 255,
+        ChangeStatus = 256,
+        Replace = 512,
+        Additional1 = 1024,
+        Additional2 = 2048,
+        Additional3 = 4096,
+        All = 8191
     }
 
     public static class GUIUtils

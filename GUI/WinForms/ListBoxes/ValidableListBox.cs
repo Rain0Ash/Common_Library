@@ -8,8 +8,10 @@ using Common_Library.Interfaces;
 
 namespace Common_Library.GUI.WinForms.ListBoxes
 {
-    public class ValidableListBox : EventListBox, IValidable
+    public class ValidableListBox : EventListBox, IAutoValidable
     {
+        public Func<Object, Boolean> ValidateFunc { get; set; } = obj => true;
+        
         public ValidableListBox()
         {
             ItemsChanged += CheckValidFormatColor;
@@ -34,9 +36,9 @@ namespace Common_Library.GUI.WinForms.ListBoxes
             PerformLayout();
         }
 
-        protected virtual Boolean CheckValidFormatItem(Object item)
+        private Boolean CheckValidFormatItem(Object item)
         {
-            return true;
+            return ValidateFunc?.Invoke(item) ?? true;
         }
 
         public Boolean CheckValidFormatIndex(Int32 index)

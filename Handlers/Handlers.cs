@@ -23,14 +23,16 @@ namespace Common_Library
 
         public delegate void HttpStatusCodeHandler(HttpStatusCode statusCode);
 
-        public delegate void FuncHandler(Func<Type, Type> function);
+        public delegate void FuncHandler<out T, in TOut>(Func<T, TOut> function);
 
         public delegate void ObjectHandler(Object obj);
 
-        public delegate void IndexObjectHandler(Object obj, Int32 index);
+        public delegate void IndexObjectHandler(Int32 index, Object obj);
 
         public delegate void KeyValueHandler(Object key, Object value);
 
+        public delegate void KeyValueHandler<in T1, in T2>(T1 key, T2 value);
+        
         public delegate void ObjectArrayHandler(Object[] obj);
 
         public delegate void TypeHandler<in T>(T type);

@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Common_Library.Exceptions;
@@ -180,18 +181,18 @@ namespace Common_Library.Watchers
             }
         }
         
-        public FSWatcher(String path, PathType type = PathType.All, PathStatus status = PathStatus.All, WatcherType watcher = WatcherType.None)
+        public FSWatcher(String path, PathType type = PathType.All, PathStatus status = PathStatus.All, WatcherType watcherType = WatcherType.None)
         {
             if (!PathUtils.IsValidPath(path))
             {
-                throw new ArgumentException("Path is invalid");
+                throw new ArgumentException($"Path: \"{path}\" is invalid");
             }
 
             Path = path;
             PathType = type;
             PathStatus = status;
 
-            _watcher = FileSystem.Watcher.Factory(watcher, Path);
+            _watcher = FileSystem.Watcher.Factory(watcherType, Path);
         }
         
         public FSWatcher(String path, IWatcher watcher, PathType type = PathType.All, PathStatus status = PathStatus.All)

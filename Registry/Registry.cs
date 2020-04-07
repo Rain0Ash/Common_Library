@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security;
@@ -10,7 +11,6 @@ using System.Text.RegularExpressions;
 using Common_Library.Exceptions;
 using Common_Library.Utils.IO;
 using Microsoft.Win32;
-using Path = Common_Library.LongPath.Path;
 
 namespace Common_Library.Registry
 {

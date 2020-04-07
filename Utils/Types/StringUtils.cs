@@ -135,6 +135,16 @@ namespace Common_Library.Utils
             return String.Format(source, args);
         }
 
+        public static Boolean EndsWith(this String str, IEnumerable<Char> chars)
+        {
+            return chars.Any(str.EndsWith);
+        }
+        
+        public static Boolean EndsWith(this String str, IEnumerable<String> substrings)
+        {
+            return substrings.Any(str.EndsWith);
+        }
+        
         public static Boolean IsNull(this String str)
         {
             return str == null;

@@ -208,9 +208,9 @@ namespace Common_Library.Watchers.FileSystem
                 StopPollingTask();
 
                 // Add the directory seperator character to the value if it's missing
-                if (value[^1] != LongPath.Path.DirectorySeparatorChar)
+                if (value[^1] != System.IO.Path.DirectorySeparatorChar)
                 {
-                    value += LongPath.Path.DirectorySeparatorChar;
+                    value += System.IO.Path.DirectorySeparatorChar;
                 }
 
                 _path = value;
@@ -655,13 +655,13 @@ namespace Common_Library.Watchers.FileSystem
         {
             foreach (String item in items)
             {
-                String itemName = LongPath.Path.GetFileName(item);
+                String itemName = System.IO.Path.GetFileName(item);
                 if (!PassesFilter(itemName))
                 {
                     continue;
                 }
 
-                String folder = LongPath.Path.GetDirectoryName(item) ?? String.Empty;
+                String folder = System.IO.Path.GetDirectoryName(item) ?? String.Empty;
 
                 SignalFileChangeForWaiters(reportType, item);
 

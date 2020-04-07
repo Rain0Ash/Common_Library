@@ -7,16 +7,18 @@ using Common_Library.Interfaces;
 
 namespace Common_Library.GUI.WinForms.TextBoxes
 {
-    public abstract class ValidableTextBox : HistoryTextBox, IValidable
+    public abstract class ValidableTextBox : HistoryTextBox, IAutoValidable
     {
+        public Func<Object, Boolean> ValidateFunc { get; set; } = obj => true;
+        
         protected ValidableTextBox()
         {
             TextChanged += (sender, args) => CheckValidFormatColor();
         }
 
-        public virtual Boolean CheckValidFormat()
+        public Boolean CheckValidFormat()
         {
-            return true;
+            return ValidateFunc?.Invoke(Text) ?? true;
         }
 
         protected virtual void CheckValidFormatColor()

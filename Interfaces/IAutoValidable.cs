@@ -5,8 +5,8 @@ using System;
 
 namespace Common_Library.Interfaces
 {
-    public interface IValidable
+    public interface IAutoValidable : IValidable
     {
-        public Boolean CheckValidFormat();
+        public Func<Object, Boolean> ValidateFunc { get; set; }
     }
 }
