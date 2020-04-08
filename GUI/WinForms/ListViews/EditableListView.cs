@@ -7,6 +7,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Common_Library.GUI.WinForms.Forms;
 using Common_Library.Types.Map;
 using Common_Library.Types.Other;
 using Common_Library.Utils;
@@ -18,7 +19,7 @@ namespace Common_Library.GUI.WinForms.ListViews
         public Boolean AllowContextMenu { get; set; } = true;
         public MouseButtons ContextMenuButton { get; set; } = MouseButtons.Right;
 
-        private ActionType _actionType = ActionType.Basic;
+        private ActionType _actionType;
         public ActionType ActionType 
         {
             get
@@ -33,14 +34,18 @@ namespace Common_Library.GUI.WinForms.ListViews
                 }
                 
                 _actionType = value;
-
+                
                 UpdateMenuButtons();
             }
         }
         
         private readonly ContextMenuStrip _menu = new ContextMenuStrip();
+
+        public Boolean DoubleClickForChange { get; set; } = true;
         
         #region Text
+        
+        public TextBoxForm ItemForm { get; set; } = new TextBoxForm();
 
         protected String GetText(ActionType action)
         {
@@ -162,6 +167,7 @@ namespace Common_Library.GUI.WinForms.ListViews
             {ActionType.Change, new ToolStripMenuItem("Change")},
             {ActionType.ChangeStatus, new ToolStripMenuItem("ChangeStatus")},
             {ActionType.Replace, new ToolStripMenuItem("Replace")},
+            {ActionType.Reset, new ToolStripMenuItem("Reset")},
             {ActionType.Additional1, new ToolStripMenuItem("Additional1")},
             {ActionType.Additional2, new ToolStripMenuItem("Additional2")},
             {ActionType.Additional3, new ToolStripMenuItem("Additional3")},
@@ -169,11 +175,13 @@ namespace Common_Library.GUI.WinForms.ListViews
 
         public EditableListView()
         {
-            UpdateMenuButtons();
+            ActionType = ActionType.Basic;
+            ValidateFuncChanged += function => ItemForm.TextBox.ValidateFunc = function;
 
             KeyDown += OnKeyDown;
             MouseDown += OpenContextMenu;
             _menu.ItemClicked += OnMenuActionClicked;
+            ItemDoubleClick += DoubleClickChange;
         }
 
         protected override void OnSelectedIndexChanged(EventArgs e)
@@ -191,7 +199,7 @@ namespace Common_Library.GUI.WinForms.ListViews
         {
             _menu.Items.Clear();
 
-            foreach ((ActionType key, ToolStripItem button) in Buttons)
+            foreach ((ActionType key, ToolStripItem item) in Buttons)
             {
                 if (!ActionType.HasFlag(key))
                 {
@@ -203,7 +211,7 @@ namespace Common_Library.GUI.WinForms.ListViews
                     continue;
                 }
                     
-                _menu.Items.Add(button);
+                _menu.Items.Add(item);
             }
         }
         
@@ -213,6 +221,9 @@ namespace Common_Library.GUI.WinForms.ListViews
             
             switch (e.KeyCode)
             {
+                case Keys.Enter when SelectedItems.Count > 0:
+                    DoubleClickChange(SelectedItems[0], null);
+                    break;
                 case Keys.A when ActionType.HasFlag(ActionType.Select) && e.Control:
                     SelectAction();
                     break;
@@ -240,7 +251,7 @@ namespace Common_Library.GUI.WinForms.ListViews
             }
         }
 
-        protected virtual void SelectAction()
+        public virtual void SelectAction()
         {
             if (!MultiSelect)
             {
@@ -253,7 +264,7 @@ namespace Common_Library.GUI.WinForms.ListViews
             }
         }
         
-        protected virtual void CopyAction()
+        public virtual void CopyAction()
         {
             try
             {
@@ -268,7 +279,7 @@ namespace Common_Library.GUI.WinForms.ListViews
             }
         }
 
-        protected virtual void PasteAction()
+        public virtual void PasteAction()
         {
             try
             {
@@ -295,13 +306,13 @@ namespace Common_Library.GUI.WinForms.ListViews
             }
         }
         
-        protected virtual void CutAction()
+        public virtual void CutAction()
         {
             CopyAction();
             RemoveAction();
         }
 
-        protected virtual void SwapAction(PointOffset offset)
+        public virtual void SwapAction(PointOffset offset)
         {
             if (SelectedIndices.Count != 1)
             {
@@ -335,42 +346,83 @@ namespace Common_Library.GUI.WinForms.ListViews
             }
         }
         
-        protected virtual void AddAction()
+        public virtual void AddAction()
         {
-            
+            ItemForm.TextBox.Clear();
+
+            if (ItemForm.ShowDialog() == DialogResult.OK)
+            {
+                AddAction(ItemForm.TextBox.Text);
+            }
         }
 
-        protected virtual void AddAction(Object item)
+        public virtual void AddAction(Object item)
         {
-            
+            switch (item)
+            {
+                case ListViewItem lvitem:
+                    AddAction(lvitem);
+                    break;
+                case Stream stream:
+                    AddAction(stream);
+                    break;
+                case Image image:
+                    AddAction(image);
+                    break;
+                case StringCollection collection:
+                    AddAction(collection);
+                    break;
+                default:
+                    AddAction(item.ToString());
+                    break;
+            }
         }
         
-        protected virtual void AddAction(ListViewItem item)
+        public virtual void AddAction(ListViewItem item)
         {
             Insert(SelectedIndices.OfType<Int32>().FirstOr(SelectedIndices.Count), item);
         }
         
-        protected virtual void AddAction(Stream stream)
+        public virtual void AddAction(Stream stream)
         {
             
         }
         
-        protected virtual void AddAction(Image image)
+        public virtual void AddAction(Image image)
+        {
+            
+        }
+
+        public virtual void AddAction(String text)
+        {
+            while (true)
+            {
+                if (ValidateFunc?.Invoke(text) != false)
+                {
+                    Add(text);
+                }
+                else
+                {
+                    ItemForm.TextBox.Clear();
+                    ItemForm.TextBox.Text = text;
+
+                    if (ItemForm.ShowDialog() == DialogResult.OK)
+                    {
+                        text = ItemForm.TextBox.Text;
+                        continue;
+                    }
+                }
+
+                break;
+            }
+        }
+
+        public virtual void AddAction(StringCollection collection)
         {
             
         }
         
-        protected virtual void AddAction(String text)
-        {
-            
-        }
-        
-        protected virtual void AddAction(StringCollection collection)
-        {
-            
-        }
-        
-        protected virtual void RemoveAction()
+        public virtual void RemoveAction()
         {
             try
             {
@@ -385,8 +437,36 @@ namespace Common_Library.GUI.WinForms.ListViews
             }
         }
 
-        protected virtual void ChangeAction()
+        private void DoubleClickChange(ListViewItem item, MouseEventArgs e)
         {
+            if (DoubleClickForChange && ActionType.HasFlag(ActionType.Change))
+            {
+                ChangeAction(item);
+            }
+        }
+        
+        public virtual void ChangeAction()
+        {
+            if (SelectedItems.Count <= 0)
+            {
+                return;
+            }
+
+            ChangeAction(SelectedItems[0]);
+        }
+
+        public virtual void ResetAction()
+        {
+        }
+        
+        public virtual void ChangeAction(ListViewItem item)
+        {
+            ItemForm.TextBox.Clear();
+            ItemForm.TextBox.Text = item.Text;
+            if (ItemForm.ShowDialog() == DialogResult.OK && CheckValidItem(ItemForm.TextBox.Text))
+            {
+                item.Text = ItemForm.TextBox.Text;
+            }
         }
 
         private void OpenContextMenu(Object sender, MouseEventArgs e)
@@ -395,16 +475,17 @@ namespace Common_Library.GUI.WinForms.ListViews
             {
                 return;
             }
-            
-            _menu.Show(Cursor.Position);
 
-            if (FocusedItem != null && FocusedItem.Bounds.Contains(e.Location))
+
+            if (FocusedItem == null || !FocusedItem.Bounds.Contains(e.Location))
             {
                 
             }
+
+            _menu.Show(Cursor.Position);
         }
 
-        private void OnMenuActionClicked(Object sender, ToolStripItemClickedEventArgs e)
+        protected virtual void OnMenuActionClicked(Object sender, ToolStripItemClickedEventArgs e)
         {
             ActionType action = Buttons.TryGetValue(e.ClickedItem);
 
@@ -430,6 +511,9 @@ namespace Common_Library.GUI.WinForms.ListViews
                     break;
                 case ActionType.Change:
                     ChangeAction();
+                    break;
+                case ActionType.Reset:
+                    ResetAction();
                     break;
                 default:
                     break;

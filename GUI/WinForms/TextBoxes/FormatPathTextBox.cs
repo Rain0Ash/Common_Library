@@ -14,14 +14,6 @@ namespace System.Windows.Forms
 {
     public class FormatPathTextBox : PathTextBox
     {
-        public override Boolean CheckWellFormed
-        {
-            get
-            {
-                return true;
-            }
-        }
-
         public IEnumerable<FormatedField> AvailableFormatingPartsGroupList;
 
         public event Handlers.EmptyHandler AvailableFormatingPartsChanged;
@@ -77,6 +69,7 @@ namespace System.Windows.Forms
 
         public FormatPathTextBox(IReflect type = null)
         {
+            CheckWellFormed = true;
             ValidateFunc = obj => CheckValid();
             UpdateAvailableFormatingParts(type);
 
@@ -128,13 +121,18 @@ namespace System.Windows.Forms
             }
         }
 
-        public override Boolean IsValid(PathType type)
+        public override Boolean IsValid(PathType type, PathStatus status)
         {
-            return IsValidPath() && CheckValidFormat();
+            return IsValidPath() && CheckValid();
         }
 
         private Boolean CheckValid()
         {
+            if (!CheckWellFormed)
+            {
+                return true;
+            }
+            
             Boolean check = IsWellFormed();
 
             if (!check)

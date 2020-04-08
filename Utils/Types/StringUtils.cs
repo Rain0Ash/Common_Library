@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Common_Library.Crypto;
+using Common_Library.Utils.Types;
 
 namespace Common_Library.Utils
 {
@@ -216,14 +218,14 @@ namespace Common_Library.Utils
             return String.Join(str, value);
         }
 
-        public static String CapitalizeFirstChar(this String input)
+        public static String CapitalizeFirstChar(this String str)
         {
-            if (String.IsNullOrEmpty(input))
+            if (String.IsNullOrEmpty(str))
             {
-                return input;
+                return str;
             }
 
-            return input[0].ToString().ToUpper() + input.Substring(1);
+            return str[0].ToString().ToUpper() + str.Substring(1);
         }
     }
 }

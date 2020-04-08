@@ -5,7 +5,11 @@ using System;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using Common_Library.GUI.WinForms.Forms;
+using Common_Library.GUI.WinForms.TextBoxes;
+using Common_Library.Types.Drawing;
 using Common_Library.Utils;
+using Common_Library.Utils.GUI.ListView;
 using Common_Library.Utils.IO;
 using Common_Library.Watchers;
 
@@ -36,6 +40,29 @@ namespace Common_Library.GUI.WinForms.ListViews
             }
         }
         
+        public event Handlers.EmptyHandler PathStatusChanged;
+
+        private PathStatus _pathStatus = PathStatus.All;
+
+        public PathStatus PathStatus
+        {
+            get
+            {
+                return _pathStatus;
+            }
+            set
+            {
+                if (_pathStatus == value)
+                {
+                    return;
+                }
+
+                _pathStatus = value;
+                PathStatusChanged?.Invoke();
+                Refresh();
+            }
+        }
+        
         public String RecursiveText
         {
             get
@@ -50,9 +77,10 @@ namespace Common_Library.GUI.WinForms.ListViews
 
         public PathListView()
         {
-            ValidateFunc = obj => CheckValidFormat();
+            ValidateFunc = CheckValidItem;
             RecursiveText = "Recursive";
             ActionType |= ActionType.ChangeStatus;
+            ItemForm = new PathTextBoxForm {TextBox = {ValidateFunc = CheckValidItem}};
         }
 
         public override void Insert(Int32 index, Object item)
@@ -75,6 +103,16 @@ namespace Common_Library.GUI.WinForms.ListViews
             base.Insert(index, lvitem);
         }
 
+        protected override Boolean CheckValidItem(Object item)
+        {
+            return item switch
+            {
+                FSWatcher watcher => watcher.IsValid(),
+                ListViewItem lvitem => CheckValidFormatItem(lvitem),
+                _ => PathUtils.IsValidPath(item.ToString(), PathType, PathStatus)
+            };
+        }
+        
         protected override Boolean CheckValidFormatItem(ListViewItem item)
         {
             Object path = item.Tag ?? item.Text;
@@ -84,7 +122,7 @@ namespace Common_Library.GUI.WinForms.ListViews
                 return watcher.IsValid();
             }
 
-            return PathUtils.IsValidPath(path.ToString(), PathType);
+            return PathUtils.IsValidPath(path.ToString(), PathType, PathStatus);
         }
 
         protected override void OnKeyDown(Object sender, KeyEventArgs e)
@@ -101,32 +139,60 @@ namespace Common_Library.GUI.WinForms.ListViews
             }
         }
 
-        protected virtual void RecursiveAction()
+        protected override void OnMenuActionClicked(Object sender, ToolStripItemClickedEventArgs e)
+        {
+            ActionType action = Buttons.TryGetValue(e.ClickedItem);
+
+            switch (action)
+            {
+                case ActionType.ChangeStatus:
+                    RecursiveAction();
+                    break;
+                default:
+                    base.OnMenuActionClicked(sender, e);
+                    break;
+            }
+        }
+
+        public override void ChangeAction(ListViewItem item)
+        {
+            base.ChangeAction(item);
+
+            if (item.Tag is FSWatcher watcher)
+            {
+                watcher.Path = item.Text;
+            }
+        }
+        
+        public virtual void RecursiveAction()
         {
             foreach (ListViewItem item in SelectedItems)
             {
                 if (item.Tag is FSWatcher watcher)
                 {
-                    watcher.Recursive = true;
+                    watcher.Recursive = !watcher.Recursive;
                 }
             }
-            
-            Refresh();
         }
 
-        protected override void OnDrawItem(Object sender, DrawListViewItemEventArgs e)
+        protected override String GetItemImageKey(ListViewItem lvitem)
         {
-            base.OnDrawItem(sender, e);
-            
-            Graphics graphics = e.Graphics;
-            ListViewItem item = e.Item;
-            Object watcher = item.Tag;
-            
-            if (watcher is FSWatcher path && path.Recursive)
+            if (lvitem.Tag is FSWatcher watcher)
             {
-                graphics.DrawString("R", item.Font, Brushes.Red,
-                    new Rectangle(item.Bounds.Width - TextRenderer.MeasureText("R", item.Font).Width, item.Bounds.Y, item.Bounds.Width, item.Bounds.Height));
+                return lvitem.ImageList.GetOrSetImageKey(watcher.Icon);
             }
+
+            return base.GetItemImageKey(lvitem);
+        }
+        
+        protected override Color GetItemForeColor(ListViewItem lvitem, DrawingData data)
+        {
+            if (lvitem.Tag is FSWatcher watcher && watcher.Recursive)
+            {
+                return Color.Red;
+            }
+            
+            return base.GetItemForeColor(lvitem, data);
         }
     }
 }

@@ -32,8 +32,7 @@ namespace Common_Library.GUI.WinForms.TextBoxes
                 CheckWellFormedChanged?.Invoke();
             }
         }
-
-
+        
         public event Handlers.EmptyHandler PathTypeChanged;
 
         private PathType _pathType = PathType.All;
@@ -55,6 +54,28 @@ namespace Common_Library.GUI.WinForms.TextBoxes
                 PathTypeChanged?.Invoke();
             }
         }
+        
+        public event Handlers.EmptyHandler PathStatusChanged;
+
+        private PathStatus _pathStatus = PathStatus.All;
+
+        public PathStatus PathStatus
+        {
+            get
+            {
+                return _pathStatus;
+            }
+            set
+            {
+                if (_pathStatus == value)
+                {
+                    return;
+                }
+
+                _pathStatus = value;
+                PathStatusChanged?.Invoke();
+            }
+        }
 
         public PathTextBox()
         {
@@ -68,7 +89,7 @@ namespace Common_Library.GUI.WinForms.TextBoxes
         {
             Boolean check = CheckValidFormat();
 
-            if (PathUtils.IsValidPath(Text, PathType) && check)
+            if (PathUtils.IsValidPath(Text, PathType, PathStatus) && check)
             {
                 BackColor = Color.White;
             }
@@ -84,12 +105,22 @@ namespace Common_Library.GUI.WinForms.TextBoxes
 
         public Boolean IsValid()
         {
-            return IsValid(PathType);
+            return IsValidPath();
         }
 
-        public virtual Boolean IsValid(PathType type)
+        public Boolean IsValid(PathType type)
         {
             return IsValidPath(type);
+        }
+        
+        public Boolean IsValid(PathStatus status)
+        {
+            return IsValidPath(status);
+        }
+        
+        public virtual Boolean IsValid(PathType type, PathStatus status)
+        {
+            return IsValidPath(type, status);
         }
 
         public Boolean IsWellFormed()
@@ -104,7 +135,17 @@ namespace Common_Library.GUI.WinForms.TextBoxes
 
         public Boolean IsValidPath(PathType type)
         {
-            return PathUtils.IsValidPath(Text, type);
+            return PathUtils.IsValidPath(Text, type, PathStatus);
+        }
+        
+        public Boolean IsValidPath(PathStatus status)
+        {
+            return PathUtils.IsValidPath(Text, PathType, status);
+        }
+        
+        public Boolean IsValidPath(PathType type, PathStatus status)
+        {
+            return PathUtils.IsValidPath(Text, type, status);
         }
 
         public String GetAbsolutePath()

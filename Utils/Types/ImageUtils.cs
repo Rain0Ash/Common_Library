@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using Common_Library.Crypto;
+using Common_Library.Utils.Types;
 
 namespace Common_Library.Utils
 {
@@ -60,7 +61,12 @@ namespace Common_Library.Utils
             return stream.ToArray();
         }
 
-        public static Byte[] Hash(this Image img, HashType type)
+        public static Byte[] GetHash(this Image img)
+        {
+            return img.ToBytes().GetHash();
+        }
+        
+        public static Byte[] GetHash(this Image img, HashType type)
         {
             return Cryptography.Hash.Hashing(img.ToBytes(), type);
         }

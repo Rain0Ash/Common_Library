@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Common_Library.Crypto;
+using Common_Library.Types.Drawing;
 using Common_Library.Types.Map;
 using Common_Library.Utils;
 using Common_Library.Utils.IO;
@@ -62,10 +63,11 @@ namespace Common_Library.GUI.WinForms.ListViews
         protected readonly ImageList Images = new ImageList();
         protected readonly Map<Object, ListViewItem> ItemsDictionary = new Map<Object, ListViewItem>();
         protected readonly EventDictionary<Object, String> ImageDictionary = new EventDictionary<Object, String>();
-        protected readonly EventDictionary<Object, (Color background, Color foreground, Font font)> ColorDictionary = new EventDictionary<Object, (Color background, Color foreground, Font font)>();
+        protected readonly EventDictionary<Object, DrawingData> ColorDictionary = new EventDictionary<Object, DrawingData>();
 
         public RowImageColorListView()
         {
+            Columns.Add("default");
             OwnerDraw = true;
             GridLines = true;
             FullRowSelect = true;
@@ -75,11 +77,12 @@ namespace Common_Library.GUI.WinForms.ListViews
             DrawItem += OnDrawItem;
             DrawSubItem += OnDrawSubItem;
             SizeChanged += OnSizeChanged;
+            ClientSizeChanged += OnSizeChanged;
             ImageDictionary.ItemsChanged += Refresh;
             ColorDictionary.ItemsChanged += Refresh;
         }
 
-        protected virtual void OnDrawItem(Object sender, DrawListViewItemEventArgs e)
+        protected void OnDrawItem(Object sender, DrawListViewItemEventArgs e)
         {
             e.DrawDefault = true;
             
@@ -92,14 +95,36 @@ namespace Common_Library.GUI.WinForms.ListViews
             }
 
             Object item = ItemsDictionary.TryGetValue(lvitem, (Object) lvitem);
-
-            (Color background, Color foreground, Font font) = ColorDictionary.TryGetValue(item, (DefaultBackgroundColor, DefaultForegroundColor, Font));
             
-            lvitem.ImageKey = ImageDictionary.TryGetValue(item, "null");
-            lvitem.BackColor = !CheckValidFormatItem(lvitem) ? InvalidColor : background.IsEmpty ? DefaultBackgroundColor : background;
-            lvitem.ForeColor = foreground.IsEmpty ? DefaultForegroundColor : foreground;
-            lvitem.Font = font ?? lvitem.Font;
+            DrawingData data = ColorDictionary.TryGetValue(item, new DrawingData(DefaultBackgroundColor, DefaultForegroundColor, lvitem.Font));
+            
+            lvitem.ImageKey = GetItemImageKey(lvitem);
+            lvitem.BackColor = GetItemBackColor(lvitem, data);
+            lvitem.ForeColor = GetItemForeColor(lvitem, data);
+            lvitem.Font = GetItemFont(lvitem, data);
             e.Graphics.FillRectangle(new SolidBrush(lvitem.BackColor), e.Item.Bounds);
+        }
+
+        protected virtual String GetItemImageKey(ListViewItem lvitem)
+        {
+            Object item = ItemsDictionary.TryGetValue(lvitem, (Object) lvitem);
+            
+            return ImageDictionary.TryGetValue(item, "null");
+        }
+        
+        protected virtual Color GetItemBackColor(ListViewItem lvitem, DrawingData data)
+        {
+            return !CheckValidFormatItem(lvitem) ? InvalidColor : data.BackgroundColor.IsEmpty ? DefaultBackgroundColor : data.BackgroundColor;
+        }
+        
+        protected virtual Color GetItemForeColor(ListViewItem lvitem, DrawingData data)
+        {
+            return data.ForegroundColor.IsEmpty ? DefaultForegroundColor : data.ForegroundColor;
+        }
+        
+        protected virtual Font GetItemFont(ListViewItem lvitem, DrawingData data)
+        {
+            return data.Font ?? lvitem.Font;
         }
 
         public void OnDrawColumnHeader(Object sender, DrawListViewColumnHeaderEventArgs e)
@@ -114,7 +139,7 @@ namespace Common_Library.GUI.WinForms.ListViews
 
         public void SetColor(Object item, Color background, Color foreground, Font font = null)
         {
-            ColorDictionary.Set(item, (background, foreground, font));
+            ColorDictionary.Set(item, new DrawingData(background, foreground, font));
         }
         
         public void RemoveColor(Object item)
@@ -134,7 +159,7 @@ namespace Common_Library.GUI.WinForms.ListViews
         
         public void SetImage(Object item, Image image)
         {
-            String hash = image.Hash(HashType.MD5).ToByteString();
+            String hash = image.GetHash(HashType.MD5).Text();
 
             if (!Images.Images.ContainsKey(hash))
             {

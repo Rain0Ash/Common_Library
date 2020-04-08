@@ -6,11 +6,11 @@ using Common_Library.GUI.WinForms.ToolTips;
 
 namespace System.Windows.Forms
 {
-    public class HelpForm : LocalizationForm
+    public class HelpToolTipForm : LocalizationForm
     {
         private readonly HelpToolTip _helpToolTip;
 
-        public HelpForm()
+        public HelpToolTipForm()
         {
             _helpToolTip = new HelpToolTip
             {

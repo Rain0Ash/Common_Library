@@ -114,6 +114,11 @@ namespace Common_Library.Utils.IO
 
         private static Boolean CheckValidPath(String path, PathType type)
         {
+            if (path.IsNullOrEmpty())
+            {
+                return false;
+            }
+            
             return type switch
             {
                 PathType.None => false,
@@ -155,7 +160,7 @@ namespace Common_Library.Utils.IO
 
         public static Boolean IsValidPath(String path, Boolean allowNetworkPath = true)
         {
-            return GetFullPath(path) != null && (!IsNetworkPath(path) || allowNetworkPath && IsValidNetworkPath(path));
+            return !path.IsNullOrEmpty() && !GetFullPath(path).IsNullOrEmpty() && (!IsNetworkPath(path) || allowNetworkPath && IsValidNetworkPath(path));
         }
 
         public static Boolean IsValidFolderPath(String path, Boolean allowNetworkPath = true)
@@ -170,14 +175,14 @@ namespace Common_Library.Utils.IO
 
         public static Boolean IsNetworkPath(String path)
         {
-            return path.StartsWith("\\");
+            return !path.IsNullOrEmpty() && path.StartsWith("\\");
         }
 
         public static Boolean IsValidNetworkPath(String path)
         {
             try
             {
-                return IsNetworkPath(path) && new Uri(path).IsUnc &&
+                return !path.IsNullOrEmpty() && IsNetworkPath(path) && new Uri(path).IsUnc &&
                        Regex.IsMatch(path, @"^\\{2}[\w-]+(\\{1}(([\w-][\w-\s]*[\w-]+[$$]?)|([\w-][$$]?$)))+");
             }
             catch (Exception)
@@ -188,7 +193,7 @@ namespace Common_Library.Utils.IO
 
         public static Boolean IsValidUrl(String path)
         {
-            return Uri.TryCreate(path, UriKind.Absolute, out Uri uriResult) && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
+            return !path.IsNullOrEmpty() && Uri.TryCreate(path, UriKind.Absolute, out Uri uriResult) && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
         }
         
         public static Boolean IsUrlContainData(String path)

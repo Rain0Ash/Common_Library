@@ -9,7 +9,8 @@ namespace Common_Library.Watchers.Interfaces
 {
     public interface IPathWatcher : IDisposable
     {
-        public String Path { get; }
+        public event Handlers.EmptyHandler PathChanged;
+        public String Path { get; set; }
         public PathStatus PathStatus { get; set; }
         
         public Image Icon { get; }

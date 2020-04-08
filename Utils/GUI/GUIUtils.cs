@@ -20,14 +20,16 @@ namespace Common_Library.Utils
         Swap = 16,
         Add = 32,
         Remove = 64,
-        Change = 128,
-        Basic = 255,
-        ChangeStatus = 256,
-        Replace = 512,
-        Additional1 = 1024,
-        Additional2 = 2048,
-        Additional3 = 4096,
-        All = 8191
+        Edit = 128,
+        Change = 256,
+        Basic = 511,
+        ChangeStatus = 512,
+        Replace = 1024,
+        Reset = 2048,
+        Additional1 = 4096,
+        Additional2 = 8192,
+        Additional3 = 16383,
+        All = 32767
     }
 
     public static class GUIUtils

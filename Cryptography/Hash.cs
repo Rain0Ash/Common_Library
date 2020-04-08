@@ -48,7 +48,7 @@ namespace Common_Library.Crypto
 
             public static String Sha1String(Byte[] data)
             {
-                return Sha1(data).ToByteString();
+                return Sha1(data).Text();
             }
 
             public static Byte[] Sha256(Byte[] data)
@@ -59,7 +59,7 @@ namespace Common_Library.Crypto
 
             public static String Sha256String(Byte[] data)
             {
-                return Sha256(data).ToByteString();
+                return Sha256(data).Text();
             }
 
             public static Byte[] Sha384(Byte[] data)
@@ -70,7 +70,7 @@ namespace Common_Library.Crypto
 
             public static String Sha384String(Byte[] data)
             {
-                return Sha384(data).ToByteString();
+                return Sha384(data).Text();
             }
 
             public static Byte[] Sha512(Byte[] data)
@@ -81,7 +81,7 @@ namespace Common_Library.Crypto
 
             public static String Sha512String(Byte[] data)
             {
-                return Sha512(data).ToByteString();
+                return Sha512(data).Text();
             }
 
             public static Byte[] MD5(Byte[] data)
@@ -92,7 +92,7 @@ namespace Common_Library.Crypto
 
             public static String MD5String(Byte[] data)
             {
-                return MD5(data).ToByteString();
+                return MD5(data).Text();
             }
 
             public static Byte Crc8(Byte[] data)

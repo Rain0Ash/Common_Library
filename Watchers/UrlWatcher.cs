@@ -4,17 +4,11 @@
 using System;
 using System.Drawing;
 using Common_Library.Utils.IO;
-using Common_Library.Watchers.Interfaces;
 
 namespace Common_Library.Watchers
 {
-    public class UrlWatcher : IPathWatcher
+    public class UrlWatcher : WatcherBase
     {
-        public String Path { get; }
-        
-        public PathStatus PathStatus { get; set; }
-
-        
         private Image _networkActiveImage;
         public Image NetworkActiveImage
         {
@@ -28,7 +22,7 @@ namespace Common_Library.Watchers
             }
         }
         
-        public Image Icon
+        public override Image Icon
         {
             get
             {
@@ -46,18 +40,8 @@ namespace Common_Library.Watchers
             Path = url;
             PathStatus = status;
         }
-        
-        public void StartWatch()
-        {
-            throw new NotImplementedException();
-        }
 
-        public void StopWatch()
-        {
-            throw new NotImplementedException();
-        }
-        
-        public Boolean IsValid()
+        public override Boolean IsValid()
         {
             return IsValid(PathStatus);
         }
@@ -73,12 +57,12 @@ namespace Common_Library.Watchers
             };
         }
 
-        public Boolean IsExist()
+        public override Boolean IsExist()
         {
             return IsValid(PathStatus.Exist);
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
         }
     }

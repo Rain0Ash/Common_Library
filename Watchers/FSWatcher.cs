@@ -4,11 +4,9 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Common_Library.Exceptions;
-using Common_Library.Watchers.Interfaces;
 using Common_Library.Utils.IO;
 using Common_Library.Watchers.FileSystem;
 using Common_Library.Watchers.FileSystem.Interfaces;
@@ -16,16 +14,9 @@ using JetBrains.Annotations;
 
 namespace Common_Library.Watchers
 {
-    public class FSWatcher : IPathWatcher
+    public class FSWatcher : WatcherBase
     {
-        public static implicit operator String(FSWatcher path)
-        {
-            return path.ToString();
-        }
-
-        public String Path { get; }
         public PathType PathType { get; set; }
-        public PathStatus PathStatus { get; set; }
 
         private readonly IWatcher _watcher;
 
@@ -54,15 +45,26 @@ namespace Common_Library.Watchers
             {
                 CheckWatcher();
 
-                if (!(_watcher is IPoller poller))
-                {
-                    return;
-                }
-
-                if (value != null)
+                if (value != null && _watcher is IPoller poller)
                 {
                     poller.Polling = value.Value;
                 }
+            }
+        }
+
+        public Boolean WatcherEnabled
+        {
+            get
+            {
+                CheckWatcher();
+
+                return _watcher.EnableRaisingEvents;
+            }
+            set
+            {
+                CheckWatcher();
+
+                _watcher.EnableRaisingEvents = value;
             }
         }
 
@@ -164,7 +166,7 @@ namespace Common_Library.Watchers
             }
         }
 
-        public Image Icon
+        public override Image Icon
         {
             get
             {
@@ -193,6 +195,19 @@ namespace Common_Library.Watchers
             PathStatus = status;
 
             _watcher = FileSystem.Watcher.Factory(watcherType, Path);
+
+            if (_watcher != null)
+            {
+                WatcherEnabled = false;
+            }
+        }
+
+        protected override void OnPathChanged()
+        {
+            if (_watcher != null)
+            {
+                _watcher.Path = Path;
+            }
         }
         
         public FSWatcher(String path, IWatcher watcher, PathType type = PathType.All, PathStatus status = PathStatus.All)
@@ -224,19 +239,19 @@ namespace Common_Library.Watchers
             _watcher.IncludeSubdirectories = Recursive;
         }
 
-        public void StartWatch()
+        public override void StartWatch()
         {
             CheckWatcher();
             
             _watcher.StartWatch();
         }
 
-        public void StopWatch()
+        public override void StopWatch()
         {
             _watcher?.StopWatch();
         }
 
-        public Boolean IsValid()
+        public override Boolean IsValid()
         {
             return IsValid(PathType, PathStatus);
         }
@@ -266,7 +281,7 @@ namespace Common_Library.Watchers
             return PathUtils.IsExistAsFile(Path);
         }
 
-        public Boolean IsExist()
+        public override Boolean IsExist()
         {
             return PathUtils.IsExist(Path, PathType);
         }
@@ -333,23 +348,8 @@ namespace Common_Library.Watchers
         {
             return FileUtils.ReadFileLines(Path, isThrow);
         }
-
-        public override String ToString()
-        {
-            return Path;
-        }
-
-        public override Boolean Equals(Object? obj)
-        {
-            return obj != null && obj.ToString().Equals(Path, StringComparison.InvariantCultureIgnoreCase);
-        }
-
-        public override Int32 GetHashCode()
-        {
-            return Path.GetHashCode();
-        }
-
-        public void Dispose()
+        
+        public override void Dispose()
         {
             Watcher?.Dispose();
         }

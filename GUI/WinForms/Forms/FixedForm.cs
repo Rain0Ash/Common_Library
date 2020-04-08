@@ -9,6 +9,8 @@ namespace Common_Library.GUI.WinForms.Forms
 {
     public abstract class FixedForm : Form
     {
+        public Object ReturnValue { get; protected set; }
+        
         protected FixedForm()
         {
             DoubleBuffered = true;

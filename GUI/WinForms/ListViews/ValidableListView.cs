@@ -13,8 +13,34 @@ namespace Common_Library.GUI.WinForms.ListViews
     public class ValidableListView : FixedListView, IAutoValidable
     {
         public Color InvalidColor { get; set; } = Color.Coral;
+
+        public event Handlers.FuncHandler<Object, Boolean> ValidateFuncChanged;  
         
-        public Func<Object, Boolean> ValidateFunc { get; set; } = obj => true;
+        private Func<Object, Boolean> _validateFunc = obj => true;
+
+        public Func<Object, Boolean> ValidateFunc
+        {
+            get
+            {
+                return _validateFunc;
+            }
+            set
+            {
+                if (_validateFunc == value)
+                {
+                    return;
+                }
+                
+                _validateFunc = value;
+                
+                ValidateFuncChanged?.Invoke(_validateFunc);
+            }
+        }
+        
+        protected virtual Boolean CheckValidItem(Object item)
+        {
+            return ValidateFunc?.Invoke(item) ?? true;
+        }
         
         protected virtual Boolean CheckValidFormatItem(ListViewItem item)
         {

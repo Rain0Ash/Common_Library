@@ -477,7 +477,7 @@ namespace Common_Library.Utils
             return collection?.Count > 0;
         }
 
-        public static String ToByteString(this Byte[] data)
+        public static String Text(this Byte[] data)
         {
             return data == null ? null : BitConverter.ToString(data).Replace("-", String.Empty);
         }
