@@ -2,11 +2,10 @@
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
 using System;
+using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 using Common_Library.GUI.WinForms.Forms;
-using Common_Library.GUI.WinForms.TextBoxes;
 using Common_Library.Types.Drawing;
 using Common_Library.Utils;
 using Common_Library.Utils.GUI.ListView;
@@ -151,6 +150,30 @@ namespace Common_Library.GUI.WinForms.ListViews
                 default:
                     base.OnMenuActionClicked(sender, e);
                     break;
+            }
+        }
+
+        public override void ViewAction()
+        {
+            if (SelectedItems.Count <= 0)
+            {
+                return;
+            }
+            
+            String path = PathUtils.GetFullPath(SelectedItems[0].Text);
+
+            if (!PathUtils.IsValidPath(path, PathType.Folder, PathStatus.Exist))
+            {
+                return;
+            }
+
+            try
+            {
+                Process.Start(@$"explorer.exe", $"\"{$@"{path}"}\"");
+            }
+            catch (Exception)
+            {
+                // ignored
             }
         }
 

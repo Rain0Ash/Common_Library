@@ -5,7 +5,6 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using Common_Library.GUI.WinForms.TextBoxes;
-using Common_Library.Interfaces;
 
 namespace Common_Library.GUI.WinForms.Forms
 {
@@ -27,7 +26,31 @@ namespace Common_Library.GUI.WinForms.Forms
 
         public Button ApplyButton { get; }
         public Button DenyButton { get; }
+
+        public String ApplyText
+        {
+            get
+            {
+                return ApplyButton.Text;
+            }
+            set
+            {
+                ApplyButton.Text = value;
+            }
+        }
         
+        public String DenyText
+        {
+            get
+            {
+                return DenyButton.Text;
+            }
+            set
+            {
+                DenyButton.Text = value;
+            }
+        }
+
         public TextBoxForm()
         {
             ApplyButton = new Button();

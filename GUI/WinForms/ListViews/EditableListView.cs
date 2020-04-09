@@ -43,9 +43,23 @@ namespace Common_Library.GUI.WinForms.ListViews
 
         public Boolean DoubleClickForChange { get; set; } = true;
         
+        public Boolean DoubleEmptyClickForAdd { get; set; } = true;
+
         #region Text
         
         public TextBoxForm ItemForm { get; set; } = new TextBoxForm();
+
+        public String ItemFormTitle
+        {
+            get
+            {
+                return ItemForm.Text;
+            }
+            set
+            {
+                ItemForm.Text = value;
+            }
+        }
 
         protected String GetText(ActionType action)
         {
@@ -160,6 +174,7 @@ namespace Common_Library.GUI.WinForms.ListViews
         {
             {ActionType.Select, new ToolStripMenuItem("Select")},
             {ActionType.Copy, new ToolStripMenuItem("Copy")},
+            {ActionType.View, new ToolStripMenuItem("View")},
             {ActionType.Paste, new ToolStripMenuItem("Paste")},
             {ActionType.Cut, new ToolStripMenuItem("Cut")},
             {ActionType.Add, new ToolStripMenuItem("Add")},
@@ -182,6 +197,7 @@ namespace Common_Library.GUI.WinForms.ListViews
             MouseDown += OpenContextMenu;
             _menu.ItemClicked += OnMenuActionClicked;
             ItemDoubleClick += DoubleClickChange;
+            EmptyDoubleClick += DoubleEmptyClickAdd;
         }
 
         protected override void OnSelectedIndexChanged(EventArgs e)
@@ -230,6 +246,9 @@ namespace Common_Library.GUI.WinForms.ListViews
                 case Keys.C when ActionType.HasFlag(ActionType.Copy) && e.Control:
                     CopyAction();
                     break;
+                case Keys.E when ActionType.HasFlag(ActionType.View) && e.Control:
+                    ViewAction();
+                    break;
                 case Keys.V when ActionType.HasFlag(ActionType.Paste) && e.Control:
                     PasteAction();
                     break;
@@ -277,6 +296,11 @@ namespace Common_Library.GUI.WinForms.ListViews
             {
                 // ignored
             }
+        }
+
+        public virtual void ViewAction()
+        {
+            
         }
 
         public virtual void PasteAction()
@@ -444,6 +468,14 @@ namespace Common_Library.GUI.WinForms.ListViews
                 ChangeAction(item);
             }
         }
+
+        private void DoubleEmptyClickAdd(MouseEventArgs e)
+        {
+            if (DoubleEmptyClickForAdd && ActionType.HasFlag(ActionType.Add))
+            {
+                AddAction();
+            }
+        }
         
         public virtual void ChangeAction()
         {
@@ -469,20 +501,29 @@ namespace Common_Library.GUI.WinForms.ListViews
             }
         }
 
-        private void OpenContextMenu(Object sender, MouseEventArgs e)
+        protected virtual void OpenContextMenu(Object sender, MouseEventArgs e)
         {
             if (!AllowContextMenu || e.Button != ContextMenuButton)
             {
                 return;
             }
 
+            ContextMenuStrip menu;
 
-            if (FocusedItem == null || !FocusedItem.Bounds.Contains(e.Location))
+            if (SelectedItems.Count > 1)
             {
-                
+                menu = _menu;
             }
-
-            _menu.Show(Cursor.Position);
+            else if (SelectedItems.Count == 1)
+            {
+                menu = _menu;
+            }
+            else
+            {
+                menu = _menu;
+            }
+            
+            menu.Show(Cursor.Position);
         }
 
         protected virtual void OnMenuActionClicked(Object sender, ToolStripItemClickedEventArgs e)
@@ -496,6 +537,9 @@ namespace Common_Library.GUI.WinForms.ListViews
                     break;
                 case ActionType.Copy:
                     CopyAction();
+                    break;
+                case ActionType.View:
+                    ViewAction();
                     break;
                 case ActionType.Paste:
                     PasteAction();
