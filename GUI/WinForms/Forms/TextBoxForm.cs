@@ -83,7 +83,7 @@ namespace Common_Library.GUI.WinForms.Forms
                 Close();
             };
             
-            Text = @"Write value";
+            Text = @"Set value";
 
             ClientSize = new Size(500, 54);
             FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -95,7 +95,7 @@ namespace Common_Library.GUI.WinForms.Forms
             Controls.Add(DenyButton);
         }
 
-        public virtual void OnTextBoxTextChanged(Object sender, EventArgs e)
+        protected virtual void OnTextBoxTextChanged(Object sender, EventArgs e)
         {
             ReturnValue = TextBox.Text;
             ApplyButton.Enabled = TextBox.CheckValidFormat();

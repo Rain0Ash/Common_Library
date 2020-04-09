@@ -69,21 +69,21 @@ namespace Common_Library.Watchers
         }
 
         public event Handlers.EmptyHandler RecursiveChanged;
-        private Boolean _recursive;
-        public Boolean Recursive
+        private Boolean _isRecursive;
+        public Boolean IsRecursive
         {
             get
             {
-                return _recursive;
+                return _isRecursive;
             }
             set
             {
-                if (_recursive == value)
+                if (_isRecursive == value)
                 {
                     return;
                 }
 
-                _recursive = value;
+                _isRecursive = value;
                 RecursiveChanged?.Invoke();
             }
         }
@@ -236,7 +236,7 @@ namespace Common_Library.Watchers
                 return;
             }
             
-            _watcher.IncludeSubdirectories = Recursive;
+            _watcher.IncludeSubdirectories = IsRecursive;
         }
 
         public override void StartWatch()
@@ -303,7 +303,7 @@ namespace Common_Library.Watchers
         
         public IEnumerable<String> GetEntries(PathType type)
         {
-            return GetEntries(type, Recursive);
+            return GetEntries(type, IsRecursive);
         }
         
         public IEnumerable<String> GetEntries(Boolean recursive)

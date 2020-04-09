@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using Common_Library.GUI.WinForms.Forms;
+using Common_Library.GUI.WinForms.ToolStrips.Items;
 using Common_Library.Types.Drawing;
 using Common_Library.Utils;
 using Common_Library.Utils.GUI.ListView;
@@ -76,17 +77,18 @@ namespace Common_Library.GUI.WinForms.ListViews
 
         public PathListView()
         {
+            OverlapAllowed = false;
             ValidateFunc = CheckValidItem;
             RecursiveText = "Recursive";
             ActionType |= ActionType.ChangeStatus;
-            ItemForm = new PathTextBoxForm {TextBox = {ValidateFunc = CheckValidItem}};
+            ItemForm = new PathTextBoxForm {TextBox = {ValidateFunc = obj => ValidateFunc?.Invoke(obj) != false}};
         }
 
         public override void Insert(Int32 index, Object item)
         {
             if (!(item is ListViewItem lvitem))
             {
-                lvitem = ItemsDictionary.GetOrAdd(item, new ListViewItem(item.ToString()));
+                lvitem = ItemsMap.TryGetValue(item, new ListViewItem(item.ToString()));
 
                 if (item is FSWatcher watcher)
                 {
@@ -140,7 +142,12 @@ namespace Common_Library.GUI.WinForms.ListViews
 
         protected override void OnMenuActionClicked(Object sender, ToolStripItemClickedEventArgs e)
         {
-            ActionType action = Buttons.TryGetValue(e.ClickedItem);
+            if (!(e.ClickedItem is FixedToolStripMenuItem item))
+            {
+                return;
+            }
+            
+            ActionType action = Buttons.TryGetValue(item);
 
             switch (action)
             {
@@ -193,7 +200,7 @@ namespace Common_Library.GUI.WinForms.ListViews
             {
                 if (item.Tag is FSWatcher watcher)
                 {
-                    watcher.Recursive = !watcher.Recursive;
+                    watcher.IsRecursive = !watcher.IsRecursive;
                 }
             }
         }
@@ -210,7 +217,7 @@ namespace Common_Library.GUI.WinForms.ListViews
         
         protected override Color GetItemForeColor(ListViewItem lvitem, DrawingData data)
         {
-            if (lvitem.Tag is FSWatcher watcher && watcher.Recursive)
+            if (lvitem.Tag is FSWatcher watcher && watcher.IsRecursive)
             {
                 return Color.Red;
             }

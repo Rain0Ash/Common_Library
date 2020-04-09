@@ -60,6 +60,7 @@
         <Generator>TextTemplatingFileGenerator</Generator>
         <LastGenOutput>Point.cs</LastGenOutput>
       </None>
+      <None Remove="Tests\**" />
     </ItemGroup>
 
     <ItemGroup>
@@ -83,6 +84,7 @@
       <Compile Update="Types\Other\Point.cs">
         <DependentUpon>Point.tt</DependentUpon>
       </Compile>
+      <Compile Remove="Tests\**" />
     </ItemGroup>
 
     <ItemGroup>
@@ -90,6 +92,7 @@
         <Generator>PublicResXFileCodeGenerator</Generator>
         <LastGenOutput>CircularImages.Designer.cs</LastGenOutput>
       </EmbeddedResource>
+      <EmbeddedResource Remove="Tests\**" />
     </ItemGroup>
 
 </Project>

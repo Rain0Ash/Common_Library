@@ -65,7 +65,7 @@ namespace Common_Library.GUI.WinForms.ListBoxes
             Graphics graphics = e.Graphics;
             Rectangle bounds = e.Bounds;
 
-            if (item is FSWatcher path && path.Recursive)
+            if (item is FSWatcher path && path.IsRecursive)
             {
                 graphics.DrawString("R", e.Font, Brushes.Red,
                     new Rectangle(bounds.Width - TextRenderer.MeasureText("R", e.Font).Width, bounds.Y, bounds.Width, bounds.Height));

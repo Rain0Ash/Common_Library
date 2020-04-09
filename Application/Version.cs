@@ -160,7 +160,7 @@ namespace Common_Library.App
             return Version.Equals(other.Version) && Status == other.Status && Branch == other.Branch;
         }
 
-        public override Boolean Equals(Object obj)
+        public override Boolean Equals(Object? obj)
         {
             return obj is AppVersion other && Equals(other);
         }

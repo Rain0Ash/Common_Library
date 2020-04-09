@@ -8,6 +8,8 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Common_Library.GUI.WinForms.Forms;
+using Common_Library.GUI.WinForms.ToolStrips;
+using Common_Library.GUI.WinForms.ToolStrips.Items;
 using Common_Library.Types.Map;
 using Common_Library.Types.Other;
 using Common_Library.Utils;
@@ -17,7 +19,7 @@ namespace Common_Library.GUI.WinForms.ListViews
     public class EditableListView : EventListView
     {
         public Boolean AllowContextMenu { get; set; } = true;
-        public MouseButtons ContextMenuButton { get; set; } = MouseButtons.Right;
+        public MouseButtons ContextMenuButton { get; } = MouseButtons.Right;
 
         private ActionType _actionType;
         public ActionType ActionType 
@@ -39,7 +41,7 @@ namespace Common_Library.GUI.WinForms.ListViews
             }
         }
         
-        private readonly ContextMenuStrip _menu = new ContextMenuStrip();
+        private readonly FixedContextMenuStrip _menu = new FixedContextMenuStrip();
 
         public Boolean DoubleClickForChange { get; set; } = true;
         
@@ -58,6 +60,30 @@ namespace Common_Library.GUI.WinForms.ListViews
             set
             {
                 ItemForm.Text = value;
+            }
+        }
+        
+        public String ItemFormApplyButtonText
+        {
+            get
+            {
+                return ItemForm.ApplyButton.Text;
+            }
+            set
+            {
+                ItemForm.ApplyButton.Text = value;
+            }
+        }
+        
+        public String ItemFormCancelButtonText
+        {
+            get
+            {
+                return ItemForm.DenyButton.Text;
+            }
+            set
+            {
+                ItemForm.DenyButton.Text = value;
             }
         }
 
@@ -170,23 +196,44 @@ namespace Common_Library.GUI.WinForms.ListViews
 
         #endregion
 
-        protected readonly IndexMap<ActionType, ToolStripItem> Buttons = new IndexMap<ActionType, ToolStripItem>
+        protected readonly IndexMap<ActionType, FixedToolStripMenuItem> Buttons = new IndexMap<ActionType, FixedToolStripMenuItem>
         {
-            {ActionType.Select, new ToolStripMenuItem("Select")},
-            {ActionType.Copy, new ToolStripMenuItem("Copy")},
-            {ActionType.View, new ToolStripMenuItem("View")},
-            {ActionType.Paste, new ToolStripMenuItem("Paste")},
-            {ActionType.Cut, new ToolStripMenuItem("Cut")},
-            {ActionType.Add, new ToolStripMenuItem("Add")},
-            {ActionType.Remove, new ToolStripMenuItem("Remove")},
-            {ActionType.Change, new ToolStripMenuItem("Change")},
-            {ActionType.ChangeStatus, new ToolStripMenuItem("ChangeStatus")},
-            {ActionType.Replace, new ToolStripMenuItem("Replace")},
-            {ActionType.Reset, new ToolStripMenuItem("Reset")},
-            {ActionType.Additional1, new ToolStripMenuItem("Additional1")},
-            {ActionType.Additional2, new ToolStripMenuItem("Additional2")},
-            {ActionType.Additional3, new ToolStripMenuItem("Additional3")},
+            {ActionType.Select, new FixedToolStripMenuItem("Select")},
+            {ActionType.Copy, new FixedToolStripMenuItem("Copy"){AllowOnMinItems = 1}},
+            {ActionType.View, new FixedToolStripMenuItem("View"){AllowOnMinItems = 1, AllowOnMaxItems = 1}},
+            {ActionType.Paste, new FixedToolStripMenuItem("Paste")},
+            {ActionType.Cut, new FixedToolStripMenuItem("Cut"){AllowOnMinItems = 1}},
+            {ActionType.Add, new FixedToolStripMenuItem("Add")},
+            {ActionType.Remove, new FixedToolStripMenuItem("Remove"){AllowOnMinItems = 1}},
+            {ActionType.Change, new FixedToolStripMenuItem("Change"){AllowOnMinItems = 1, AllowOnMaxItems = 1}},
+            {ActionType.ChangeStatus, new FixedToolStripMenuItem("ChangeStatus"){AllowOnMinItems = 1}},
+            {ActionType.Replace, new FixedToolStripMenuItem("Replace")},
+            {ActionType.Reset, new FixedToolStripMenuItem("Reset")},
+            {ActionType.Additional1, new FixedToolStripMenuItem("Additional1")},
+            {ActionType.Additional2, new FixedToolStripMenuItem("Additional2")},
+            {ActionType.Additional3, new FixedToolStripMenuItem("Additional3")},
         };
+        
+        protected override void WndProc(ref Message msg)
+        {
+            if (msg.Msg >= 0x204 && msg.Msg <= 0x206)
+            {
+                Point pointMousePos = new Point(msg.LParam.ToInt32() & 0xffff, msg.LParam.ToInt32() >> 16);
+                ListViewHitTestInfo lvhti = HitTest(pointMousePos);
+
+                if (lvhti.Item == null)
+                {
+                    SelectedIndices.Clear();
+                }
+                else if (SelectedIndices.Count == 0 && lvhti.Item != null)
+                {
+                    lvhti.Item.Selected = true;
+                    lvhti.Item.Focused = true;
+                }
+            }
+            
+            base.WndProc(ref msg);
+        }
 
         public EditableListView()
         {
@@ -211,11 +258,11 @@ namespace Common_Library.GUI.WinForms.ListViews
             base.OnSelectedIndexChanged(e);
         }
 
-        private void UpdateMenuButtons()
+        private void UpdateMenuButtons(Int32 count = -1)
         {
             _menu.Items.Clear();
 
-            foreach ((ActionType key, ToolStripItem item) in Buttons)
+            foreach ((ActionType key, FixedToolStripMenuItem item) in Buttons)
             {
                 if (!ActionType.HasFlag(key))
                 {
@@ -226,7 +273,12 @@ namespace Common_Library.GUI.WinForms.ListViews
                 {
                     continue;
                 }
-                    
+
+                if (count >= 0 && !item.SelectedCountInRange(count))
+                {
+                    continue;
+                }
+                
                 _menu.Items.Add(item);
             }
         }
@@ -300,7 +352,6 @@ namespace Common_Library.GUI.WinForms.ListViews
 
         public virtual void ViewAction()
         {
-            
         }
 
         public virtual void PasteAction()
@@ -500,7 +551,7 @@ namespace Common_Library.GUI.WinForms.ListViews
                 item.Text = ItemForm.TextBox.Text;
             }
         }
-
+        
         protected virtual void OpenContextMenu(Object sender, MouseEventArgs e)
         {
             if (!AllowContextMenu || e.Button != ContextMenuButton)
@@ -508,27 +559,18 @@ namespace Common_Library.GUI.WinForms.ListViews
                 return;
             }
 
-            ContextMenuStrip menu;
-
-            if (SelectedItems.Count > 1)
-            {
-                menu = _menu;
-            }
-            else if (SelectedItems.Count == 1)
-            {
-                menu = _menu;
-            }
-            else
-            {
-                menu = _menu;
-            }
-            
-            menu.Show(Cursor.Position);
+            UpdateMenuButtons(SelectedItems.Count);
+            _menu.Show(Cursor.Position);
         }
 
         protected virtual void OnMenuActionClicked(Object sender, ToolStripItemClickedEventArgs e)
         {
-            ActionType action = Buttons.TryGetValue(e.ClickedItem);
+            if (!(e.ClickedItem is FixedToolStripMenuItem item))
+            {
+                return;
+            }
+            
+            ActionType action = Buttons.TryGetValue(item);
 
             switch (action)
             {

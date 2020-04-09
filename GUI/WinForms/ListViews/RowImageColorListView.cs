@@ -16,6 +16,7 @@ namespace Common_Library.GUI.WinForms.ListViews
     public class RowImageColorListView : ValidableListView
     {
         public Boolean OverlapAllowed { get; set; } = false;
+        public Boolean OverlapCheckByText { get; set; } = true;
         
         private Color _defaultForegroundColor = Color.Black;
 
@@ -60,12 +61,13 @@ namespace Common_Library.GUI.WinForms.ListViews
         }
         
         protected readonly ImageList Images = new ImageList();
-        protected readonly Map<Object, ListViewItem> ItemsDictionary = new Map<Object, ListViewItem>();
+        protected readonly Map<Object, ListViewItem> ItemsMap = new Map<Object, ListViewItem>();
         protected readonly EventDictionary<Object, String> ImageDictionary = new EventDictionary<Object, String>();
         protected readonly EventDictionary<Object, DrawingData> ColorDictionary = new EventDictionary<Object, DrawingData>();
 
         public RowImageColorListView()
         {
+            SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true);
             Columns.Add("default");
             OwnerDraw = true;
             GridLines = true;
@@ -93,10 +95,10 @@ namespace Common_Library.GUI.WinForms.ListViews
                 return;
             }
 
-            Object item = ItemsDictionary.TryGetValue(lvitem, (Object) lvitem);
+            Object item = ItemsMap.TryGetValue(lvitem, (Object) lvitem);
             
             DrawingData data = ColorDictionary.TryGetValue(item, new DrawingData(DefaultBackgroundColor, DefaultForegroundColor, lvitem.Font));
-            
+
             lvitem.ImageKey = GetItemImageKey(lvitem);
             lvitem.BackColor = GetItemBackColor(lvitem, data);
             lvitem.ForeColor = GetItemForeColor(lvitem, data);
@@ -106,7 +108,7 @@ namespace Common_Library.GUI.WinForms.ListViews
 
         protected virtual String GetItemImageKey(ListViewItem lvitem)
         {
-            Object item = ItemsDictionary.TryGetValue(lvitem, (Object) lvitem);
+            Object item = ItemsMap.TryGetValue(lvitem, (Object) lvitem);
             
             return ImageDictionary.TryGetValue(item, "null");
         }
@@ -203,14 +205,20 @@ namespace Common_Library.GUI.WinForms.ListViews
 
         public virtual void Insert(Int32 index, Object item)
         {
-            if (!(item is ListViewItem lvitem))
-            {
-                lvitem = ItemsDictionary.GetOrAdd(item, new ListViewItem(item.ToString()));
-            }
-            
-            if (!OverlapAllowed && Items.OfType<Object>().Any(item.Equals))
+            ListViewItem lvitem = item as ListViewItem;
+
+            if (!OverlapAllowed && (Items.OfType<Object>().Any(item.Equals)
+                                    || ItemsMap.ContainsKey(item)
+                                    || lvitem != null && ItemsMap.ContainsValue(lvitem))
+                                    || OverlapCheckByText && (ItemsMap.ContainsKey(lvitem?.Text ?? item.ToString())
+                                        || Items.OfType<ListViewItem>().Any(l => l.Text == (lvitem?.Text ?? item.ToString()))))
             {
                 return;
+            }
+
+            if (lvitem == null)
+            {
+                lvitem = ItemsMap.GetOrAdd(item, new ListViewItem(item.ToString()));
             }
 
             if (index < Items.Count)
@@ -238,11 +246,11 @@ namespace Common_Library.GUI.WinForms.ListViews
         {
             if (!(item is ListViewItem lvitem))
             {
-                lvitem = ItemsDictionary.TryGetValue(item);
+                lvitem = ItemsMap.TryGetValue(item);
             }
             else
             {
-                item = ItemsDictionary.TryGetValue(lvitem, item);
+                item = ItemsMap.TryGetValue(lvitem, item);
             }
 
             if (lvitem == null)

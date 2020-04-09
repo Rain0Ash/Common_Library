@@ -80,15 +80,15 @@ namespace Common_Library.GUI.WinForms.ListBoxes
                     Object item = ListBox.Items[index];
                     if (item is FSWatcher path)
                     {
-                        path.Recursive = !path.Recursive;
+                        path.IsRecursive = !path.IsRecursive;
                     }
                 }
 
                 ListBox.Update();
             };
-            AddButton.PathBeenSelected += path => ListBox.Add(new FSWatcher(path, PathType, PathStatus.Exist) {Recursive = true});
+            AddButton.PathBeenSelected += path => ListBox.Add(new FSWatcher(path, PathType, PathStatus.Exist) {IsRecursive = true});
             AddButton.PathsBeenSelected += paths =>
-                ListBox.AddRange(paths.Select(path => new FSWatcher(path.ToString(), PathType, PathStatus.Exist) {Recursive = true})
+                ListBox.AddRange(paths.Select(path => new FSWatcher(path.ToString(), PathType, PathStatus.Exist) {IsRecursive = true})
                     .ToArray());
             RemoveButton.Click += (sender, args) => ListBox.RemoveAt(ListBox.SelectedIndices);
             Controls.Add(AddButton);
