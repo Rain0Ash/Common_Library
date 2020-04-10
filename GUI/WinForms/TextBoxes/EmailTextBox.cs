@@ -9,7 +9,7 @@ namespace Common_Library.GUI.WinForms.TextBoxes
     {
         public EmailTextBox()
         {
-            ValidateFunc = obj => EmailUtils.CheckValidEmail(Text);
+            Validate = () => EmailUtils.CheckValidEmail(Text);
             PasswdChar = '\0';
         }
     }

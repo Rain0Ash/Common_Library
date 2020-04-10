@@ -78,10 +78,11 @@ namespace Common_Library.GUI.WinForms.ListViews
         public PathListView()
         {
             OverlapAllowed = false;
-            ValidateFunc = CheckValidItem;
+            ValidateItem = IsValidItem;
             RecursiveText = "Recursive";
             ActionType |= ActionType.ChangeStatus;
-            ItemForm = new PathTextBoxForm {TextBox = {ValidateFunc = obj => ValidateFunc?.Invoke(obj) != false}};
+            ItemForm = new PathTextBoxForm();
+            ItemForm.TextBox.Validate = () => IsValidItem(ItemForm.TextBox.Text);
         }
 
         public override void Insert(Int32 index, Object item)
@@ -104,17 +105,17 @@ namespace Common_Library.GUI.WinForms.ListViews
             base.Insert(index, lvitem);
         }
 
-        protected override Boolean CheckValidItem(Object item)
+        public override Boolean IsValidItem(Object item)
         {
             return item switch
             {
                 FSWatcher watcher => watcher.IsValid(),
-                ListViewItem lvitem => CheckValidFormatItem(lvitem),
+                ListViewItem lvitem => IsValidItem(lvitem),
                 _ => PathUtils.IsValidPath(item.ToString(), PathType, PathStatus)
             };
         }
         
-        protected override Boolean CheckValidFormatItem(ListViewItem item)
+        protected Boolean IsValidItem(ListViewItem item)
         {
             Object path = item.Tag ?? item.Text;
             

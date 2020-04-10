@@ -39,11 +39,11 @@ namespace Common_Library.GUI.WinForms.TextBoxes
 
         public PortTextBox()
         {
-            ValidateFunc = obj => NetworkUtils.ValidatePort(Text);
+            Validate = () => NetworkUtils.ValidatePort(Text);
             PasswdChar = '\0';
             MaxLength = 5;
             Text = DefaultPort.ToString();
-            Leave += (sender, args) => Text = CheckValidFormat() ? Text : DefaultPort.ToString();
+            Leave += (sender, args) => Text = IsValid ? Text : DefaultPort.ToString();
         }
 
         protected override void OnKeyPress(KeyPressEventArgs e)

@@ -11,31 +11,41 @@ namespace Common_Library.Comparers
     {
     }
 
+    public class OrderedStringComparer : OrderedComparer<String>
+    {
+        public StringComparison ComparisonType { get; set; }
+        public OrderedStringComparer(IEnumerable<String> order = null, StringComparison comparison = StringComparison.Ordinal)
+            : base(order)
+        {
+            ComparisonType = comparison;
+        }
+
+        public override Int32 Compare(String x, String y)
+        {
+            return Compare(Order.FindIndex(item => item.Equals(x, ComparisonType)), Order.FindIndex(item => item.Equals(y, ComparisonType)));
+        }
+    }
+
     public class OrderedComparer<T> : IComparer<T>
     {
-        private readonly List<T> _orderList;
+        public List<T> Order { get; }
 
-        protected IList<T> Order
+        public OrderedComparer(IEnumerable<T> order = null)
         {
-            get
-            {
-                return _orderList;
-            }
+            Order = (order ?? new T[0]).ToList();
         }
 
-        public OrderedComparer(IEnumerable<T> languageOrderList = null)
+        protected Int32 Compare(Int32 x, Int32 y)
         {
-            _orderList = (languageOrderList ?? new T[0]).ToList();
-        }
-
-        public Int32 Compare(T x, T y)
-        {
-            Int32 indexOfX = _orderList.IndexOf(x);
-            Int32 indexOfY = _orderList.IndexOf(y);
-
-            Int32 ix = indexOfX != -1 ? indexOfX : _orderList.Count + 1;
-            Int32 iy = indexOfY != -1 ? indexOfY : _orderList.Count + 1;
+            Int32 ix = x != -1 ? x : Order.Count + 1;
+            Int32 iy = y != -1 ? y : Order.Count + 1;
+            
             return ix.CompareTo(iy);
+        }
+        
+        public virtual Int32 Compare(T x, T y)
+        {
+            return Compare(Order.IndexOf(x), Order.IndexOf(y));
         }
     }
 }

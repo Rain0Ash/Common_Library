@@ -277,12 +277,7 @@ namespace Common_Library.GUI.WinForms.TextBoxes
 
         public Boolean IsValid()
         {
-            return TextBox.IsValid();
-        }
-
-        public Boolean IsValid(PathType type)
-        {
-            return TextBox.IsValid(type);
+            return TextBox.IsValid;
         }
 
         private void OnAvailableFormatingParts_Changed()

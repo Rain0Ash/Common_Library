@@ -238,7 +238,7 @@ namespace Common_Library.GUI.WinForms.ListViews
         public EditableListView()
         {
             ActionType = ActionType.Basic;
-            ValidateFuncChanged += function => ItemForm.TextBox.ValidateFunc = function;
+            ValidateItemChanged += () => ItemForm.TextBox.Validate = () => IsValidItem(ItemForm.TextBox.Text);
 
             KeyDown += OnKeyDown;
             MouseDown += OpenContextMenu;
@@ -472,7 +472,7 @@ namespace Common_Library.GUI.WinForms.ListViews
         {
             while (true)
             {
-                if (ValidateFunc?.Invoke(text) != false)
+                if (IsValidItem(text))
                 {
                     Add(text);
                 }
@@ -546,7 +546,7 @@ namespace Common_Library.GUI.WinForms.ListViews
         {
             ItemForm.TextBox.Clear();
             ItemForm.TextBox.Text = item.Text;
-            if (ItemForm.ShowDialog() == DialogResult.OK && CheckValidItem(ItemForm.TextBox.Text))
+            if (ItemForm.ShowDialog() == DialogResult.OK && IsValidItem(ItemForm.TextBox.Text))
             {
                 item.Text = ItemForm.TextBox.Text;
             }

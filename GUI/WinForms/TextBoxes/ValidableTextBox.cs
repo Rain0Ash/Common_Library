@@ -7,23 +7,47 @@ using Common_Library.Interfaces;
 
 namespace Common_Library.GUI.WinForms.TextBoxes
 {
-    public class ValidableTextBox : HistoryTextBox, IAutoValidable
+    public class ValidableTextBox : HistoryTextBox, IValidable
     {
-        public Func<Object, Boolean> ValidateFunc { get; set; } = obj => true;
+        public event Handlers.EmptyHandler ValidateChanged;
         
+        private Func<Boolean> _validate;
+        public Func<Boolean> Validate
+        {
+            get
+            {
+                return _validate;
+            }
+            set
+            {
+                if (_validate == value)
+                {
+                    return;
+                }
+
+                _validate = value;
+                
+                ValidateChanged?.Invoke();
+            }
+        }
+
         public ValidableTextBox()
         {
-            TextChanged += (sender, args) => CheckValidFormatColor();
+            TextChanged += (sender, args) => ItemValidateColor();
+            ValidateChanged += ItemValidateColor;
         }
 
-        public Boolean CheckValidFormat()
+        public Boolean IsValid
         {
-            return ValidateFunc?.Invoke(Text) ?? true;
+            get
+            {
+                return Validate?.Invoke() != false;
+            }
         }
 
-        protected virtual void CheckValidFormatColor()
+        protected virtual void ItemValidateColor()
         {
-            BackColor = CheckValidFormat() ? Color.White : Color.Coral;
+            BackColor = IsValid ? Color.White : Color.Coral;
         }
     }
 }

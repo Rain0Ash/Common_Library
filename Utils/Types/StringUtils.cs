@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 
 namespace Common_Library.Utils
 {
-    public enum SplitByEnum
+    public enum SplitType
     {
         NewLine,
         UpperCase
@@ -22,45 +22,44 @@ namespace Common_Library.Utils
         public static IEnumerable<String> GetFormatVariables(String str)
         {
             return Regex.Matches(str, FormatVariableRegexPattern, RegexOptions.Compiled)
-                .OfType<Match>().Select(match => match.Value)
+                .OfType<Match>()
+                .Select(match => match.Value)
                 .Select(format => Regex.Replace(format.ToLower(), @"\{|\}", String.Empty));
         }
 
+        private static readonly IReadOnlyDictionary<Char, Char> BracketPairs = new Dictionary<Char, Char>
+        {
+            {'(', ')'},
+            {'{', '}'},
+            {'[', ']'},
+            {'<', '>'}
+        };
+        
         public static Boolean IsBracketsWellFormed(String str)
         {
-            IReadOnlyDictionary<Char, Char> bracketPairs = new Dictionary<Char, Char>
-            {
-                {'(', ')'},
-                {'{', '}'},
-                {'[', ']'},
-                {'<', '>'}
-            };
-
             Stack<Char> brackets = new Stack<Char>();
 
             try
             {
                 foreach (Char c in str)
                 {
-                    if (bracketPairs.Keys.Contains(c))
+                    if (BracketPairs.Keys.Contains(c))
                     {
                         brackets.Push(c);
                     }
                     else
                     {
-                        if (!bracketPairs.Values.Contains(c))
+                        if (!BracketPairs.Values.Contains(c))
                         {
                             continue;
                         }
 
-                        if (c == bracketPairs[brackets.First()])
-                        {
-                            brackets.Pop();
-                        }
-                        else
+                        if (c != BracketPairs[brackets.First()])
                         {
                             return false;
                         }
+                        
+                        brackets.Pop();
                     }
                 }
             }
@@ -89,10 +88,10 @@ namespace Common_Library.Utils
             Int32 i = 0;
             StringBuilder newFormatString = new StringBuilder(source);
             Dictionary<String, Int32> keyToInt = new Dictionary<String, Int32>();
-            foreach (KeyValuePair<String, Object> tuple in valueDict)
+            foreach ((String key, Object _) in valueDict)
             {
-                newFormatString = newFormatString.Replace("{" + tuple.Key + "}", "{" + i + "}");
-                keyToInt.Add(tuple.Key, i);
+                newFormatString = newFormatString.Replace("{" + key + "}", "{" + i + "}");
+                keyToInt.Add(key, i);
                 i++;
             }
 
@@ -103,7 +102,7 @@ namespace Common_Library.Utils
         {
             const String pattern = @"(?<!\{)(?>\{\{)*\{\d(.*?)";
             MatchCollection matches = Regex.Matches(str, pattern, RegexOptions.Compiled);
-            return matches.OfType<Match>().Select(m => m.Value).Distinct().Count();
+            return matches.Select(m => m.Value).Distinct().Count();
         }
 
         public static String BeforeFormatVariables(String str)
@@ -186,13 +185,13 @@ namespace Common_Library.Utils
                 .SelectMany(split => split.Split(' ')).ToArray();
         }
 
-        public static String[] SplitBy(this String str, SplitByEnum splitByEnum = SplitByEnum.NewLine)
+        public static String[] SplitBy(this String str, SplitType splitType = SplitType.NewLine)
         {
-            return splitByEnum switch
+            return splitType switch
             {
-                SplitByEnum.NewLine => str.Split('\n', StringSplitOptions.RemoveEmptyEntries),
-                SplitByEnum.UpperCase => SplitByUpperCase(str),
-                _ => throw new NotImplementedException()
+                SplitType.NewLine => str.Split('\n', StringSplitOptions.RemoveEmptyEntries),
+                SplitType.UpperCase => SplitByUpperCase(str),
+                _ => throw new NotSupportedException()
             };
         }
 

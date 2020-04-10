@@ -174,7 +174,7 @@ namespace Common_Library.GUI.WinForms.Forms
         {
             ButtonsParamsList = Enum.GetValues(typeof(MessageBoxButtons)).OfType<MessageBoxButtons>().ToDictionary(e => e,
                 e => e.ToString()
-                    .SplitBy(SplitByEnum.UpperCase)
+                    .SplitBy(SplitType.UpperCase)
                     .Select(epart => (Enum.TryParse(epart, out DialogResult result), result).result)
                     .Select(result => (result, result.ToString())).ToArray());
         }

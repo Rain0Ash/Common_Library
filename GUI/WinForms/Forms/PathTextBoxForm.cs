@@ -51,7 +51,7 @@ namespace Common_Library.GUI.WinForms.Forms
             
             if (TextBox is FormatPathTextBox textBox)
             {
-                textBox.CheckWellFormed = false;
+                textBox.WellFormedCheck = false;
             }
 
             PathTextBox.PathDialogButton.PathBeenSelected += path => TextBox.Text = path;
@@ -64,7 +64,7 @@ namespace Common_Library.GUI.WinForms.Forms
         protected override void OnTextBoxTextChanged(Object sender, EventArgs e)
         {
             ReturnValue = TextBox.Text;
-            ApplyButton.Enabled = !TextBox.Text.IsNullOrEmpty() && TextBox.ValidateFunc?.Invoke(TextBox.Text) != false;
+            ApplyButton.Enabled = !TextBox.Text.IsNullOrEmpty() && TextBox.IsValid;
         }
 
         protected virtual void OnShown(Object sender, EventArgs e)

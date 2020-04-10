@@ -43,15 +43,10 @@ namespace Common_Library.GUI.WinForms.TextBoxes
 
         public IPTextBox()
         {
-            ValidateFunc = obj => NetworkUtils.ValidateIPv4(Text);
+            Validate = () => NetworkUtils.ValidateIPv4(Text);
             MaxLength = 15;
             PasswdChar = '\0';
-            Leave += (sender, args) => Text = CheckValidFormat() ? Text : DefaultHost;
-        }
-
-        protected override void CheckValidFormatColor()
-        {
-            BackColor = CheckValidFormat() ? Color.White : Color.Coral;
+            Leave += (sender, args) => Text = IsValid ? Text : DefaultHost;
         }
 
         protected override Boolean IsAllowedChar(Char c)

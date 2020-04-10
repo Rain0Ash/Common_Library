@@ -98,7 +98,7 @@ namespace Common_Library.GUI.WinForms.Forms
         protected virtual void OnTextBoxTextChanged(Object sender, EventArgs e)
         {
             ReturnValue = TextBox.Text;
-            ApplyButton.Enabled = TextBox.CheckValidFormat();
+            ApplyButton.Enabled = TextBox.IsValid;
         }
     }
 }

@@ -115,7 +115,7 @@ namespace Common_Library.GUI.WinForms.ListViews
         
         protected virtual Color GetItemBackColor(ListViewItem lvitem, DrawingData data)
         {
-            return !CheckValidFormatItem(lvitem) ? InvalidColor : data.BackgroundColor.IsEmpty ? DefaultBackgroundColor : data.BackgroundColor;
+            return !IsValidItem(lvitem) ? InvalidColor : data.BackgroundColor.IsEmpty ? DefaultBackgroundColor : data.BackgroundColor;
         }
         
         protected virtual Color GetItemForeColor(ListViewItem lvitem, DrawingData data)

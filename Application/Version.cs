@@ -3,8 +3,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Threading;
 using Common_Library.Utils;
 
 namespace Common_Library.App
@@ -34,10 +36,19 @@ namespace Common_Library.App
             NewArchitecture
         }
 
-        public static AppVersion Version = new AppVersion(1, Status.None);
+        // ReSharper disable once FieldCanBeMadeReadOnly.Global
+        public static AppVersion Version = new AppVersion();
+
+        public static Boolean AlreadyStarted
+        {
+            get
+            {
+                return Version.AlreadyStarted;
+            }
+        }
     }
 
-    public struct AppVersion : IComparable<AppVersion>, IEquatable<AppVersion>
+    public struct AppVersion : IComparable<AppVersion>, IEquatable<AppVersion>, IDisposable
     {
         private static readonly IReadOnlyDictionary<App.Status, String> StatusDictionary = new Dictionary<App.Status, String>
         {
@@ -92,17 +103,36 @@ namespace Common_Library.App
             return first.CompareTo(second) <= 0;
         }
 
+        public String AppName { get; }
         public IComparable Version { get; }
 
         public App.Status Status { get; }
 
         public App.Branch Branch { get; }
 
-        public AppVersion(IComparable version, App.Status status = App.Status.Release, App.Branch branch = App.Branch.Master)
+        private readonly Mutex _mutex;
+
+        public Boolean AlreadyStarted
         {
+            get
+            {
+                return _mutex?.WaitOne(0) != true;
+            }
+        }
+        
+        public AppVersion(IComparable version, App.Status status = App.Status.Release, App.Branch branch = App.Branch.Master)
+            : this(Process.GetCurrentProcess().ProcessName, version, status, branch)
+        {
+        }
+        
+        public AppVersion(String name, IComparable version, App.Status status = App.Status.Release, App.Branch branch = App.Branch.Master)
+        {
+            AppName = name;
             Version = version;
             Status = status;
             Branch = branch;
+            
+            _mutex = new Mutex(true, AppName);
         }
 
         public static DateTime GetBuildDateTime(String path)
@@ -132,6 +162,11 @@ namespace Common_Library.App
 
         public Int32 CompareTo(AppVersion other, Boolean versionFirst)
         {
+            if (AppName != other.AppName)
+            {
+                throw new ArgumentException("Application names is not equals");
+            }
+            
             Int32 versionCompare = ComparerUtils.ToCompare(Version, other.Version, false) ?? 0;
 
             if (versionFirst && versionCompare != 0)
@@ -173,6 +208,19 @@ namespace Common_Library.App
                 hashCode = (hashCode * 397) ^ (Int32) Status;
                 hashCode = (hashCode * 397) ^ (Int32) Branch;
                 return hashCode;
+            }
+        }
+
+        public void Dispose()
+        {
+            try
+            {
+                _mutex.ReleaseMutex();
+                _mutex.Dispose();
+            }
+            catch (Exception)
+            {
+                // ignored
             }
         }
     }

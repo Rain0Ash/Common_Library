@@ -7,6 +7,15 @@ namespace Common_Library.Interfaces
 {
     public interface IValidable
     {
-        public Boolean CheckValidFormat();
+        public event Handlers.EmptyHandler ValidateChanged;
+        public Func<Boolean> Validate { get; set; }
+
+        public Boolean IsValid
+        {
+            get
+            {
+                return Validate?.Invoke() != false;
+            }
+        }
     }
 }

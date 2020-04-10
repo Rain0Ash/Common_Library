@@ -137,7 +137,50 @@ namespace Common_Library.Utils
 
             return alternate;
         }
+        
+        public static T LastOr<T>(this IEnumerable<T> source, T alternate)
+        {
+            return LastOr(source, item => true, alternate);
+        }
 
+        public static T LastOr<T>(this IEnumerable<T> source, Func<T, Boolean> predicate, T alternate)
+        {
+            return FirstOr(source.Reverse(), predicate, alternate);
+        }
+
+        /// <summary>
+        /// Return item if ienumerable is empty
+        /// </summary>
+        /// <param name="source">source</param>
+        /// <param name="alternate">returned item</param>
+        /// <typeparam name="T"></typeparam>
+        public static IEnumerable<T> WhereOr<T>(this IEnumerable<T> source, T alternate)
+        {
+            return WhereOr(source, item => true, alternate);
+        }
+        
+        /// <summary>
+        /// Return item if ienumerable is empty
+        /// </summary>
+        /// <param name="source">source</param>
+        /// <param name="predicate">predicate</param>
+        /// <param name="alternate">returned item</param>
+        /// <typeparam name="T"></typeparam>
+        public static IEnumerable<T> WhereOr<T>(this IEnumerable<T> source, Func<T, Boolean> predicate, T alternate)
+        {
+            Int32 count = 0;
+            foreach (T item in source.Where(predicate))
+            {
+                yield return item;
+                count++;
+            }
+
+            if (count == 0)
+            {
+                yield return alternate;
+            }
+        }
+        
         public static IEnumerable<T> Replace<T>(this IEnumerable<T> source, T oldValue, T newValue, IEqualityComparer<T> comparer = null)
         {
             comparer ??= EqualityComparer<T>.Default;
@@ -451,8 +494,7 @@ namespace Common_Library.Utils
         /// <returns>
         /// All elements of <paramref name="source"/> except <paramref name="without"/>.
         /// </returns>
-        public static IEnumerable<T> Without<T>(IEnumerable<T> source,
-            params T[] without)
+        public static IEnumerable<T> Without<T>(IEnumerable<T> source, params T[] without)
         {
             return Without(source, without, null);
         }

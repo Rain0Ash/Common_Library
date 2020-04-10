@@ -9,51 +9,53 @@ using Common_Library.Interfaces;
 
 namespace Common_Library.GUI.WinForms.ListViews
 {
-    public class ValidableListView : FixedListView, IAutoValidable
+    public class ValidableListView : FixedListView, IMultiValidable
     {
         public Color InvalidColor { get; set; } = Color.Coral;
 
-        public event Handlers.FuncHandler<Object, Boolean> ValidateFuncChanged;  
+        public event Handlers.EmptyHandler ValidateItemChanged;  
         
-        private Func<Object, Boolean> _validateFunc = obj => true;
-
-        public Func<Object, Boolean> ValidateFunc
+        private Func<Object, Boolean> _validateItem;
+        public Func<Object, Boolean> ValidateItem
         {
             get
             {
-                return _validateFunc;
+                return _validateItem;
             }
             set
             {
-                if (_validateFunc == value)
+                if (_validateItem == value)
                 {
                     return;
                 }
                 
-                _validateFunc = value;
+                _validateItem = value;
                 
-                ValidateFuncChanged?.Invoke(_validateFunc);
+                ValidateItemChanged?.Invoke();
             }
         }
         
-        protected virtual Boolean CheckValidItem(Object item)
+        public Boolean IsValid
         {
-            return ValidateFunc?.Invoke(item) ?? true;
-        }
-        
-        protected virtual Boolean CheckValidFormatItem(ListViewItem item)
-        {
-            return ValidateFunc?.Invoke(item.Text) ?? true;
+            get
+            {
+                return Items.OfType<ListViewItem>().All(IsValidItem);
+            }
         }
 
-        public Boolean CheckValidFormatIndex(Int32 index)
+        public ValidableListView()
         {
-            return CheckValidFormatItem(Items[index]);
+            ValidateItemChanged += Refresh;
         }
 
-        public Boolean CheckValidFormat()
+        public virtual Boolean IsValidItem(Object item)
         {
-            return Items.OfType<ListViewItem>().All(CheckValidFormatItem);
+            return ValidateItem?.Invoke(item) ?? true;
+        }
+
+        public Boolean IsValidIndex(Int32 index)
+        {
+            return IsValidItem(Items[index]);
         }
     }
 }

@@ -11,25 +11,25 @@ namespace Common_Library.GUI.WinForms.TextBoxes
 {
     public class PathTextBox : HidenTextBox
     {
-        public event Handlers.EmptyHandler CheckWellFormedChanged;
+        public event Handlers.EmptyHandler WellFormedCheckChanged;
 
-        private Boolean _checkWellFormed = true;
+        private Boolean _wellFormedCheck = true;
 
-        public virtual Boolean CheckWellFormed
+        public virtual Boolean WellFormedCheck
         {
             get
             {
-                return _checkWellFormed;
+                return _wellFormedCheck;
             }
             set
             {
-                if (_checkWellFormed == value)
+                if (_wellFormedCheck == value)
                 {
                     return;
                 }
 
-                _checkWellFormed = value;
-                CheckWellFormedChanged?.Invoke();
+                _wellFormedCheck = value;
+                WellFormedCheckChanged?.Invoke();
             }
         }
         
@@ -77,23 +77,30 @@ namespace Common_Library.GUI.WinForms.TextBoxes
             }
         }
 
-        public PathTextBox()
+        public Boolean IsWellFormed
         {
-            ValidateFunc = obj => !CheckWellFormed || IsWellFormed();
-            PasswdChar = '\0';
-            CheckWellFormedChanged += CheckValidFormatColor;
-            PathTypeChanged += CheckValidFormatColor;
+            get
+            {
+                return !WellFormedCheck || WellFormedValidate();
+            }
         }
 
-        protected override void CheckValidFormatColor()
+        public PathTextBox()
         {
-            Boolean check = CheckValidFormat();
+            Validate = () => IsValidPath() && IsWellFormed;
+            PasswdChar = '\0';
+            WellFormedCheckChanged += ItemValidateColor;
+            PathTypeChanged += ItemValidateColor;
+            PathStatusChanged += ItemValidateColor;
+        }
 
-            if (PathUtils.IsValidPath(Text, PathType, PathStatus) && check)
+        protected override void ItemValidateColor()
+        {
+            if (IsValid)
             {
                 BackColor = Color.White;
             }
-            else if (!check)
+            else if (!IsWellFormed)
             {
                 BackColor = Color.PaleVioletRed;
             }
@@ -103,27 +110,7 @@ namespace Common_Library.GUI.WinForms.TextBoxes
             }
         }
 
-        public Boolean IsValid()
-        {
-            return IsValidPath();
-        }
-
-        public Boolean IsValid(PathType type)
-        {
-            return IsValidPath(type);
-        }
-        
-        public Boolean IsValid(PathStatus status)
-        {
-            return IsValidPath(status);
-        }
-        
-        public virtual Boolean IsValid(PathType type, PathStatus status)
-        {
-            return IsValidPath(type, status);
-        }
-
-        public Boolean IsWellFormed()
+        public virtual Boolean WellFormedValidate()
         {
             return StringUtils.IsBracketsWellFormed(Text);
         }
@@ -156,13 +143,13 @@ namespace Common_Library.GUI.WinForms.TextBoxes
         public String GetRelativePath()
         {
             String absolutePath = PathUtils.GetFullPath(Text);
-            return absolutePath == null ? null : PathUtils.GetRelativePath(absolutePath, Directory.GetCurrentDirectory());
+            return absolutePath.IsNullOrEmpty() ? null : PathUtils.GetRelativePath(absolutePath, Directory.GetCurrentDirectory());
         }
 
         public String GetRelativePath(String relativePath)
         {
             String absolutePath = PathUtils.GetFullPath(relativePath);
-            return absolutePath == null ? GetRelativePath() : PathUtils.GetRelativePath(PathUtils.GetFullPath(Text), absolutePath);
+            return absolutePath.IsNullOrEmpty() ? GetRelativePath() : PathUtils.GetRelativePath(PathUtils.GetFullPath(Text), absolutePath);
         }
     }
 }
